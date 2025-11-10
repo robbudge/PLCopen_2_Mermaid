@@ -1,0 +1,28 @@
+2025-11-07 08:29:46,232 - INFO - ObjectID-focused application started
+2025-11-07 08:29:52,063 - INFO - File selected: S:/PLC_export_Test/Z100_Manager.xml
+2025-11-07 08:29:52,847 - INFO - Starting ObjectID-focused XML processing
+2025-11-07 08:29:52,855 - ERROR - Processing error: invalid predicate
+Traceback (most recent call last):
+  File "C:\Users\Robert.Budgen\AppData\Local\Python\pythoncore-3.14-64\Lib\xml\etree\ElementPath.py", line 370, in iterfind
+    selector = _cache[cache_key]
+               ~~~~~~^^^^^^^^^^^
+KeyError: (".//ns:addData[ns:data[@name='http://www.3s-software.com/plcopenxml/objectid']]", ('3s', 'http://www.3s-software.com/plcopenxml/objectid'), ('ns', 'http://www.plcopen.org/xml/tc6_0200'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "S:\PLC_export_Test\PLCopen_2_DrawIO\main.py", line 158, in process_file
+    self.process_objectid_bodies(root, output_dir, base_name)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "S:\PLC_export_Test\PLCopen_2_DrawIO\main.py", line 184, in process_objectid_bodies
+    objectid_sections = root.findall(
+        ".//ns:addData[ns:data[@name='http://www.3s-software.com/plcopenxml/objectid']]", self.namespaces)
+  File "C:\Users\Robert.Budgen\AppData\Local\Python\pythoncore-3.14-64\Lib\xml\etree\ElementPath.py", line 411, in findall
+    return list(iterfind(elem, path, namespaces))
+                ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Robert.Budgen\AppData\Local\Python\pythoncore-3.14-64\Lib\xml\etree\ElementPath.py", line 384, in iterfind
+    selector.append(ops[token[0]](next, token))
+                    ~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Robert.Budgen\AppData\Local\Python\pythoncore-3.14-64\Lib\xml\etree\ElementPath.py", line 337, in prepare_predicate
+    raise SyntaxError("invalid predicate")
+SyntaxError: invalid predicate

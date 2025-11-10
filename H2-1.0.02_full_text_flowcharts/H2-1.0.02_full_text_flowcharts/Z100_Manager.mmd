@@ -1,0 +1,113 @@
+%% Z100_Manager - program - Full Text Flowchart
+flowchart TD
+    Start([Start: Z100_Manager])
+    N1["PVL.Z100_Config.StrMode:=Burkert.Burkert_OSCAT_BASIC.REPLACE_ALL(str:=TO_STRING(PVL.Z100_Config.Mode.eMode) , src:='_' , rep:=' ' );"]
+    N2["PVL.Z100_Config.StrStatus:=Burkert.Burkert_OSCAT_BASIC.REPLACE_ALL(str:=TO_STRING(PVL.Z100_Config.Status.eStatus) , src:='_' , rep:=' ' );"]
+    N3["PVl.Z100_Config.StrTask:=Burkert.Burkert_OSCAT_BASIC.REPLACE_ALL(str:=TO_STRING(PVL.Z100_Config.Task.eTask) , src:='_' , rep:=' ' );"]
+    N4["PVL.Z100_Config.Mode.eMode:=Burkert.eHOA_Modes.Manual;"]
+    SubCall_5["CALL: Alarms"]
+    style SubCall_5 fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    Case_6["CASE	PVL.Z100_Config.Task.eTask OF"]
+    CaseOpt_6_0["eZ100_task.Off"]
+    CaseOpt_6_0_L1["CALL: Task_OFF"]
+    style CaseOpt_6_0_L1 fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    CaseOpt_6_1["eZ100_Task.Continuous_Level"]
+    CaseOpt_6_1_L1["CALL: Task_Level"]
+    style CaseOpt_6_1_L1 fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    CaseOpt_6_2["eZ100_Task.Continuous_Flow_Intake"]
+    CaseOpt_6_3["eZ100_Task.Continuous_Flow_Discharge"]
+    CaseOpt_6_3_L1["CALL: TASK_Flow_Discharge"]
+    style CaseOpt_6_3_L1 fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    CaseOpt_6_4["eZ100_task.Continuous_UV"]
+    CaseOpt_6_4_L1["CALL: Continuous_UV"]
+    style CaseOpt_6_4_L1 fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    CaseOpt_6_5["eZ100_Task.Batch_Level"]
+    CaseOpt_6_6["eZ100_Task.Batch"]
+    CaseOpt_6_7["eZ100_Task.Drain"]
+    CaseOpt_6_7_L1["CALL: Task_Drain"]
+    style CaseOpt_6_7_L1 fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    CaseEnd_6[Continue...]
+    N27["ACV_Manager();"]
+    N28["PVl.Duplex[Duplex_mapping.Z100].Run_Pct:=MAX("]
+    N29["PVL.PID[pid_mapping.Z100_Flow].CV,"]
+    N30["PVl.PID[PID_Mapping.Z100_Level].CV,"]
+    N31["PVl.PID[PID_mapping.Z100_Pressure].CV);"]
+    N32["PVl.Duplex[Duplex_Mapping.Z100].Run_Request:=PVl.Duplex[Duplex_mapping.Z100].Run_Pct&amp;gt;5;"]
+    N33["pvl.Z100_Config.UV_Rate.Target:=SEL("]
+    N34["PVL.Z100_Config.uvDSP&amp;gt;0,"]
+    N35["0,"]
+    N36["((0.06 * PVL.Z202_Config.Pond_Area_m2 * PVL.AIT[ait_Mapping.UV_001].EU) / PVL.Z100_Config.uvDSP));"]
+    N37["FT101_Array_Size:=SIZEOF(GVl.FT101_Ave);"]
+    If_38{{"IF GVL.CLK_500ms THEN"}}
+    Then_38["THEN"]
+    Stmt_38_1930["GVl.FT101_Ave[FT101_Ave_Index]:=PVL.s8098[s8098_Mapping.FT_101].PDO.VolumeFlow.EU;"]
+    Stmt_38_8273["FT101_Ave_Index:=FT101_Ave_Index+1;"]
+    Else_38["ELSE"]
+    Stmt_38_7580["Burkert.MEM.MemMove(pSource:= ADR(GVl.FT101_Ave[1]), pDestination:=ADR(GVl.FT101_Ave[0]) , uiNumberOfBytes:=(SIZEOF(GVl.FT101_Ave)-4) );"]
+    Stmt_38_1967["GVl.FT101_Ave[49]:=PVL.s8098[s8098_Mapping.FT_101].PDO.VolumeFlow.EU;"]
+    IfEnd_38[Continue...]
+    N59["FT101_Ave:=Burkert.Burkert_OSCAT_BASIC.ARRAY_AVG (	pt:=ADR(GVl.FT101_Ave),	size:=SIZEOF(GVl.FT101_Ave));"]
+    N60["FT101_Hav:=Burkert.Burkert_OSCAT_BASIC.ARRAY_HAV (	pt:=ADR(GVl.FT101_Ave[0]),size:=TO_UINT(FT101_Ave_Index*4));"]
+    N61["END_IF;"]
+    N62["END_IF;"]
+    If_63{{"IF FT101_Ave=0  THEN 	FT101_Ave_Index:=0; END_IF;"}}
+    Then_63["THEN"]
+    Stmt_63_4274["PVl.PID[pid_mapping.Z100_Flow].Actual:=PVL.s8098[s8098_Mapping.FT_101].PDO.VolumeFlow.EU;;//FT101_AVE;"]
+    IfEnd_63[Continue...]
+    Start --> N1
+    N1 --> N2
+    N2 --> N3
+    N3 --> N4
+    N4 --> SubCall_5
+    SubCall_5 --> Case_6
+    Case_6 --> CaseOpt_6_0
+    CaseOpt_6_0 --> CaseOpt_6_0_L1
+    Case_6 --> CaseOpt_6_1
+    CaseOpt_6_1 --> CaseOpt_6_1_L1
+    Case_6 --> CaseOpt_6_2
+    Case_6 --> CaseOpt_6_3
+    CaseOpt_6_3 --> CaseOpt_6_3_L1
+    Case_6 --> CaseOpt_6_4
+    CaseOpt_6_4 --> CaseOpt_6_4_L1
+    Case_6 --> CaseOpt_6_5
+    Case_6 --> CaseOpt_6_6
+    Case_6 --> CaseOpt_6_7
+    CaseOpt_6_7 --> CaseOpt_6_7_L1
+    CaseOpt_6_0_L1 --> CaseEnd_6
+    CaseOpt_6_1_L1 --> CaseEnd_6
+    CaseOpt_6_2 --> CaseEnd_6
+    CaseOpt_6_3_L1 --> CaseEnd_6
+    CaseOpt_6_4_L1 --> CaseEnd_6
+    CaseOpt_6_5 --> CaseEnd_6
+    CaseOpt_6_6 --> CaseEnd_6
+    CaseOpt_6_7_L1 --> CaseEnd_6
+    CaseEnd_6 --> N27
+    N27 --> N28
+    N28 --> N29
+    N29 --> N30
+    N30 --> N31
+    N31 --> N32
+    N32 --> N33
+    N33 --> N34
+    N34 --> N35
+    N35 --> N36
+    N36 --> N37
+    N37 --> If_38
+    If_38 -- Yes --> Then_38
+    Then_38 --> Stmt_38_1930
+    Stmt_38_1930 --> Stmt_38_8273
+    If_38 -- No --> Else_38
+    Else_38 --> Stmt_38_7580
+    Stmt_38_7580 --> Stmt_38_1967
+    Stmt_38_8273 --> IfEnd_38
+    Stmt_38_1967 --> IfEnd_38
+    IfEnd_38 --> N59
+    N59 --> N60
+    N60 --> N61
+    N61 --> N62
+    N62 --> If_63
+    If_63 -- Yes --> Then_63
+    Then_63 --> Stmt_63_4274
+    Stmt_63_4274 --> IfEnd_63
+    End([End])
+    Stmt_63_4274 --> End

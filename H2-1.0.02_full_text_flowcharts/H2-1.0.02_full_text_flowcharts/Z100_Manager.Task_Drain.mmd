@@ -1,0 +1,50 @@
+%% Z100_Manager.Task_Drain - action - Full Text Flowchart
+flowchart TD
+    Start([Start: Z100_Manager.Task_Drain])
+    If_1{{"IF PVL.Z100_Config.Task.eTask&amp;lt;&amp;gt; Local_Task THEN"}}
+    Then_1["THEN"]
+    Stmt_1_237["Local_Task:=PVL.Z100_Config.Task.eTask;"]
+    Stmt_1_9742["PVL.Z100_Config.READY:=TRUE;"]
+    IfEnd_1[Continue...]
+    N22["PVL.PID[PID_Mapping.Z100_Flow].PLC_Target:=PVL.Z100_Config.Drain_Rate.Target;"]
+    N23["Burkert.Alarm_Window_Convert(window:=PVL.Z100_Config.Drain_Rate,Config:=PVL.s8098[s8098_Mapping.FT_101].PDO.VolumeFlow.Alarm_Config);"]
+    SubCall_24["CALL: Evaluate_Drain"]
+    style SubCall_24 fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    Case_25["CASE PVL.Z100_Config.Status.eStatus OF"]
+    CaseOpt_25_0["eZ100_Status.PT101_High_High_Pressure_Alarm"]
+    CaseOpt_25_0_L1["Local_Status:=eZ100_Status.PT101_High_High_Pressure_Alarm;PVL.Z100_Config.READY:=FALSE;"]
+    CaseOpt_25_1["eZ100_Status.PT101_Low_Low_Pressure_Alarm"]
+    CaseOpt_25_1_L1["Local_Status:=eZ100_Status.PT101_Low_Low_Pressure_Alarm;PVL.Z100_Config.READY:=FALSE;"]
+    CaseOpt_25_2["eZ100_Status.LSLL101_Pump_Intakes_Dry"]
+    CaseOpt_25_2_L1["Local_Status:=PVL.Z100_Config.Status.eStatus;PVL.Z100_Config.READY:=FALSE;"]
+    CaseOpt_25_3["eZ100_Status.Drain_Complete"]
+    CaseOpt_25_3_L1["Local_Status:=PVL.Z100_Config.Status.eStatus;	PVL.Z100_Config.READY:=TRUE;"]
+    CaseOpt_25_4["eZ100_Status.Drain_Active"]
+    CaseOpt_25_4_L1["PVL.Z100_Config.READY:=TRUE;"]
+    CaseEnd_25[Continue...]
+    Start --> If_1
+    If_1 -- Yes --> Then_1
+    Then_1 --> Stmt_1_237
+    Stmt_1_237 --> Stmt_1_9742
+    Stmt_1_9742 --> IfEnd_1
+    IfEnd_1 --> N22
+    N22 --> N23
+    N23 --> SubCall_24
+    SubCall_24 --> Case_25
+    Case_25 --> CaseOpt_25_0
+    CaseOpt_25_0 --> CaseOpt_25_0_L1
+    Case_25 --> CaseOpt_25_1
+    CaseOpt_25_1 --> CaseOpt_25_1_L1
+    Case_25 --> CaseOpt_25_2
+    CaseOpt_25_2 --> CaseOpt_25_2_L1
+    Case_25 --> CaseOpt_25_3
+    CaseOpt_25_3 --> CaseOpt_25_3_L1
+    Case_25 --> CaseOpt_25_4
+    CaseOpt_25_4 --> CaseOpt_25_4_L1
+    CaseOpt_25_0_L1 --> CaseEnd_25
+    CaseOpt_25_1_L1 --> CaseEnd_25
+    CaseOpt_25_2_L1 --> CaseEnd_25
+    CaseOpt_25_3_L1 --> CaseEnd_25
+    CaseOpt_25_4_L1 --> CaseEnd_25
+    End([End])
+    CaseOpt_25_4_L1 --> End
