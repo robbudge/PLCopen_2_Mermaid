@@ -1,6 +1,6 @@
 """
 ST (Structured Text) Processor for Codesys to Mermaid conversion
-Updated with proper XHTML extraction and improved statement parsing
+Updated with proper nested IF-THEN-ELSE parsing and improved statement parsing
 """
 
 import logging
@@ -136,7 +136,7 @@ class STProcessor:
     def _parse_st_statements(self, st_code: str) -> List[Dict[str, Any]]:
         """
         Parse ST code into structured statements
-        IMPROVED: Better handling of CASE statements and control structures
+        IMPROVED: Better handling of nested IF, CASE statements and control structures
         """
         statements = []
         if not st_code or not st_code.strip():
@@ -144,54 +144,110 @@ class STProcessor:
 
         logger.info(f"Parsing ST code: {st_code[:100]}...")
 
-        # First, let's handle CASE statements specially since they have a specific structure
-        case_pattern = r'CASE\s+([^:]*?)\s+OF\s*(.*?)\s*END_CASE'
-        case_matches = list(re.finditer(case_pattern, st_code, re.IGNORECASE | re.DOTALL))
-
-        if case_matches:
-            # Process CASE statements separately
-            remaining_code = st_code
-            for match in case_matches:
-                # Add content before CASE
-                before_case = remaining_code[:match.start()].strip()
-                if before_case:
-                    statements.extend(self._parse_simple_statements(before_case))
-
-                # Process CASE statement
-                case_var = match.group(1).strip()
-                case_content = match.group(2).strip()
-
-                # Add CASE start
-                statements.append({
-                    'type': 'CASE',
-                    'content': case_var,
-                    'raw': f"CASE {case_var} OF"
-                })
-
-                # Parse CASE branches
-                branches = self._parse_case_branches(case_content)
-                statements.extend(branches)
-
-                # Add CASE end
-                statements.append({
-                    'type': 'END_CONTROL',
-                    'content': 'END_CASE',
-                    'raw': 'END_CASE'
-                })
-
-                remaining_code = remaining_code[match.end():]
-
-            # Add any remaining code after last CASE
-            if remaining_code.strip():
-                statements.extend(self._parse_simple_statements(remaining_code))
-        else:
-            # No CASE statements, use regular parsing
-            statements = self._parse_simple_statements(st_code)
+        # Use recursive parsing to handle nested structures
+        statements = self._parse_nested_structures(st_code)
 
         return statements
 
+    def _parse_nested_structures(self, st_code: str, depth: int = 0) -> List[Dict[str, Any]]:
+        """Parse nested control structures recursively"""
+        statements = []
+        remaining_code = st_code
+
+        while remaining_code.strip():
+            # Look for the next control structure
+            next_control = self._find_next_control_structure(remaining_code)
+
+            if not next_control:
+                # No more control structures, parse remaining as simple statements
+                if remaining_code.strip():
+                    statements.extend(self._parse_simple_statements(remaining_code))
+                break
+
+            control_type, start_pos, end_pos, content = next_control
+
+            # Add content before control structure
+            before_control = remaining_code[:start_pos].strip()
+            if before_control:
+                statements.extend(self._parse_simple_statements(before_control))
+
+            # Process the control structure
+            if control_type == 'IF':
+                # Parse IF-THEN-ELSE structure
+                if_match = re.match(r'IF\s+(.*?)\s+THEN\s*(.*?)\s*(?:ELSE\s*(.*?)\s*)?END_IF', content,
+                                    re.IGNORECASE | re.DOTALL)
+                if if_match:
+                    condition = if_match.group(1).strip()
+                    then_block = if_match.group(2).strip()
+                    else_block = if_match.group(3).strip() if if_match.group(3) else ""
+
+                    # Recursively parse nested structures in THEN and ELSE blocks
+                    then_statements = self._parse_nested_structures(then_block, depth + 1)
+                    else_statements = self._parse_nested_structures(else_block, depth + 1)
+
+                    statements.append({
+                        'type': 'IF',
+                        'content': condition,
+                        'raw': f"IF {condition} THEN",
+                        'then_block': then_block,
+                        'else_block': else_block,
+                        'then_statements': then_statements,
+                        'else_statements': else_statements
+                    })
+
+            elif control_type == 'CASE':
+                # Parse CASE structure
+                case_match = re.match(r'CASE\s+([^:]*?)\s+OF\s*(.*?)\s*END_CASE', content, re.IGNORECASE | re.DOTALL)
+                if case_match:
+                    case_var = case_match.group(1).strip()
+                    case_content = case_match.group(2).strip()
+
+                    statements.append({
+                        'type': 'CASE',
+                        'content': case_var,
+                        'raw': f"CASE {case_var} OF"
+                    })
+
+                    # Parse CASE branches
+                    branches = self._parse_case_branches(case_content)
+                    statements.extend(branches)
+
+                    statements.append({
+                        'type': 'END_CONTROL',
+                        'content': 'END_CASE',
+                        'raw': 'END_CASE'
+                    })
+
+            # Move to remaining code after this control structure
+            remaining_code = remaining_code[end_pos:]
+
+        return statements
+
+    def _find_next_control_structure(self, st_code: str) -> Optional[tuple]:
+        """Find the next control structure in the code"""
+        # Look for IF statements
+        if_pattern = r'IF\s+.*?\s+THEN\s*.*?\s*END_IF'
+        if_match = re.search(if_pattern, st_code, re.IGNORECASE | re.DOTALL)
+
+        # Look for CASE statements
+        case_pattern = r'CASE\s+.*?\s+OF\s*.*?\s*END_CASE'
+        case_match = re.search(case_pattern, st_code, re.IGNORECASE | re.DOTALL)
+
+        # Find the earliest occurring control structure
+        matches = []
+        if if_match:
+            matches.append(('IF', if_match.start(), if_match.end(), if_match.group()))
+        if case_match:
+            matches.append(('CASE', case_match.start(), case_match.end(), case_match.group()))
+
+        if matches:
+            # Return the earliest match
+            return min(matches, key=lambda x: x[1])
+
+        return None
+
     def _parse_simple_statements(self, st_code: str) -> List[Dict[str, Any]]:
-        """Parse simple statements (non-CASE)"""
+        """Parse simple statements (non-control structures)"""
         statements = []
         lines = st_code.split('\n')
         current_statement = ""
@@ -333,7 +389,7 @@ class STProcessor:
             }
 
         # SEL function - treat as decision
-        elif 'sel(' in stmt_lower:
+        elif 'sel(' in stmt_lower and ':=' in statement:
             return {
                 'type': 'SEL_DECISION',
                 'content': statement,
@@ -367,7 +423,7 @@ class STProcessor:
                                          original_code: str) -> str:
         """
         Build Mermaid flowchart from parsed statements
-        FIXED: Handles empty CASE branches as 'NA' and SEL as decision boxes
+        FIXED: Proper nested IF-THEN-ELSE with correct branching
         """
         lines = []
 
@@ -404,7 +460,172 @@ class STProcessor:
         while i < len(statements):
             stmt = statements[i]
 
-            if stmt['type'] == 'CASE':
+            if stmt['type'] == 'IF' and 'then_statements' in stmt:
+                # IF statement with nested THEN and ELSE blocks
+                if_node = f"If{node_id}"
+                condition = stmt["content"].replace('"', '\\"')
+                lines.append(f'    {if_node}{{"IF {condition}"}}')
+                lines.append(f'    {previous_node} --> {if_node}')
+
+                # Build THEN branch
+                then_start_node = f"ThenStart{node_id}"
+                then_end_node = f"ThenEnd{node_id}"
+
+                # Create start of THEN branch
+                lines.append(f'    {if_node} -->|True| {then_start_node}["THEN branch"]')
+
+                # Build nested statements for THEN branch
+                then_previous = then_start_node
+                then_sub_id = node_id * 100
+
+                for then_stmt in stmt['then_statements']:
+                    if then_stmt['type'] == 'IF' and 'then_statements' in then_stmt:
+                        # Nested IF in THEN branch - build it properly
+                        nested_if_node = f"If{then_sub_id}"
+                        nested_condition = then_stmt["content"].replace('"', '\\"')
+                        lines.append(f'    {nested_if_node}{{"IF {nested_condition}"}}')
+                        lines.append(f'    {then_previous} --> {nested_if_node}')
+
+                        # Build nested THEN branch
+                        nested_then_start = f"ThenStart{then_sub_id}"
+                        nested_then_end = f"ThenEnd{then_sub_id}"
+                        lines.append(f'    {nested_if_node} -->|True| {nested_then_start}["THEN branch"]')
+
+                        nested_then_previous = nested_then_start
+                        nested_then_sub_id = then_sub_id + 1
+
+                        for nested_then_stmt in then_stmt['then_statements']:
+                            nested_then_node = f"Then{nested_then_sub_id}"
+                            nested_then_content = nested_then_stmt["content"].replace('"', '\\"')
+                            lines.append(f'    {nested_then_node}["{nested_then_content}"]')
+                            lines.append(f'    {nested_then_previous} --> {nested_then_node}')
+                            nested_then_previous = nested_then_node
+                            nested_then_sub_id += 1
+
+                        lines.append(f'    {nested_then_previous} --> {nested_then_end}')
+
+                        # Build nested ELSE branch
+                        nested_else_start = f"ElseStart{then_sub_id}"
+                        nested_else_end = f"ElseEnd{then_sub_id}"
+                        lines.append(f'    {nested_if_node} -->|False| {nested_else_start}["ELSE branch"]')
+
+                        nested_else_previous = nested_else_start
+                        nested_else_sub_id = then_sub_id + 100
+
+                        for nested_else_stmt in then_stmt['else_statements']:
+                            nested_else_node = f"Else{nested_else_sub_id}"
+                            nested_else_content = nested_else_stmt["content"].replace('"', '\\"')
+                            lines.append(f'    {nested_else_node}["{nested_else_content}"]')
+                            lines.append(f'    {nested_else_previous} --> {nested_else_node}')
+                            nested_else_previous = nested_else_node
+                            nested_else_sub_id += 1
+
+                        lines.append(f'    {nested_else_previous} --> {nested_else_end}')
+
+                        # Create merge point for nested IF
+                        nested_merge_node = f"Merge{then_sub_id}"
+                        lines.append(f'    {nested_then_end} --> {nested_merge_node}')
+                        lines.append(f'    {nested_else_end} --> {nested_merge_node}')
+
+                        then_previous = nested_merge_node
+                        then_sub_id = nested_else_sub_id + 1
+
+                    else:
+                        # Regular statement in THEN branch
+                        then_node_name = f"Then{then_sub_id}"
+                        then_content = then_stmt["content"].replace('"', '\\"')
+                        lines.append(f'    {then_node_name}["{then_content}"]')
+                        lines.append(f'    {then_previous} --> {then_node_name}')
+                        then_previous = then_node_name
+                        then_sub_id += 1
+
+                # Connect last THEN statement to THEN end
+                lines.append(f'    {then_previous} --> {then_end_node}')
+
+                # Build ELSE branch
+                else_start_node = f"ElseStart{node_id}"
+                else_end_node = f"ElseEnd{node_id}"
+
+                # Create start of ELSE branch
+                lines.append(f'    {if_node} -->|False| {else_start_node}["ELSE branch"]')
+
+                # Build nested statements for ELSE branch
+                else_previous = else_start_node
+                else_sub_id = node_id * 1000
+
+                for else_stmt in stmt['else_statements']:
+                    if else_stmt['type'] == 'IF' and 'then_statements' in else_stmt:
+                        # Nested IF in ELSE branch - build it properly
+                        nested_if_node = f"If{else_sub_id}"
+                        nested_condition = else_stmt["content"].replace('"', '\\"')
+                        lines.append(f'    {nested_if_node}{{"IF {nested_condition}"}}')
+                        lines.append(f'    {else_previous} --> {nested_if_node}')
+
+                        # Build nested THEN branch
+                        nested_then_start = f"ThenStart{else_sub_id}"
+                        nested_then_end = f"ThenEnd{else_sub_id}"
+                        lines.append(f'    {nested_if_node} -->|True| {nested_then_start}["THEN branch"]')
+
+                        nested_then_previous = nested_then_start
+                        nested_then_sub_id = else_sub_id + 1
+
+                        for nested_then_stmt in else_stmt['then_statements']:
+                            nested_then_node = f"Then{nested_then_sub_id}"
+                            nested_then_content = nested_then_stmt["content"].replace('"', '\\"')
+                            lines.append(f'    {nested_then_node}["{nested_then_content}"]')
+                            lines.append(f'    {nested_then_previous} --> {nested_then_node}')
+                            nested_then_previous = nested_then_node
+                            nested_then_sub_id += 1
+
+                        lines.append(f'    {nested_then_previous} --> {nested_then_end}')
+
+                        # Build nested ELSE branch
+                        nested_else_start = f"ElseStart{else_sub_id}"
+                        nested_else_end = f"ElseEnd{else_sub_id}"
+                        lines.append(f'    {nested_if_node} -->|False| {nested_else_start}["ELSE branch"]')
+
+                        nested_else_previous = nested_else_start
+                        nested_else_sub_id = else_sub_id + 100
+
+                        for nested_else_stmt in else_stmt['else_statements']:
+                            nested_else_node = f"Else{nested_else_sub_id}"
+                            nested_else_content = nested_else_stmt["content"].replace('"', '\\"')
+                            lines.append(f'    {nested_else_node}["{nested_else_content}"]')
+                            lines.append(f'    {nested_else_previous} --> {nested_else_node}')
+                            nested_else_previous = nested_else_node
+                            nested_else_sub_id += 1
+
+                        lines.append(f'    {nested_else_previous} --> {nested_else_end}')
+
+                        # Create merge point for nested IF
+                        nested_merge_node = f"Merge{else_sub_id}"
+                        lines.append(f'    {nested_then_end} --> {nested_merge_node}')
+                        lines.append(f'    {nested_else_end} --> {nested_merge_node}')
+
+                        else_previous = nested_merge_node
+                        else_sub_id = nested_else_sub_id + 1
+
+                    else:
+                        # Regular statement in ELSE branch
+                        else_node_name = f"Else{else_sub_id}"
+                        else_content = else_stmt["content"].replace('"', '\\"')
+                        lines.append(f'    {else_node_name}["{else_content}"]')
+                        lines.append(f'    {else_previous} --> {else_node_name}')
+                        else_previous = else_node_name
+                        else_sub_id += 1
+
+                # Connect last ELSE statement to ELSE end
+                lines.append(f'    {else_previous} --> {else_end_node}')
+
+                # Create merge point after both branches
+                merge_node = f"Merge{node_id}"
+                lines.append(f'    {then_end_node} --> {merge_node}')
+                lines.append(f'    {else_end_node} --> {merge_node}')
+
+                previous_node = merge_node
+                node_id += 1
+
+            elif stmt['type'] == 'CASE':
                 # CASE statement with branches
                 case_node = f"Case{node_id}"
                 lines.append(f'    {case_node}{{"CASE {stmt["content"]}"}}')
@@ -447,45 +668,54 @@ class STProcessor:
                 previous_node = merge_node
                 node_id += 1
 
-            elif stmt['type'] == 'IF':
-                node_name = f"Action{node_id}"
-                content = stmt["content"].replace('"', '\\"')
-                lines.append(f'    {node_name}{{"IF {content}"}}')
-                lines.append(f'    {previous_node} --> {node_name}')
-
-                # Create True and False branches
-                true_node = f"True{node_id}"
-                false_node = f"False{node_id}"
-                lines.append(f'    {node_name} -->|True| {true_node}["Then branch"]')
-                lines.append(f'    {node_name} -->|False| {false_node}["Else branch"]')
-
-                # Create merge point
-                merge_node = f"Merge{node_id}"
-                lines.append(f'    {true_node} --> {merge_node}')
-                lines.append(f'    {false_node} --> {merge_node}')
-
-                previous_node = merge_node
-                node_id += 1
-
             elif stmt['type'] == 'SEL_DECISION':
-                # SEL function as decision box
-                node_name = f"SEL{node_id}"
-                content = stmt["content"].replace('"', '\\"')
-                lines.append(f'    {node_name}{{"SEL {content}"}}')
-                lines.append(f'    {previous_node} --> {node_name}')
+                # Parse SEL function properly
+                sel_content = stmt["content"]
 
-                # Create True and False branches for SEL
-                true_node = f"SEL_True{node_id}"
-                false_node = f"SEL_False{node_id}"
-                lines.append(f'    {node_name} -->|True| {true_node}["First value"]')
-                lines.append(f'    {node_name} -->|False| {false_node}["Second value"]')
+                # Extract the assignment target and SEL parameters
+                sel_match = re.match(r'(.+?):=\s*SEL\s*\(\s*(.+?)\s*,\s*(.+?)\s*,\s*(.+?)\s*\)', sel_content,
+                                     re.IGNORECASE)
 
-                # Create merge point
-                merge_node = f"Merge{node_id}"
-                lines.append(f'    {true_node} --> {merge_node}')
-                lines.append(f'    {false_node} --> {merge_node}')
+                if sel_match:
+                    target_var = sel_match.group(1).strip()
+                    condition = sel_match.group(2).strip()
+                    false_value = sel_match.group(3).strip()
+                    true_value = sel_match.group(4).strip()
 
-                previous_node = merge_node
+                    # Create SEL decision node with just the condition
+                    sel_node = f"SEL{node_id}"
+                    condition_content = condition.replace('"', '\\"')
+                    lines.append(f'    {sel_node}{{"SEL: {condition_content}"}}')
+                    lines.append(f'    {previous_node} --> {sel_node}')
+
+                    # Create True branch (first value after condition)
+                    true_node = f"SEL_True{node_id}"
+                    true_assignment = f"{target_var} := {true_value}"
+                    true_content = true_assignment.replace('"', '\\"')
+                    lines.append(f'    {true_node}["{true_content}"]')
+                    lines.append(f'    {sel_node} -->|True| {true_node}')
+
+                    # Create False branch (second value after condition)
+                    false_node = f"SEL_False{node_id}"
+                    false_assignment = f"{target_var} := {false_value}"
+                    false_content = false_assignment.replace('"', '\\"')
+                    lines.append(f'    {false_node}["{false_content}"]')
+                    lines.append(f'    {sel_node} -->|False| {false_node}')
+
+                    # Create merge point
+                    merge_node = f"Merge{node_id}"
+                    lines.append(f'    {true_node} --> {merge_node}')
+                    lines.append(f'    {false_node} --> {merge_node}')
+
+                    previous_node = merge_node
+                else:
+                    # Fallback if SEL parsing fails
+                    node_name = f"Action{node_id}"
+                    content = stmt["content"].replace('"', '\\"')
+                    lines.append(f'    {node_name}["{content}"]')
+                    lines.append(f'    {previous_node} --> {node_name}')
+                    previous_node = node_name
+
                 node_id += 1
 
             elif stmt['type'] in ['FOR', 'WHILE', 'REPEAT']:
@@ -514,6 +744,61 @@ class STProcessor:
         lines.append(f'    {previous_node} --> End["End: {pou_name}"]')
 
         return '\n'.join(lines)
+
+    def _build_nested_if(self, if_stmt: Dict[str, Any], base_id: int, previous_node: str, end_node: str) -> List[str]:
+        """Build nested IF statement"""
+        lines = []
+
+        if_node = f"If{base_id}"
+        condition = if_stmt["content"].replace('"', '\\"')
+        lines.append(f'    {if_node}{{"IF {condition}"}}')
+        lines.append(f'    {previous_node} --> {if_node}')
+
+        # Build THEN branch for nested IF
+        then_start_node = f"ThenStart{base_id}"
+        then_end_node = f"ThenEnd{base_id}"
+
+        lines.append(f'    {if_node} -->|True| {then_start_node}["THEN branch"]')
+
+        then_previous = then_start_node
+        then_sub_id = base_id + 1
+
+        for then_stmt in if_stmt['then_statements']:
+            then_node_name = f"Then{then_sub_id}"
+            then_content = then_stmt["content"].replace('"', '\\"')
+            lines.append(f'    {then_node_name}["{then_content}"]')
+            lines.append(f'    {then_previous} --> {then_node_name}')
+            then_previous = then_node_name
+            then_sub_id += 1
+
+        lines.append(f'    {then_previous} --> {then_end_node}')
+
+        # Build ELSE branch for nested IF
+        else_start_node = f"ElseStart{base_id}"
+        else_end_node = f"ElseEnd{base_id}"
+
+        lines.append(f'    {if_node} -->|False| {else_start_node}["ELSE branch"]')
+
+        else_previous = else_start_node
+        else_sub_id = base_id + 100
+
+        for else_stmt in if_stmt['else_statements']:
+            else_node_name = f"Else{else_sub_id}"
+            else_content = else_stmt["content"].replace('"', '\\"')
+            lines.append(f'    {else_node_name}["{else_content}"]')
+            lines.append(f'    {else_previous} --> {else_node_name}')
+            else_previous = else_node_name
+            else_sub_id += 1
+
+        lines.append(f'    {else_previous} --> {else_end_node}')
+
+        # Create merge point for nested IF
+        merge_node = f"Merge{base_id}"
+        lines.append(f'    {then_end_node} --> {merge_node}')
+        lines.append(f'    {else_end_node} --> {merge_node}')
+        lines.append(f'    {merge_node} --> {end_node}')
+
+        return lines
 
     def _create_empty_flowchart(self, pou_name: str) -> str:
         """Create empty flowchart for POU with no code"""
