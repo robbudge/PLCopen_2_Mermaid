@@ -3753,3 +3753,1344 @@
 2025-11-10 14:43:47,983 - __main__ - ERROR - Application failed to start: cannot import name 'STProcessor' from 'st_processor' (S:\PLC_export_Test\PLCopen_2_DrawIO\H2-1.0.02_full_text_flowcharts\st_processor.py)
 2025-11-10 14:47:12,630 - __main__ - INFO - Starting PLCopen XML to Diagram Converter
 2025-11-10 14:47:12,632 - __main__ - ERROR - Application failed to start: cannot import name 'STProcessor' from 'st_processor' (S:\PLC_export_Test\PLCopen_2_DrawIO\H2-1.0.02_full_text_flowcharts\st_processor.py)
+2025-11-10 14:50:45,458 - __main__ - INFO - Starting PLCopen XML to Diagram Converter
+2025-11-10 14:50:52,497 - gui_manager - INFO - File selected: S:/PLC_export_Test/H2N-PLCopen/H2-1.0.02.xml
+2025-11-10 14:50:53,480 - gui_manager - INFO - Parsing XML structure...
+2025-11-10 14:50:53,497 - gui_manager - INFO - Namespace detected: {http://www.plcopen.org/xml/tc6_0200}
+2025-11-10 14:50:53,497 - gui_manager - INFO - Extracting POU elements and actions...
+2025-11-10 14:50:53,497 - gui_manager - INFO - Found 36 POU elements
+2025-11-10 14:50:53,497 - gui_manager - INFO - Extracting project structure...
+2025-11-10 14:50:53,498 - gui_manager - INFO - Project structure extracted with 6 root items
+2025-11-10 14:50:53,498 - gui_manager - INFO - Total components extracted: 121
+2025-11-10 14:50:53,498 - gui_manager - INFO - Opening component browser...
+2025-11-10 14:50:53,652 - gui_manager - INFO - Component browser displayed, waiting for user selection...
+2025-11-10 14:50:58,391 - gui_manager - INFO - User selected component: 8434914f-e6f1-445d-8041-c11fc10ec62b
+2025-11-10 14:51:01,200 - gui_manager - INFO - Converting ObjectID 8434914f-e6f1-445d-8041-c11fc10ec62b to formats: ['mermaid']
+2025-11-10 14:51:01,200 - mermaid_processor - INFO - Mermaid processor namespace set to: {http://www.plcopen.org/xml/tc6_0200}
+2025-11-10 14:51:01,200 - st_processor - INFO - STProcessor namespace set to: {http://www.plcopen.org/xml/tc6_0200}
+2025-11-10 14:51:01,200 - drawio_processor - INFO - DrawIO processor namespace set to: {http://www.plcopen.org/xml/tc6_0200}
+2025-11-10 14:51:01,200 - st_processor - INFO - STProcessor namespace set to: {http://www.plcopen.org/xml/tc6_0200}
+2025-11-10 14:51:01,200 - mermaid_processor - INFO - Converting POU: Z100_Manager to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:51:01,200 - mermaid_processor - INFO - Found body for Z100_Manager, analyzing content...
+2025-11-10 14:51:01,200 - mermaid_processor - INFO - Body children tags for Z100_Manager: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 14:51:01,200 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 13
+2025-11-10 14:51:01,200 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+            
+2025-11-10 14:51:01,200 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager ===
+2025-11-10 14:51:01,200 - st_processor - INFO - Found direct ST element for Z100_Manager
+2025-11-10 14:51:01,200 - mermaid_processor - INFO - Found ST code for Z100_Manager, length: 13 characters
+2025-11-10 14:51:01,200 - mermaid_processor - ERROR - Mermaid conversion failed for Z100_Manager: 'STProcessor' object has no attribute 'convert_to_mermaid'
+2025-11-10 14:54:34,845 - __main__ - INFO - Starting PLCopen XML to Diagram Converter
+2025-11-10 14:54:41,965 - gui_manager - INFO - File selected: S:/PLC_export_Test/H2N-PLCopen/H2-1.0.02.xml
+2025-11-10 14:54:42,661 - gui_manager - INFO - Parsing XML structure...
+2025-11-10 14:54:42,677 - gui_manager - INFO - Namespace detected: {http://www.plcopen.org/xml/tc6_0200}
+2025-11-10 14:54:42,677 - gui_manager - INFO - Extracting POU elements and actions...
+2025-11-10 14:54:42,677 - gui_manager - INFO - Found 36 POU elements
+2025-11-10 14:54:42,677 - gui_manager - INFO - Extracting project structure...
+2025-11-10 14:54:42,678 - gui_manager - INFO - Project structure extracted with 6 root items
+2025-11-10 14:54:42,678 - gui_manager - INFO - Total components extracted: 121
+2025-11-10 14:54:42,678 - gui_manager - INFO - Opening component browser...
+2025-11-10 14:54:42,775 - gui_manager - INFO - Component browser displayed, waiting for user selection...
+2025-11-10 14:54:45,922 - gui_manager - INFO - Select button clicked - setting selection to: 8434914f-e6f1-445d-8041-c11fc10ec62b
+2025-11-10 14:54:46,005 - gui_manager - INFO - User selected component: 8434914f-e6f1-445d-8041-c11fc10ec62b
+2025-11-10 14:54:48,294 - gui_manager - INFO - Converting ObjectID 8434914f-e6f1-445d-8041-c11fc10ec62b to formats: ['mermaid']
+2025-11-10 14:54:48,294 - mermaid_processor - INFO - Mermaid processor namespace set to: {http://www.plcopen.org/xml/tc6_0200}
+2025-11-10 14:54:48,294 - st_processor - INFO - STProcessor namespace set to: {http://www.plcopen.org/xml/tc6_0200}
+2025-11-10 14:54:48,294 - drawio_processor - INFO - DrawIO processor namespace set to: {http://www.plcopen.org/xml/tc6_0200}
+2025-11-10 14:54:48,294 - st_processor - INFO - STProcessor namespace set to: {http://www.plcopen.org/xml/tc6_0200}
+2025-11-10 14:54:48,294 - mermaid_processor - INFO - Converting POU: Z100_Manager to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:54:48,294 - mermaid_processor - INFO - Found body for Z100_Manager, analyzing content...
+2025-11-10 14:54:48,294 - mermaid_processor - INFO - Body children tags for Z100_Manager: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 14:54:48,294 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 13
+2025-11-10 14:54:48,294 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+            
+2025-11-10 14:54:48,294 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager ===
+2025-11-10 14:54:48,294 - st_processor - INFO - Found direct ST element for Z100_Manager
+2025-11-10 14:54:48,294 - mermaid_processor - INFO - Found ST code for Z100_Manager, length: 13 characters
+2025-11-10 14:54:48,294 - st_processor - INFO - Processing ST code for Z100_Manager, length: 13
+2025-11-10 14:54:48,294 - st_processor - INFO - Parsed 0 statements for Z100_Manager
+2025-11-10 14:54:48,295 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager_logic.mmd with 293 characters
+2025-11-10 14:54:48,295 - mermaid_processor - INFO - Found interface for Z100_Manager, analyzing variables...
+2025-11-10 14:54:48,295 - mermaid_processor - INFO - Found 7 variables in interface for Z100_Manager
+2025-11-10 14:54:48,295 - mermaid_processor - INFO - Variable 0: name=None, type=eZ100_Status
+2025-11-10 14:54:48,295 - mermaid_processor - INFO - Variable 1: name=None, type=eZ100_Status
+2025-11-10 14:54:48,295 - mermaid_processor - INFO - Variable 2: name=None, type=eZ100_Task
+2025-11-10 14:54:48,295 - mermaid_processor - INFO - Variable 3: name=None, type=Unknown
+2025-11-10 14:54:48,295 - mermaid_processor - INFO - Variable 4: name=None, type=Unknown
+2025-11-10 14:54:48,295 - mermaid_processor - INFO - Variable 5: name=None, type=Unknown
+2025-11-10 14:54:48,295 - mermaid_processor - INFO - Variable 6: name=None, type=Unknown
+2025-11-10 14:54:48,295 - mermaid_processor - WARNING - No variables found in interface for Z100_Manager
+2025-11-10 14:54:48,295 - mermaid_processor - WARNING - No interface diagram generated for Z100_Manager - no variables found
+2025-11-10 14:54:48,295 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager_logic.mmd']
+2025-11-10 14:54:48,295 - gui_manager - INFO - Converting 16 actions for POU: Z100_Manager
+2025-11-10 14:54:48,295 - mermaid_processor - INFO - Converting Action: Z100_Manager.Evaluate_Batch_Level to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:54:48,295 - mermaid_processor - INFO - Found body for Z100_Manager.Evaluate_Batch_Level, analyzing content...
+2025-11-10 14:54:48,295 - mermaid_processor - INFO - Body children tags for Z100_Manager.Evaluate_Batch_Level: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 14:54:48,295 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 14:54:48,295 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 14:54:48,295 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Evaluate_Batch_Level ===
+2025-11-10 14:54:48,295 - st_processor - INFO - Found direct ST element for Z100_Manager.Evaluate_Batch_Level
+2025-11-10 14:54:48,295 - mermaid_processor - INFO - Found ST code for Z100_Manager.Evaluate_Batch_Level, length: 17 characters
+2025-11-10 14:54:48,295 - st_processor - INFO - Processing ST code for Z100_Manager.Evaluate_Batch_Level, length: 17
+2025-11-10 14:54:48,295 - st_processor - INFO - Parsed 0 statements for Z100_Manager.Evaluate_Batch_Level
+2025-11-10 14:54:48,295 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Evaluate_Batch_Level_logic.mmd with 356 characters
+2025-11-10 14:54:48,295 - mermaid_processor - WARNING - No interface found for Z100_Manager.Evaluate_Batch_Level
+2025-11-10 14:54:48,295 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Evaluate_Batch_Level_logic.mmd']
+2025-11-10 14:54:48,296 - mermaid_processor - INFO - Converting Action: Z100_Manager.PID_Manager to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:54:48,296 - mermaid_processor - INFO - Found body for Z100_Manager.PID_Manager, analyzing content...
+2025-11-10 14:54:48,296 - mermaid_processor - INFO - Body children tags for Z100_Manager.PID_Manager: ['{http://www.plcopen.org/xml/tc6_0200}ST', '{http://www.plcopen.org/xml/tc6_0200}addData']
+2025-11-10 14:54:48,296 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 14:54:48,296 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 14:54:48,296 - mermaid_processor - INFO - Body child 1: {http://www.plcopen.org/xml/tc6_0200}addData - has text: True - text length: 17
+2025-11-10 14:54:48,296 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}addData: 
+                
+2025-11-10 14:54:48,296 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.PID_Manager ===
+2025-11-10 14:54:48,296 - st_processor - INFO - Found direct ST element for Z100_Manager.PID_Manager
+2025-11-10 14:54:48,296 - mermaid_processor - INFO - Found ST code for Z100_Manager.PID_Manager, length: 17 characters
+2025-11-10 14:54:48,296 - st_processor - INFO - Processing ST code for Z100_Manager.PID_Manager, length: 17
+2025-11-10 14:54:48,296 - st_processor - INFO - Parsed 0 statements for Z100_Manager.PID_Manager
+2025-11-10 14:54:48,296 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.PID_Manager_logic.mmd with 329 characters
+2025-11-10 14:54:48,296 - mermaid_processor - WARNING - No interface found for Z100_Manager.PID_Manager
+2025-11-10 14:54:48,296 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.PID_Manager_logic.mmd']
+2025-11-10 14:54:48,296 - mermaid_processor - INFO - Converting Action: Z100_Manager.Task_Drain to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:54:48,296 - mermaid_processor - INFO - Found body for Z100_Manager.Task_Drain, analyzing content...
+2025-11-10 14:54:48,296 - mermaid_processor - INFO - Body children tags for Z100_Manager.Task_Drain: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 14:54:48,296 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 14:54:48,296 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 14:54:48,296 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Task_Drain ===
+2025-11-10 14:54:48,296 - st_processor - INFO - Found direct ST element for Z100_Manager.Task_Drain
+2025-11-10 14:54:48,296 - mermaid_processor - INFO - Found ST code for Z100_Manager.Task_Drain, length: 17 characters
+2025-11-10 14:54:48,296 - st_processor - INFO - Processing ST code for Z100_Manager.Task_Drain, length: 17
+2025-11-10 14:54:48,296 - st_processor - INFO - Parsed 0 statements for Z100_Manager.Task_Drain
+2025-11-10 14:54:48,296 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Task_Drain_logic.mmd with 326 characters
+2025-11-10 14:54:48,296 - mermaid_processor - WARNING - No interface found for Z100_Manager.Task_Drain
+2025-11-10 14:54:48,296 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Task_Drain_logic.mmd']
+2025-11-10 14:54:48,296 - mermaid_processor - INFO - Converting Action: Z100_Manager.Evaluate_ALL to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:54:48,296 - mermaid_processor - INFO - Found body for Z100_Manager.Evaluate_ALL, analyzing content...
+2025-11-10 14:54:48,296 - mermaid_processor - INFO - Body children tags for Z100_Manager.Evaluate_ALL: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 14:54:48,296 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 14:54:48,296 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 14:54:48,296 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Evaluate_ALL ===
+2025-11-10 14:54:48,297 - st_processor - INFO - Found direct ST element for Z100_Manager.Evaluate_ALL
+2025-11-10 14:54:48,297 - mermaid_processor - INFO - Found ST code for Z100_Manager.Evaluate_ALL, length: 17 characters
+2025-11-10 14:54:48,297 - st_processor - INFO - Processing ST code for Z100_Manager.Evaluate_ALL, length: 17
+2025-11-10 14:54:48,297 - st_processor - INFO - Parsed 0 statements for Z100_Manager.Evaluate_ALL
+2025-11-10 14:54:48,297 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Evaluate_ALL_logic.mmd with 332 characters
+2025-11-10 14:54:48,297 - mermaid_processor - WARNING - No interface found for Z100_Manager.Evaluate_ALL
+2025-11-10 14:54:48,297 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Evaluate_ALL_logic.mmd']
+2025-11-10 14:54:48,297 - mermaid_processor - INFO - Converting Action: Z100_Manager.Continuous_UV to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:54:48,297 - mermaid_processor - INFO - Found body for Z100_Manager.Continuous_UV, analyzing content...
+2025-11-10 14:54:48,297 - mermaid_processor - INFO - Body children tags for Z100_Manager.Continuous_UV: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 14:54:48,297 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 14:54:48,297 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 14:54:48,297 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Continuous_UV ===
+2025-11-10 14:54:48,297 - st_processor - INFO - Found direct ST element for Z100_Manager.Continuous_UV
+2025-11-10 14:54:48,297 - mermaid_processor - INFO - Found ST code for Z100_Manager.Continuous_UV, length: 17 characters
+2025-11-10 14:54:48,297 - st_processor - INFO - Processing ST code for Z100_Manager.Continuous_UV, length: 17
+2025-11-10 14:54:48,297 - st_processor - INFO - Parsed 0 statements for Z100_Manager.Continuous_UV
+2025-11-10 14:54:48,297 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Continuous_UV_logic.mmd with 335 characters
+2025-11-10 14:54:48,297 - mermaid_processor - WARNING - No interface found for Z100_Manager.Continuous_UV
+2025-11-10 14:54:48,297 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Continuous_UV_logic.mmd']
+2025-11-10 14:54:48,297 - mermaid_processor - INFO - Converting Action: Z100_Manager.Evaluate_Continuous_UV to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:54:48,297 - mermaid_processor - INFO - Found body for Z100_Manager.Evaluate_Continuous_UV, analyzing content...
+2025-11-10 14:54:48,297 - mermaid_processor - INFO - Body children tags for Z100_Manager.Evaluate_Continuous_UV: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 14:54:48,297 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 14:54:48,297 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 14:54:48,297 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Evaluate_Continuous_UV ===
+2025-11-10 14:54:48,297 - st_processor - INFO - Found direct ST element for Z100_Manager.Evaluate_Continuous_UV
+2025-11-10 14:54:48,297 - mermaid_processor - INFO - Found ST code for Z100_Manager.Evaluate_Continuous_UV, length: 17 characters
+2025-11-10 14:54:48,297 - st_processor - INFO - Processing ST code for Z100_Manager.Evaluate_Continuous_UV, length: 17
+2025-11-10 14:54:48,297 - st_processor - INFO - Parsed 0 statements for Z100_Manager.Evaluate_Continuous_UV
+2025-11-10 14:54:48,298 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Evaluate_Continuous_UV_logic.mmd with 362 characters
+2025-11-10 14:54:48,298 - mermaid_processor - WARNING - No interface found for Z100_Manager.Evaluate_Continuous_UV
+2025-11-10 14:54:48,298 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Evaluate_Continuous_UV_logic.mmd']
+2025-11-10 14:54:48,298 - mermaid_processor - INFO - Converting Action: Z100_Manager.Evaluate_Level to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:54:48,298 - mermaid_processor - INFO - Found body for Z100_Manager.Evaluate_Level, analyzing content...
+2025-11-10 14:54:48,298 - mermaid_processor - INFO - Body children tags for Z100_Manager.Evaluate_Level: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 14:54:48,298 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 14:54:48,298 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 14:54:48,298 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Evaluate_Level ===
+2025-11-10 14:54:48,298 - st_processor - INFO - Found direct ST element for Z100_Manager.Evaluate_Level
+2025-11-10 14:54:48,298 - mermaid_processor - INFO - Found ST code for Z100_Manager.Evaluate_Level, length: 17 characters
+2025-11-10 14:54:48,298 - st_processor - INFO - Processing ST code for Z100_Manager.Evaluate_Level, length: 17
+2025-11-10 14:54:48,298 - st_processor - INFO - Parsed 0 statements for Z100_Manager.Evaluate_Level
+2025-11-10 14:54:48,298 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Evaluate_Level_logic.mmd with 338 characters
+2025-11-10 14:54:48,298 - mermaid_processor - WARNING - No interface found for Z100_Manager.Evaluate_Level
+2025-11-10 14:54:48,298 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Evaluate_Level_logic.mmd']
+2025-11-10 14:54:48,298 - mermaid_processor - INFO - Converting Action: Z100_Manager.Evaluate_Flow_Intake to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:54:48,298 - mermaid_processor - INFO - Found body for Z100_Manager.Evaluate_Flow_Intake, analyzing content...
+2025-11-10 14:54:48,298 - mermaid_processor - INFO - Body children tags for Z100_Manager.Evaluate_Flow_Intake: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 14:54:48,298 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 14:54:48,298 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 14:54:48,298 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Evaluate_Flow_Intake ===
+2025-11-10 14:54:48,298 - st_processor - INFO - Found direct ST element for Z100_Manager.Evaluate_Flow_Intake
+2025-11-10 14:54:48,298 - mermaid_processor - INFO - Found ST code for Z100_Manager.Evaluate_Flow_Intake, length: 17 characters
+2025-11-10 14:54:48,298 - st_processor - INFO - Processing ST code for Z100_Manager.Evaluate_Flow_Intake, length: 17
+2025-11-10 14:54:48,298 - st_processor - INFO - Parsed 0 statements for Z100_Manager.Evaluate_Flow_Intake
+2025-11-10 14:54:48,299 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Evaluate_Flow_Intake_logic.mmd with 356 characters
+2025-11-10 14:54:48,299 - mermaid_processor - WARNING - No interface found for Z100_Manager.Evaluate_Flow_Intake
+2025-11-10 14:54:48,299 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Evaluate_Flow_Intake_logic.mmd']
+2025-11-10 14:54:48,299 - mermaid_processor - INFO - Converting Action: Z100_Manager.ACV_Manager to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:54:48,299 - mermaid_processor - INFO - Found body for Z100_Manager.ACV_Manager, analyzing content...
+2025-11-10 14:54:48,299 - mermaid_processor - INFO - Body children tags for Z100_Manager.ACV_Manager: ['{http://www.plcopen.org/xml/tc6_0200}ST', '{http://www.plcopen.org/xml/tc6_0200}addData']
+2025-11-10 14:54:48,299 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 14:54:48,299 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 14:54:48,299 - mermaid_processor - INFO - Body child 1: {http://www.plcopen.org/xml/tc6_0200}addData - has text: True - text length: 17
+2025-11-10 14:54:48,299 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}addData: 
+                
+2025-11-10 14:54:48,299 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.ACV_Manager ===
+2025-11-10 14:54:48,299 - st_processor - INFO - Found direct ST element for Z100_Manager.ACV_Manager
+2025-11-10 14:54:48,299 - mermaid_processor - INFO - Found ST code for Z100_Manager.ACV_Manager, length: 17 characters
+2025-11-10 14:54:48,299 - st_processor - INFO - Processing ST code for Z100_Manager.ACV_Manager, length: 17
+2025-11-10 14:54:48,299 - st_processor - INFO - Parsed 0 statements for Z100_Manager.ACV_Manager
+2025-11-10 14:54:48,299 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.ACV_Manager_logic.mmd with 329 characters
+2025-11-10 14:54:48,299 - mermaid_processor - WARNING - No interface found for Z100_Manager.ACV_Manager
+2025-11-10 14:54:48,299 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.ACV_Manager_logic.mmd']
+2025-11-10 14:54:48,299 - mermaid_processor - INFO - Converting Action: Z100_Manager.Task_Flow_Discharge to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:54:48,299 - mermaid_processor - INFO - Found body for Z100_Manager.Task_Flow_Discharge, analyzing content...
+2025-11-10 14:54:48,299 - mermaid_processor - INFO - Body children tags for Z100_Manager.Task_Flow_Discharge: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 14:54:48,299 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 14:54:48,299 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 14:54:48,299 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Task_Flow_Discharge ===
+2025-11-10 14:54:48,299 - st_processor - INFO - Found direct ST element for Z100_Manager.Task_Flow_Discharge
+2025-11-10 14:54:48,299 - mermaid_processor - INFO - Found ST code for Z100_Manager.Task_Flow_Discharge, length: 17 characters
+2025-11-10 14:54:48,299 - st_processor - INFO - Processing ST code for Z100_Manager.Task_Flow_Discharge, length: 17
+2025-11-10 14:54:48,299 - st_processor - INFO - Parsed 0 statements for Z100_Manager.Task_Flow_Discharge
+2025-11-10 14:54:48,299 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Task_Flow_Discharge_logic.mmd with 353 characters
+2025-11-10 14:54:48,299 - mermaid_processor - WARNING - No interface found for Z100_Manager.Task_Flow_Discharge
+2025-11-10 14:54:48,299 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Task_Flow_Discharge_logic.mmd']
+2025-11-10 14:54:48,299 - mermaid_processor - INFO - Converting Action: Z100_Manager.Alarms to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:54:48,299 - mermaid_processor - INFO - Found body for Z100_Manager.Alarms, analyzing content...
+2025-11-10 14:54:48,299 - mermaid_processor - INFO - Body children tags for Z100_Manager.Alarms: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 14:54:48,300 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 14:54:48,300 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 14:54:48,300 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Alarms ===
+2025-11-10 14:54:48,300 - st_processor - INFO - Found direct ST element for Z100_Manager.Alarms
+2025-11-10 14:54:48,300 - mermaid_processor - INFO - Found ST code for Z100_Manager.Alarms, length: 17 characters
+2025-11-10 14:54:48,300 - st_processor - INFO - Processing ST code for Z100_Manager.Alarms, length: 17
+2025-11-10 14:54:48,300 - st_processor - INFO - Parsed 0 statements for Z100_Manager.Alarms
+2025-11-10 14:54:48,300 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Alarms_logic.mmd with 314 characters
+2025-11-10 14:54:48,300 - mermaid_processor - WARNING - No interface found for Z100_Manager.Alarms
+2025-11-10 14:54:48,300 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Alarms_logic.mmd']
+2025-11-10 14:54:48,300 - mermaid_processor - INFO - Converting Action: Z100_Manager.Task_OFF to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:54:48,300 - mermaid_processor - INFO - Found body for Z100_Manager.Task_OFF, analyzing content...
+2025-11-10 14:54:48,300 - mermaid_processor - INFO - Body children tags for Z100_Manager.Task_OFF: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 14:54:48,300 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 14:54:48,300 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 14:54:48,300 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Task_OFF ===
+2025-11-10 14:54:48,300 - st_processor - INFO - Found direct ST element for Z100_Manager.Task_OFF
+2025-11-10 14:54:48,300 - mermaid_processor - INFO - Found ST code for Z100_Manager.Task_OFF, length: 17 characters
+2025-11-10 14:54:48,300 - st_processor - INFO - Processing ST code for Z100_Manager.Task_OFF, length: 17
+2025-11-10 14:54:48,300 - st_processor - INFO - Parsed 0 statements for Z100_Manager.Task_OFF
+2025-11-10 14:54:48,300 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Task_OFF_logic.mmd with 320 characters
+2025-11-10 14:54:48,300 - mermaid_processor - WARNING - No interface found for Z100_Manager.Task_OFF
+2025-11-10 14:54:48,300 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Task_OFF_logic.mmd']
+2025-11-10 14:54:48,300 - mermaid_processor - INFO - Converting Action: Z100_Manager.Evaluate_Batch to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:54:48,300 - mermaid_processor - INFO - Found body for Z100_Manager.Evaluate_Batch, analyzing content...
+2025-11-10 14:54:48,300 - mermaid_processor - INFO - Body children tags for Z100_Manager.Evaluate_Batch: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 14:54:48,300 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 14:54:48,300 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 14:54:48,300 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Evaluate_Batch ===
+2025-11-10 14:54:48,300 - st_processor - INFO - Found direct ST element for Z100_Manager.Evaluate_Batch
+2025-11-10 14:54:48,300 - mermaid_processor - INFO - Found ST code for Z100_Manager.Evaluate_Batch, length: 17 characters
+2025-11-10 14:54:48,300 - st_processor - INFO - Processing ST code for Z100_Manager.Evaluate_Batch, length: 17
+2025-11-10 14:54:48,301 - st_processor - INFO - Parsed 0 statements for Z100_Manager.Evaluate_Batch
+2025-11-10 14:54:48,301 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Evaluate_Batch_logic.mmd with 338 characters
+2025-11-10 14:54:48,301 - mermaid_processor - WARNING - No interface found for Z100_Manager.Evaluate_Batch
+2025-11-10 14:54:48,301 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Evaluate_Batch_logic.mmd']
+2025-11-10 14:54:48,301 - mermaid_processor - INFO - Converting Action: Z100_Manager.Task_Level to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:54:48,301 - mermaid_processor - INFO - Found body for Z100_Manager.Task_Level, analyzing content...
+2025-11-10 14:54:48,301 - mermaid_processor - INFO - Body children tags for Z100_Manager.Task_Level: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 14:54:48,301 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 14:54:48,301 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 14:54:48,301 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Task_Level ===
+2025-11-10 14:54:48,301 - st_processor - INFO - Found direct ST element for Z100_Manager.Task_Level
+2025-11-10 14:54:48,301 - mermaid_processor - INFO - Found ST code for Z100_Manager.Task_Level, length: 17 characters
+2025-11-10 14:54:48,301 - st_processor - INFO - Processing ST code for Z100_Manager.Task_Level, length: 17
+2025-11-10 14:54:48,301 - st_processor - INFO - Parsed 0 statements for Z100_Manager.Task_Level
+2025-11-10 14:54:48,301 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Task_Level_logic.mmd with 326 characters
+2025-11-10 14:54:48,301 - mermaid_processor - WARNING - No interface found for Z100_Manager.Task_Level
+2025-11-10 14:54:48,301 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Task_Level_logic.mmd']
+2025-11-10 14:54:48,301 - mermaid_processor - INFO - Converting Action: Z100_Manager.Evaluate_Flow_Discharge to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:54:48,301 - mermaid_processor - INFO - Found body for Z100_Manager.Evaluate_Flow_Discharge, analyzing content...
+2025-11-10 14:54:48,301 - mermaid_processor - INFO - Body children tags for Z100_Manager.Evaluate_Flow_Discharge: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 14:54:48,301 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 14:54:48,301 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 14:54:48,301 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Evaluate_Flow_Discharge ===
+2025-11-10 14:54:48,301 - st_processor - INFO - Found direct ST element for Z100_Manager.Evaluate_Flow_Discharge
+2025-11-10 14:54:48,301 - mermaid_processor - INFO - Found ST code for Z100_Manager.Evaluate_Flow_Discharge, length: 17 characters
+2025-11-10 14:54:48,301 - st_processor - INFO - Processing ST code for Z100_Manager.Evaluate_Flow_Discharge, length: 17
+2025-11-10 14:54:48,301 - st_processor - INFO - Parsed 0 statements for Z100_Manager.Evaluate_Flow_Discharge
+2025-11-10 14:54:48,301 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Evaluate_Flow_Discharge_logic.mmd with 365 characters
+2025-11-10 14:54:48,301 - mermaid_processor - WARNING - No interface found for Z100_Manager.Evaluate_Flow_Discharge
+2025-11-10 14:54:48,301 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Evaluate_Flow_Discharge_logic.mmd']
+2025-11-10 14:54:48,302 - mermaid_processor - INFO - Converting Action: Z100_Manager.Evaluate_Drain to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:54:48,302 - mermaid_processor - INFO - Found body for Z100_Manager.Evaluate_Drain, analyzing content...
+2025-11-10 14:54:48,302 - mermaid_processor - INFO - Body children tags for Z100_Manager.Evaluate_Drain: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 14:54:48,302 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 14:54:48,302 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 14:54:48,302 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Evaluate_Drain ===
+2025-11-10 14:54:48,302 - st_processor - INFO - Found direct ST element for Z100_Manager.Evaluate_Drain
+2025-11-10 14:54:48,302 - mermaid_processor - INFO - Found ST code for Z100_Manager.Evaluate_Drain, length: 17 characters
+2025-11-10 14:54:48,302 - st_processor - INFO - Processing ST code for Z100_Manager.Evaluate_Drain, length: 17
+2025-11-10 14:54:48,302 - st_processor - INFO - Parsed 0 statements for Z100_Manager.Evaluate_Drain
+2025-11-10 14:54:48,302 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Evaluate_Drain_logic.mmd with 338 characters
+2025-11-10 14:54:48,302 - mermaid_processor - WARNING - No interface found for Z100_Manager.Evaluate_Drain
+2025-11-10 14:54:48,302 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Evaluate_Drain_logic.mmd']
+2025-11-10 14:54:48,302 - gui_manager - INFO - Successfully generated files in S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:55:17,110 - gui_manager - INFO - Parsing XML structure...
+2025-11-10 14:55:17,127 - gui_manager - INFO - Namespace detected: {http://www.plcopen.org/xml/tc6_0200}
+2025-11-10 14:55:17,127 - gui_manager - INFO - Extracting POU elements and actions...
+2025-11-10 14:55:17,130 - gui_manager - INFO - Found 36 POU elements
+2025-11-10 14:55:17,130 - gui_manager - INFO - Extracting project structure...
+2025-11-10 14:55:17,131 - gui_manager - INFO - Project structure extracted with 6 root items
+2025-11-10 14:55:17,131 - gui_manager - INFO - Total components extracted: 121
+2025-11-10 14:55:17,131 - gui_manager - INFO - Opening component browser...
+2025-11-10 14:55:17,230 - gui_manager - INFO - Component browser displayed, waiting for user selection...
+2025-11-10 14:55:19,922 - gui_manager - INFO - User selected component: 8434914f-e6f1-445d-8041-c11fc10ec62b
+2025-11-10 14:55:22,089 - gui_manager - INFO - Converting ObjectID 8434914f-e6f1-445d-8041-c11fc10ec62b to formats: ['mermaid']
+2025-11-10 14:55:22,089 - mermaid_processor - INFO - Mermaid processor namespace set to: {http://www.plcopen.org/xml/tc6_0200}
+2025-11-10 14:55:22,090 - st_processor - INFO - STProcessor namespace set to: {http://www.plcopen.org/xml/tc6_0200}
+2025-11-10 14:55:22,090 - drawio_processor - INFO - DrawIO processor namespace set to: {http://www.plcopen.org/xml/tc6_0200}
+2025-11-10 14:55:22,090 - st_processor - INFO - STProcessor namespace set to: {http://www.plcopen.org/xml/tc6_0200}
+2025-11-10 14:55:22,090 - mermaid_processor - INFO - Converting POU: Z100_Manager to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:55:22,090 - mermaid_processor - INFO - Found body for Z100_Manager, analyzing content...
+2025-11-10 14:55:22,090 - mermaid_processor - INFO - Body children tags for Z100_Manager: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 14:55:22,090 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 13
+2025-11-10 14:55:22,090 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+            
+2025-11-10 14:55:22,090 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager ===
+2025-11-10 14:55:22,090 - st_processor - INFO - Found direct ST element for Z100_Manager
+2025-11-10 14:55:22,090 - mermaid_processor - INFO - Found ST code for Z100_Manager, length: 13 characters
+2025-11-10 14:55:22,090 - st_processor - INFO - Processing ST code for Z100_Manager, length: 13
+2025-11-10 14:55:22,090 - st_processor - INFO - Parsed 0 statements for Z100_Manager
+2025-11-10 14:55:22,090 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager_logic.mmd with 293 characters
+2025-11-10 14:55:22,090 - mermaid_processor - INFO - Found interface for Z100_Manager, analyzing variables...
+2025-11-10 14:55:22,090 - mermaid_processor - INFO - Found 7 variables in interface for Z100_Manager
+2025-11-10 14:55:22,090 - mermaid_processor - INFO - Variable 0: name=None, type=eZ100_Status
+2025-11-10 14:55:22,090 - mermaid_processor - INFO - Variable 1: name=None, type=eZ100_Status
+2025-11-10 14:55:22,090 - mermaid_processor - INFO - Variable 2: name=None, type=eZ100_Task
+2025-11-10 14:55:22,090 - mermaid_processor - INFO - Variable 3: name=None, type=Unknown
+2025-11-10 14:55:22,090 - mermaid_processor - INFO - Variable 4: name=None, type=Unknown
+2025-11-10 14:55:22,090 - mermaid_processor - INFO - Variable 5: name=None, type=Unknown
+2025-11-10 14:55:22,090 - mermaid_processor - INFO - Variable 6: name=None, type=Unknown
+2025-11-10 14:55:22,090 - mermaid_processor - WARNING - No variables found in interface for Z100_Manager
+2025-11-10 14:55:22,090 - mermaid_processor - WARNING - No interface diagram generated for Z100_Manager - no variables found
+2025-11-10 14:55:22,090 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager_logic.mmd']
+2025-11-10 14:55:22,090 - gui_manager - INFO - Converting 16 actions for POU: Z100_Manager
+2025-11-10 14:55:22,091 - mermaid_processor - INFO - Converting Action: Z100_Manager.Evaluate_Batch_Level to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:55:22,091 - mermaid_processor - INFO - Found body for Z100_Manager.Evaluate_Batch_Level, analyzing content...
+2025-11-10 14:55:22,091 - mermaid_processor - INFO - Body children tags for Z100_Manager.Evaluate_Batch_Level: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 14:55:22,091 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 14:55:22,091 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 14:55:22,091 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Evaluate_Batch_Level ===
+2025-11-10 14:55:22,091 - st_processor - INFO - Found direct ST element for Z100_Manager.Evaluate_Batch_Level
+2025-11-10 14:55:22,093 - mermaid_processor - INFO - Found ST code for Z100_Manager.Evaluate_Batch_Level, length: 17 characters
+2025-11-10 14:55:22,093 - st_processor - INFO - Processing ST code for Z100_Manager.Evaluate_Batch_Level, length: 17
+2025-11-10 14:55:22,093 - st_processor - INFO - Parsed 0 statements for Z100_Manager.Evaluate_Batch_Level
+2025-11-10 14:55:22,094 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Evaluate_Batch_Level_logic.mmd with 356 characters
+2025-11-10 14:55:22,094 - mermaid_processor - WARNING - No interface found for Z100_Manager.Evaluate_Batch_Level
+2025-11-10 14:55:22,094 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Evaluate_Batch_Level_logic.mmd']
+2025-11-10 14:55:22,094 - mermaid_processor - INFO - Converting Action: Z100_Manager.PID_Manager to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:55:22,094 - mermaid_processor - INFO - Found body for Z100_Manager.PID_Manager, analyzing content...
+2025-11-10 14:55:22,094 - mermaid_processor - INFO - Body children tags for Z100_Manager.PID_Manager: ['{http://www.plcopen.org/xml/tc6_0200}ST', '{http://www.plcopen.org/xml/tc6_0200}addData']
+2025-11-10 14:55:22,094 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 14:55:22,094 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 14:55:22,094 - mermaid_processor - INFO - Body child 1: {http://www.plcopen.org/xml/tc6_0200}addData - has text: True - text length: 17
+2025-11-10 14:55:22,094 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}addData: 
+                
+2025-11-10 14:55:22,094 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.PID_Manager ===
+2025-11-10 14:55:22,094 - st_processor - INFO - Found direct ST element for Z100_Manager.PID_Manager
+2025-11-10 14:55:22,094 - mermaid_processor - INFO - Found ST code for Z100_Manager.PID_Manager, length: 17 characters
+2025-11-10 14:55:22,094 - st_processor - INFO - Processing ST code for Z100_Manager.PID_Manager, length: 17
+2025-11-10 14:55:22,094 - st_processor - INFO - Parsed 0 statements for Z100_Manager.PID_Manager
+2025-11-10 14:55:22,094 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.PID_Manager_logic.mmd with 329 characters
+2025-11-10 14:55:22,094 - mermaid_processor - WARNING - No interface found for Z100_Manager.PID_Manager
+2025-11-10 14:55:22,094 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.PID_Manager_logic.mmd']
+2025-11-10 14:55:22,094 - mermaid_processor - INFO - Converting Action: Z100_Manager.Task_Drain to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:55:22,094 - mermaid_processor - INFO - Found body for Z100_Manager.Task_Drain, analyzing content...
+2025-11-10 14:55:22,094 - mermaid_processor - INFO - Body children tags for Z100_Manager.Task_Drain: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 14:55:22,094 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 14:55:22,094 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 14:55:22,094 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Task_Drain ===
+2025-11-10 14:55:22,094 - st_processor - INFO - Found direct ST element for Z100_Manager.Task_Drain
+2025-11-10 14:55:22,094 - mermaid_processor - INFO - Found ST code for Z100_Manager.Task_Drain, length: 17 characters
+2025-11-10 14:55:22,094 - st_processor - INFO - Processing ST code for Z100_Manager.Task_Drain, length: 17
+2025-11-10 14:55:22,094 - st_processor - INFO - Parsed 0 statements for Z100_Manager.Task_Drain
+2025-11-10 14:55:22,094 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Task_Drain_logic.mmd with 326 characters
+2025-11-10 14:55:22,094 - mermaid_processor - WARNING - No interface found for Z100_Manager.Task_Drain
+2025-11-10 14:55:22,094 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Task_Drain_logic.mmd']
+2025-11-10 14:55:22,095 - mermaid_processor - INFO - Converting Action: Z100_Manager.Evaluate_ALL to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:55:22,095 - mermaid_processor - INFO - Found body for Z100_Manager.Evaluate_ALL, analyzing content...
+2025-11-10 14:55:22,095 - mermaid_processor - INFO - Body children tags for Z100_Manager.Evaluate_ALL: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 14:55:22,095 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 14:55:22,095 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 14:55:22,095 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Evaluate_ALL ===
+2025-11-10 14:55:22,095 - st_processor - INFO - Found direct ST element for Z100_Manager.Evaluate_ALL
+2025-11-10 14:55:22,095 - mermaid_processor - INFO - Found ST code for Z100_Manager.Evaluate_ALL, length: 17 characters
+2025-11-10 14:55:22,095 - st_processor - INFO - Processing ST code for Z100_Manager.Evaluate_ALL, length: 17
+2025-11-10 14:55:22,095 - st_processor - INFO - Parsed 0 statements for Z100_Manager.Evaluate_ALL
+2025-11-10 14:55:22,095 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Evaluate_ALL_logic.mmd with 332 characters
+2025-11-10 14:55:22,095 - mermaid_processor - WARNING - No interface found for Z100_Manager.Evaluate_ALL
+2025-11-10 14:55:22,095 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Evaluate_ALL_logic.mmd']
+2025-11-10 14:55:22,095 - mermaid_processor - INFO - Converting Action: Z100_Manager.Continuous_UV to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:55:22,095 - mermaid_processor - INFO - Found body for Z100_Manager.Continuous_UV, analyzing content...
+2025-11-10 14:55:22,095 - mermaid_processor - INFO - Body children tags for Z100_Manager.Continuous_UV: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 14:55:22,095 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 14:55:22,095 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 14:55:22,095 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Continuous_UV ===
+2025-11-10 14:55:22,095 - st_processor - INFO - Found direct ST element for Z100_Manager.Continuous_UV
+2025-11-10 14:55:22,095 - mermaid_processor - INFO - Found ST code for Z100_Manager.Continuous_UV, length: 17 characters
+2025-11-10 14:55:22,095 - st_processor - INFO - Processing ST code for Z100_Manager.Continuous_UV, length: 17
+2025-11-10 14:55:22,095 - st_processor - INFO - Parsed 0 statements for Z100_Manager.Continuous_UV
+2025-11-10 14:55:22,095 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Continuous_UV_logic.mmd with 335 characters
+2025-11-10 14:55:22,095 - mermaid_processor - WARNING - No interface found for Z100_Manager.Continuous_UV
+2025-11-10 14:55:22,095 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Continuous_UV_logic.mmd']
+2025-11-10 14:55:22,096 - mermaid_processor - INFO - Converting Action: Z100_Manager.Evaluate_Continuous_UV to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:55:22,096 - mermaid_processor - INFO - Found body for Z100_Manager.Evaluate_Continuous_UV, analyzing content...
+2025-11-10 14:55:22,096 - mermaid_processor - INFO - Body children tags for Z100_Manager.Evaluate_Continuous_UV: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 14:55:22,096 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 14:55:22,096 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 14:55:22,096 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Evaluate_Continuous_UV ===
+2025-11-10 14:55:22,096 - st_processor - INFO - Found direct ST element for Z100_Manager.Evaluate_Continuous_UV
+2025-11-10 14:55:22,096 - mermaid_processor - INFO - Found ST code for Z100_Manager.Evaluate_Continuous_UV, length: 17 characters
+2025-11-10 14:55:22,096 - st_processor - INFO - Processing ST code for Z100_Manager.Evaluate_Continuous_UV, length: 17
+2025-11-10 14:55:22,096 - st_processor - INFO - Parsed 0 statements for Z100_Manager.Evaluate_Continuous_UV
+2025-11-10 14:55:22,097 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Evaluate_Continuous_UV_logic.mmd with 362 characters
+2025-11-10 14:55:22,097 - mermaid_processor - WARNING - No interface found for Z100_Manager.Evaluate_Continuous_UV
+2025-11-10 14:55:22,097 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Evaluate_Continuous_UV_logic.mmd']
+2025-11-10 14:55:22,097 - mermaid_processor - INFO - Converting Action: Z100_Manager.Evaluate_Level to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:55:22,097 - mermaid_processor - INFO - Found body for Z100_Manager.Evaluate_Level, analyzing content...
+2025-11-10 14:55:22,097 - mermaid_processor - INFO - Body children tags for Z100_Manager.Evaluate_Level: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 14:55:22,097 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 14:55:22,097 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 14:55:22,097 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Evaluate_Level ===
+2025-11-10 14:55:22,097 - st_processor - INFO - Found direct ST element for Z100_Manager.Evaluate_Level
+2025-11-10 14:55:22,097 - mermaid_processor - INFO - Found ST code for Z100_Manager.Evaluate_Level, length: 17 characters
+2025-11-10 14:55:22,097 - st_processor - INFO - Processing ST code for Z100_Manager.Evaluate_Level, length: 17
+2025-11-10 14:55:22,097 - st_processor - INFO - Parsed 0 statements for Z100_Manager.Evaluate_Level
+2025-11-10 14:55:22,097 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Evaluate_Level_logic.mmd with 338 characters
+2025-11-10 14:55:22,097 - mermaid_processor - WARNING - No interface found for Z100_Manager.Evaluate_Level
+2025-11-10 14:55:22,097 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Evaluate_Level_logic.mmd']
+2025-11-10 14:55:22,097 - mermaid_processor - INFO - Converting Action: Z100_Manager.Evaluate_Flow_Intake to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:55:22,097 - mermaid_processor - INFO - Found body for Z100_Manager.Evaluate_Flow_Intake, analyzing content...
+2025-11-10 14:55:22,097 - mermaid_processor - INFO - Body children tags for Z100_Manager.Evaluate_Flow_Intake: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 14:55:22,097 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 14:55:22,097 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 14:55:22,097 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Evaluate_Flow_Intake ===
+2025-11-10 14:55:22,097 - st_processor - INFO - Found direct ST element for Z100_Manager.Evaluate_Flow_Intake
+2025-11-10 14:55:22,097 - mermaid_processor - INFO - Found ST code for Z100_Manager.Evaluate_Flow_Intake, length: 17 characters
+2025-11-10 14:55:22,097 - st_processor - INFO - Processing ST code for Z100_Manager.Evaluate_Flow_Intake, length: 17
+2025-11-10 14:55:22,097 - st_processor - INFO - Parsed 0 statements for Z100_Manager.Evaluate_Flow_Intake
+2025-11-10 14:55:22,098 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Evaluate_Flow_Intake_logic.mmd with 356 characters
+2025-11-10 14:55:22,098 - mermaid_processor - WARNING - No interface found for Z100_Manager.Evaluate_Flow_Intake
+2025-11-10 14:55:22,098 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Evaluate_Flow_Intake_logic.mmd']
+2025-11-10 14:55:22,098 - mermaid_processor - INFO - Converting Action: Z100_Manager.ACV_Manager to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:55:22,098 - mermaid_processor - INFO - Found body for Z100_Manager.ACV_Manager, analyzing content...
+2025-11-10 14:55:22,098 - mermaid_processor - INFO - Body children tags for Z100_Manager.ACV_Manager: ['{http://www.plcopen.org/xml/tc6_0200}ST', '{http://www.plcopen.org/xml/tc6_0200}addData']
+2025-11-10 14:55:22,098 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 14:55:22,098 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 14:55:22,098 - mermaid_processor - INFO - Body child 1: {http://www.plcopen.org/xml/tc6_0200}addData - has text: True - text length: 17
+2025-11-10 14:55:22,098 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}addData: 
+                
+2025-11-10 14:55:22,098 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.ACV_Manager ===
+2025-11-10 14:55:22,098 - st_processor - INFO - Found direct ST element for Z100_Manager.ACV_Manager
+2025-11-10 14:55:22,098 - mermaid_processor - INFO - Found ST code for Z100_Manager.ACV_Manager, length: 17 characters
+2025-11-10 14:55:22,098 - st_processor - INFO - Processing ST code for Z100_Manager.ACV_Manager, length: 17
+2025-11-10 14:55:22,098 - st_processor - INFO - Parsed 0 statements for Z100_Manager.ACV_Manager
+2025-11-10 14:55:22,098 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.ACV_Manager_logic.mmd with 329 characters
+2025-11-10 14:55:22,098 - mermaid_processor - WARNING - No interface found for Z100_Manager.ACV_Manager
+2025-11-10 14:55:22,098 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.ACV_Manager_logic.mmd']
+2025-11-10 14:55:22,098 - mermaid_processor - INFO - Converting Action: Z100_Manager.Task_Flow_Discharge to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:55:22,098 - mermaid_processor - INFO - Found body for Z100_Manager.Task_Flow_Discharge, analyzing content...
+2025-11-10 14:55:22,098 - mermaid_processor - INFO - Body children tags for Z100_Manager.Task_Flow_Discharge: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 14:55:22,098 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 14:55:22,098 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 14:55:22,098 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Task_Flow_Discharge ===
+2025-11-10 14:55:22,098 - st_processor - INFO - Found direct ST element for Z100_Manager.Task_Flow_Discharge
+2025-11-10 14:55:22,098 - mermaid_processor - INFO - Found ST code for Z100_Manager.Task_Flow_Discharge, length: 17 characters
+2025-11-10 14:55:22,098 - st_processor - INFO - Processing ST code for Z100_Manager.Task_Flow_Discharge, length: 17
+2025-11-10 14:55:22,099 - st_processor - INFO - Parsed 0 statements for Z100_Manager.Task_Flow_Discharge
+2025-11-10 14:55:22,099 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Task_Flow_Discharge_logic.mmd with 353 characters
+2025-11-10 14:55:22,099 - mermaid_processor - WARNING - No interface found for Z100_Manager.Task_Flow_Discharge
+2025-11-10 14:55:22,099 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Task_Flow_Discharge_logic.mmd']
+2025-11-10 14:55:22,100 - mermaid_processor - INFO - Converting Action: Z100_Manager.Alarms to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:55:22,100 - mermaid_processor - INFO - Found body for Z100_Manager.Alarms, analyzing content...
+2025-11-10 14:55:22,100 - mermaid_processor - INFO - Body children tags for Z100_Manager.Alarms: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 14:55:22,100 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 14:55:22,100 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 14:55:22,100 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Alarms ===
+2025-11-10 14:55:22,100 - st_processor - INFO - Found direct ST element for Z100_Manager.Alarms
+2025-11-10 14:55:22,100 - mermaid_processor - INFO - Found ST code for Z100_Manager.Alarms, length: 17 characters
+2025-11-10 14:55:22,100 - st_processor - INFO - Processing ST code for Z100_Manager.Alarms, length: 17
+2025-11-10 14:55:22,100 - st_processor - INFO - Parsed 0 statements for Z100_Manager.Alarms
+2025-11-10 14:55:22,100 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Alarms_logic.mmd with 314 characters
+2025-11-10 14:55:22,100 - mermaid_processor - WARNING - No interface found for Z100_Manager.Alarms
+2025-11-10 14:55:22,100 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Alarms_logic.mmd']
+2025-11-10 14:55:22,100 - mermaid_processor - INFO - Converting Action: Z100_Manager.Task_OFF to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:55:22,100 - mermaid_processor - INFO - Found body for Z100_Manager.Task_OFF, analyzing content...
+2025-11-10 14:55:22,100 - mermaid_processor - INFO - Body children tags for Z100_Manager.Task_OFF: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 14:55:22,100 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 14:55:22,100 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 14:55:22,100 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Task_OFF ===
+2025-11-10 14:55:22,100 - st_processor - INFO - Found direct ST element for Z100_Manager.Task_OFF
+2025-11-10 14:55:22,100 - mermaid_processor - INFO - Found ST code for Z100_Manager.Task_OFF, length: 17 characters
+2025-11-10 14:55:22,100 - st_processor - INFO - Processing ST code for Z100_Manager.Task_OFF, length: 17
+2025-11-10 14:55:22,100 - st_processor - INFO - Parsed 0 statements for Z100_Manager.Task_OFF
+2025-11-10 14:55:22,100 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Task_OFF_logic.mmd with 320 characters
+2025-11-10 14:55:22,100 - mermaid_processor - WARNING - No interface found for Z100_Manager.Task_OFF
+2025-11-10 14:55:22,100 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Task_OFF_logic.mmd']
+2025-11-10 14:55:22,100 - mermaid_processor - INFO - Converting Action: Z100_Manager.Evaluate_Batch to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:55:22,100 - mermaid_processor - INFO - Found body for Z100_Manager.Evaluate_Batch, analyzing content...
+2025-11-10 14:55:22,100 - mermaid_processor - INFO - Body children tags for Z100_Manager.Evaluate_Batch: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 14:55:22,101 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 14:55:22,101 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 14:55:22,101 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Evaluate_Batch ===
+2025-11-10 14:55:22,101 - st_processor - INFO - Found direct ST element for Z100_Manager.Evaluate_Batch
+2025-11-10 14:55:22,101 - mermaid_processor - INFO - Found ST code for Z100_Manager.Evaluate_Batch, length: 17 characters
+2025-11-10 14:55:22,101 - st_processor - INFO - Processing ST code for Z100_Manager.Evaluate_Batch, length: 17
+2025-11-10 14:55:22,101 - st_processor - INFO - Parsed 0 statements for Z100_Manager.Evaluate_Batch
+2025-11-10 14:55:22,101 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Evaluate_Batch_logic.mmd with 338 characters
+2025-11-10 14:55:22,101 - mermaid_processor - WARNING - No interface found for Z100_Manager.Evaluate_Batch
+2025-11-10 14:55:22,101 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Evaluate_Batch_logic.mmd']
+2025-11-10 14:55:22,101 - mermaid_processor - INFO - Converting Action: Z100_Manager.Task_Level to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:55:22,101 - mermaid_processor - INFO - Found body for Z100_Manager.Task_Level, analyzing content...
+2025-11-10 14:55:22,101 - mermaid_processor - INFO - Body children tags for Z100_Manager.Task_Level: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 14:55:22,101 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 14:55:22,101 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 14:55:22,101 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Task_Level ===
+2025-11-10 14:55:22,101 - st_processor - INFO - Found direct ST element for Z100_Manager.Task_Level
+2025-11-10 14:55:22,101 - mermaid_processor - INFO - Found ST code for Z100_Manager.Task_Level, length: 17 characters
+2025-11-10 14:55:22,101 - st_processor - INFO - Processing ST code for Z100_Manager.Task_Level, length: 17
+2025-11-10 14:55:22,101 - st_processor - INFO - Parsed 0 statements for Z100_Manager.Task_Level
+2025-11-10 14:55:22,101 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Task_Level_logic.mmd with 326 characters
+2025-11-10 14:55:22,101 - mermaid_processor - WARNING - No interface found for Z100_Manager.Task_Level
+2025-11-10 14:55:22,102 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Task_Level_logic.mmd']
+2025-11-10 14:55:22,102 - mermaid_processor - INFO - Converting Action: Z100_Manager.Evaluate_Flow_Discharge to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:55:22,102 - mermaid_processor - INFO - Found body for Z100_Manager.Evaluate_Flow_Discharge, analyzing content...
+2025-11-10 14:55:22,102 - mermaid_processor - INFO - Body children tags for Z100_Manager.Evaluate_Flow_Discharge: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 14:55:22,102 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 14:55:22,102 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 14:55:22,102 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Evaluate_Flow_Discharge ===
+2025-11-10 14:55:22,102 - st_processor - INFO - Found direct ST element for Z100_Manager.Evaluate_Flow_Discharge
+2025-11-10 14:55:22,102 - mermaid_processor - INFO - Found ST code for Z100_Manager.Evaluate_Flow_Discharge, length: 17 characters
+2025-11-10 14:55:22,102 - st_processor - INFO - Processing ST code for Z100_Manager.Evaluate_Flow_Discharge, length: 17
+2025-11-10 14:55:22,102 - st_processor - INFO - Parsed 0 statements for Z100_Manager.Evaluate_Flow_Discharge
+2025-11-10 14:55:22,102 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Evaluate_Flow_Discharge_logic.mmd with 365 characters
+2025-11-10 14:55:22,102 - mermaid_processor - WARNING - No interface found for Z100_Manager.Evaluate_Flow_Discharge
+2025-11-10 14:55:22,102 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Evaluate_Flow_Discharge_logic.mmd']
+2025-11-10 14:55:22,102 - mermaid_processor - INFO - Converting Action: Z100_Manager.Evaluate_Drain to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:55:22,102 - mermaid_processor - INFO - Found body for Z100_Manager.Evaluate_Drain, analyzing content...
+2025-11-10 14:55:22,102 - mermaid_processor - INFO - Body children tags for Z100_Manager.Evaluate_Drain: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 14:55:22,102 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 14:55:22,102 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 14:55:22,102 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Evaluate_Drain ===
+2025-11-10 14:55:22,102 - st_processor - INFO - Found direct ST element for Z100_Manager.Evaluate_Drain
+2025-11-10 14:55:22,102 - mermaid_processor - INFO - Found ST code for Z100_Manager.Evaluate_Drain, length: 17 characters
+2025-11-10 14:55:22,102 - st_processor - INFO - Processing ST code for Z100_Manager.Evaluate_Drain, length: 17
+2025-11-10 14:55:22,102 - st_processor - INFO - Parsed 0 statements for Z100_Manager.Evaluate_Drain
+2025-11-10 14:55:22,102 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Evaluate_Drain_logic.mmd with 338 characters
+2025-11-10 14:55:22,102 - mermaid_processor - WARNING - No interface found for Z100_Manager.Evaluate_Drain
+2025-11-10 14:55:22,102 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Evaluate_Drain_logic.mmd']
+2025-11-10 14:55:22,102 - gui_manager - INFO - Successfully generated files in S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 14:59:45,132 - __main__ - INFO - Starting PLCopen XML to Diagram Converter
+2025-11-10 14:59:52,044 - gui_manager - INFO - File selected: S:/PLC_export_Test/H2N-PLCopen/H2-1.0.02.xml
+2025-11-10 14:59:53,068 - gui_manager - INFO - Parsing XML structure...
+2025-11-10 14:59:53,085 - gui_manager - INFO - Namespace detected: {http://www.plcopen.org/xml/tc6_0200}
+2025-11-10 14:59:53,085 - gui_manager - INFO - Extracting POU elements and actions...
+2025-11-10 14:59:53,085 - gui_manager - INFO - Found 36 POU elements
+2025-11-10 14:59:53,086 - gui_manager - INFO - Extracting project structure...
+2025-11-10 14:59:53,086 - gui_manager - INFO - Project structure extracted with 6 root items
+2025-11-10 14:59:53,086 - gui_manager - INFO - Total components extracted: 121
+2025-11-10 14:59:53,086 - gui_manager - INFO - Opening component browser...
+2025-11-10 14:59:53,133 - gui_manager - INFO - Component browser displayed, waiting for user selection...
+2025-11-10 14:59:58,289 - gui_manager - INFO - Select button clicked - setting selection to: 8434914f-e6f1-445d-8041-c11fc10ec62b
+2025-11-10 14:59:58,305 - gui_manager - INFO - User selected component: 8434914f-e6f1-445d-8041-c11fc10ec62b
+2025-11-10 15:00:02,152 - gui_manager - INFO - Converting ObjectID 8434914f-e6f1-445d-8041-c11fc10ec62b to formats: ['mermaid']
+2025-11-10 15:00:02,153 - mermaid_processor - INFO - Mermaid processor namespace set to: {http://www.plcopen.org/xml/tc6_0200}
+2025-11-10 15:00:02,153 - st_processor - INFO - STProcessor namespace set to: {http://www.plcopen.org/xml/tc6_0200}
+2025-11-10 15:00:02,153 - drawio_processor - INFO - DrawIO processor namespace set to: {http://www.plcopen.org/xml/tc6_0200}
+2025-11-10 15:00:02,153 - st_processor - INFO - STProcessor namespace set to: {http://www.plcopen.org/xml/tc6_0200}
+2025-11-10 15:00:02,153 - mermaid_processor - INFO - Converting POU: Z100_Manager to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 15:00:02,153 - mermaid_processor - INFO - Found body for Z100_Manager, analyzing content...
+2025-11-10 15:00:02,153 - mermaid_processor - INFO - Body children tags for Z100_Manager: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 15:00:02,153 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 13
+2025-11-10 15:00:02,153 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+            
+2025-11-10 15:00:02,153 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager ===
+2025-11-10 15:00:02,153 - st_processor - INFO - Found ST code from itertext for Z100_Manager, length: 2197
+2025-11-10 15:00:02,153 - mermaid_processor - INFO - Found ST code for Z100_Manager, length: 2197 characters
+2025-11-10 15:00:02,153 - st_processor - INFO - Processing ST code for Z100_Manager, length: 2197 characters
+2025-11-10 15:00:02,153 - st_processor - INFO - Cleaned code sample: PVL.Z100_Config.StrMode:=Burkert.Burkert_OSCAT_BASIC.REPLACE_ALL(str:=TO_STRING(PVL.Z100_Config.Mode.eMode) , src:='_' , rep:=' ' );
+PVL.Z100_Config.StrStatus:=Burkert.Burkert_OSCAT_BASIC.REPLACE_ALL(...
+2025-11-10 15:00:02,153 - st_processor - INFO - After cleaning: 2129 characters
+2025-11-10 15:00:02,153 - st_processor - INFO - Parsing ST code: PVL.Z100_Config.StrMode:=Burkert.Burkert_OSCAT_BASIC.REPLACE_ALL(str:=TO_STRING(PVL.Z100_Config.Mode...
+2025-11-10 15:00:02,154 - st_processor - INFO - Parsed 34 statements for Z100_Manager
+2025-11-10 15:00:02,154 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager_logic.mmd with 2980 characters
+2025-11-10 15:00:02,154 - mermaid_processor - INFO - Found interface for Z100_Manager, analyzing variables...
+2025-11-10 15:00:02,154 - mermaid_processor - INFO - Found 7 variables in interface for Z100_Manager
+2025-11-10 15:00:02,154 - mermaid_processor - INFO - Variable 0: name=None, type=eZ100_Status
+2025-11-10 15:00:02,154 - mermaid_processor - INFO - Variable 1: name=None, type=eZ100_Status
+2025-11-10 15:00:02,154 - mermaid_processor - INFO - Variable 2: name=None, type=eZ100_Task
+2025-11-10 15:00:02,154 - mermaid_processor - INFO - Variable 3: name=None, type=Unknown
+2025-11-10 15:00:02,154 - mermaid_processor - INFO - Variable 4: name=None, type=Unknown
+2025-11-10 15:00:02,154 - mermaid_processor - INFO - Variable 5: name=None, type=Unknown
+2025-11-10 15:00:02,154 - mermaid_processor - INFO - Variable 6: name=None, type=Unknown
+2025-11-10 15:00:02,154 - mermaid_processor - WARNING - No variables found in interface for Z100_Manager
+2025-11-10 15:00:02,154 - mermaid_processor - WARNING - No interface diagram generated for Z100_Manager - no variables found
+2025-11-10 15:00:02,154 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager_logic.mmd']
+2025-11-10 15:00:02,154 - gui_manager - INFO - Converting 16 actions for POU: Z100_Manager
+2025-11-10 15:00:02,154 - mermaid_processor - INFO - Converting Action: Z100_Manager.Evaluate_Batch_Level to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 15:00:02,154 - mermaid_processor - INFO - Found body for Z100_Manager.Evaluate_Batch_Level, analyzing content...
+2025-11-10 15:00:02,154 - mermaid_processor - INFO - Body children tags for Z100_Manager.Evaluate_Batch_Level: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 15:00:02,154 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 15:00:02,154 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 15:00:02,154 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Evaluate_Batch_Level ===
+2025-11-10 15:00:02,154 - st_processor - INFO - Found ST code from itertext for Z100_Manager.Evaluate_Batch_Level, length: 2778
+2025-11-10 15:00:02,154 - mermaid_processor - INFO - Found ST code for Z100_Manager.Evaluate_Batch_Level, length: 2778 characters
+2025-11-10 15:00:02,154 - st_processor - INFO - Processing ST code for Z100_Manager.Evaluate_Batch_Level, length: 2778 characters
+2025-11-10 15:00:02,155 - st_processor - INFO - Cleaned code sample: tStatus:=Local_status;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01A].Ready) THEN tStatus:=eZ100_Status.LT01A_Not_Ready; END_IF;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01B].Ready) THEN tStatus:=eZ100_Status.LT01B_Not_...
+2025-11-10 15:00:02,155 - st_processor - INFO - After cleaning: 2716 characters
+2025-11-10 15:00:02,155 - st_processor - INFO - Parsing ST code: tStatus:=Local_status;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01A].Ready) THEN tStatus:=eZ100_Status.LT01A_...
+2025-11-10 15:00:02,155 - st_processor - INFO - Parsed 46 statements for Z100_Manager.Evaluate_Batch_Level
+2025-11-10 15:00:02,155 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Evaluate_Batch_Level_logic.mmd with 3414 characters
+2025-11-10 15:00:02,155 - mermaid_processor - WARNING - No interface found for Z100_Manager.Evaluate_Batch_Level
+2025-11-10 15:00:02,155 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Evaluate_Batch_Level_logic.mmd']
+2025-11-10 15:00:02,155 - mermaid_processor - INFO - Converting Action: Z100_Manager.PID_Manager to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 15:00:02,155 - mermaid_processor - INFO - Found body for Z100_Manager.PID_Manager, analyzing content...
+2025-11-10 15:00:02,155 - mermaid_processor - INFO - Body children tags for Z100_Manager.PID_Manager: ['{http://www.plcopen.org/xml/tc6_0200}ST', '{http://www.plcopen.org/xml/tc6_0200}addData']
+2025-11-10 15:00:02,155 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 15:00:02,155 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 15:00:02,155 - mermaid_processor - INFO - Body child 1: {http://www.plcopen.org/xml/tc6_0200}addData - has text: True - text length: 17
+2025-11-10 15:00:02,155 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}addData: 
+                
+2025-11-10 15:00:02,155 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.PID_Manager ===
+2025-11-10 15:00:02,155 - st_processor - WARNING - No ST code found for Z100_Manager.PID_Manager
+2025-11-10 15:00:02,155 - cfc_processor - INFO - Found 1 CFC elements for Z100_Manager.PID_Manager
+2025-11-10 15:00:02,155 - mermaid_processor - INFO - Found CFC code for Z100_Manager.PID_Manager
+2025-11-10 15:00:02,155 - cfc_processor - INFO - Converting CFC to Mermaid for Z100_Manager.PID_Manager
+2025-11-10 15:00:02,155 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.PID_Manager_logic.mmd with 897 characters
+2025-11-10 15:00:02,155 - mermaid_processor - WARNING - No interface found for Z100_Manager.PID_Manager
+2025-11-10 15:00:02,155 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.PID_Manager_logic.mmd']
+2025-11-10 15:00:02,156 - mermaid_processor - INFO - Converting Action: Z100_Manager.Task_Drain to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 15:00:02,156 - mermaid_processor - INFO - Found body for Z100_Manager.Task_Drain, analyzing content...
+2025-11-10 15:00:02,156 - mermaid_processor - INFO - Body children tags for Z100_Manager.Task_Drain: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 15:00:02,156 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 15:00:02,156 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 15:00:02,156 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Task_Drain ===
+2025-11-10 15:00:02,156 - st_processor - INFO - Found ST code from itertext for Z100_Manager.Task_Drain, length: 1334
+2025-11-10 15:00:02,156 - mermaid_processor - INFO - Found ST code for Z100_Manager.Task_Drain, length: 1334 characters
+2025-11-10 15:00:02,156 - st_processor - INFO - Processing ST code for Z100_Manager.Task_Drain, length: 1334 characters
+2025-11-10 15:00:02,156 - st_processor - INFO - Cleaned code sample: IF PVL.Z100_Config.Task.eTask<> Local_Task THEN
+Local_Task:=PVL.Z100_Config.Task.eTask;
+PVL.Z100_Config.READY:=TRUE;
+END_IF;
+local_status:=eZ100_Status.Drain_Active;
+PVL.PID[PID_Mapping.Z100_Flow].PLC...
+2025-11-10 15:00:02,156 - st_processor - INFO - After cleaning: 1270 characters
+2025-11-10 15:00:02,156 - st_processor - INFO - Parsing ST code: IF PVL.Z100_Config.Task.eTask<> Local_Task THEN
+Local_Task:=PVL.Z100_Config.Task.eTask;
+PVL.Z100_Con...
+2025-11-10 15:00:02,157 - st_processor - INFO - Parsed 22 statements for Z100_Manager.Task_Drain
+2025-11-10 15:00:02,157 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Task_Drain_logic.mmd with 2439 characters
+2025-11-10 15:00:02,157 - mermaid_processor - WARNING - No interface found for Z100_Manager.Task_Drain
+2025-11-10 15:00:02,157 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Task_Drain_logic.mmd']
+2025-11-10 15:00:02,157 - mermaid_processor - INFO - Converting Action: Z100_Manager.Evaluate_ALL to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 15:00:02,157 - mermaid_processor - INFO - Found body for Z100_Manager.Evaluate_ALL, analyzing content...
+2025-11-10 15:00:02,157 - mermaid_processor - INFO - Body children tags for Z100_Manager.Evaluate_ALL: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 15:00:02,157 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 15:00:02,157 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 15:00:02,157 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Evaluate_ALL ===
+2025-11-10 15:00:02,157 - st_processor - INFO - Found ST code from itertext for Z100_Manager.Evaluate_ALL, length: 2556
+2025-11-10 15:00:02,157 - mermaid_processor - INFO - Found ST code for Z100_Manager.Evaluate_ALL, length: 2556 characters
+2025-11-10 15:00:02,157 - st_processor - INFO - Processing ST code for Z100_Manager.Evaluate_ALL, length: 2556 characters
+2025-11-10 15:00:02,157 - st_processor - INFO - Cleaned code sample: tStatus:=Local_status;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01A].Ready) THEN tStatus:=eZ100_Status.LT01A_Not_Ready; END_IF;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01B].Ready) THEN tStatus:=eZ100_Status.LT01B_Not_...
+2025-11-10 15:00:02,157 - st_processor - INFO - After cleaning: 2496 characters
+2025-11-10 15:00:02,157 - st_processor - INFO - Parsing ST code: tStatus:=Local_status;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01A].Ready) THEN tStatus:=eZ100_Status.LT01A_...
+2025-11-10 15:00:02,157 - st_processor - INFO - Parsed 42 statements for Z100_Manager.Evaluate_ALL
+2025-11-10 15:00:02,157 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Evaluate_ALL_logic.mmd with 3100 characters
+2025-11-10 15:00:02,158 - mermaid_processor - WARNING - No interface found for Z100_Manager.Evaluate_ALL
+2025-11-10 15:00:02,158 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Evaluate_ALL_logic.mmd']
+2025-11-10 15:00:02,158 - mermaid_processor - INFO - Converting Action: Z100_Manager.Continuous_UV to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 15:00:02,158 - mermaid_processor - INFO - Found body for Z100_Manager.Continuous_UV, analyzing content...
+2025-11-10 15:00:02,158 - mermaid_processor - INFO - Body children tags for Z100_Manager.Continuous_UV: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 15:00:02,158 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 15:00:02,158 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 15:00:02,158 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Continuous_UV ===
+2025-11-10 15:00:02,158 - st_processor - INFO - Found ST code from itertext for Z100_Manager.Continuous_UV, length: 1162
+2025-11-10 15:00:02,158 - mermaid_processor - INFO - Found ST code for Z100_Manager.Continuous_UV, length: 1162 characters
+2025-11-10 15:00:02,158 - st_processor - INFO - Processing ST code for Z100_Manager.Continuous_UV, length: 1162 characters
+2025-11-10 15:00:02,158 - st_processor - INFO - Cleaned code sample: IF PVL.Z100_Config.Task.eTask<> Local_Task THEN
+Local_Task:=PVL.Z100_Config.Task.eTask;
+local_status:=eZ100_Status.UV_Control_Active;
+END_IF;
+PVL.PID[PID_Mapping.Z100_Flow].PLC_Target:=LIMIT(PVl.Z100_...
+2025-11-10 15:00:02,158 - st_processor - INFO - After cleaning: 1098 characters
+2025-11-10 15:00:02,158 - st_processor - INFO - Parsing ST code: IF PVL.Z100_Config.Task.eTask<> Local_Task THEN
+Local_Task:=PVL.Z100_Config.Task.eTask;
+local_status...
+2025-11-10 15:00:02,158 - st_processor - INFO - Parsed 15 statements for Z100_Manager.Continuous_UV
+2025-11-10 15:00:02,158 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Continuous_UV_logic.mmd with 1898 characters
+2025-11-10 15:00:02,158 - mermaid_processor - WARNING - No interface found for Z100_Manager.Continuous_UV
+2025-11-10 15:00:02,158 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Continuous_UV_logic.mmd']
+2025-11-10 15:00:02,158 - mermaid_processor - INFO - Converting Action: Z100_Manager.Evaluate_Continuous_UV to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 15:00:02,158 - mermaid_processor - INFO - Found body for Z100_Manager.Evaluate_Continuous_UV, analyzing content...
+2025-11-10 15:00:02,158 - mermaid_processor - INFO - Body children tags for Z100_Manager.Evaluate_Continuous_UV: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 15:00:02,158 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 15:00:02,158 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 15:00:02,158 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Evaluate_Continuous_UV ===
+2025-11-10 15:00:02,158 - st_processor - INFO - Found ST code from itertext for Z100_Manager.Evaluate_Continuous_UV, length: 2972
+2025-11-10 15:00:02,158 - mermaid_processor - INFO - Found ST code for Z100_Manager.Evaluate_Continuous_UV, length: 2972 characters
+2025-11-10 15:00:02,158 - st_processor - INFO - Processing ST code for Z100_Manager.Evaluate_Continuous_UV, length: 2972 characters
+2025-11-10 15:00:02,158 - st_processor - INFO - Cleaned code sample: tStatus:=Local_status;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01A].Ready) THEN tStatus:=eZ100_Status.LT01A_Not_Ready; END_IF;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01B].Ready) THEN tStatus:=eZ100_Status.LT01B_Not_...
+2025-11-10 15:00:02,159 - st_processor - INFO - After cleaning: 2906 characters
+2025-11-10 15:00:02,159 - st_processor - INFO - Parsing ST code: tStatus:=Local_status;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01A].Ready) THEN tStatus:=eZ100_Status.LT01A_...
+2025-11-10 15:00:02,160 - st_processor - INFO - Parsed 50 statements for Z100_Manager.Evaluate_Continuous_UV
+2025-11-10 15:00:02,160 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Evaluate_Continuous_UV_logic.mmd with 3776 characters
+2025-11-10 15:00:02,160 - mermaid_processor - WARNING - No interface found for Z100_Manager.Evaluate_Continuous_UV
+2025-11-10 15:00:02,160 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Evaluate_Continuous_UV_logic.mmd']
+2025-11-10 15:00:02,160 - mermaid_processor - INFO - Converting Action: Z100_Manager.Evaluate_Level to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 15:00:02,160 - mermaid_processor - INFO - Found body for Z100_Manager.Evaluate_Level, analyzing content...
+2025-11-10 15:00:02,160 - mermaid_processor - INFO - Body children tags for Z100_Manager.Evaluate_Level: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 15:00:02,160 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 15:00:02,160 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 15:00:02,160 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Evaluate_Level ===
+2025-11-10 15:00:02,160 - st_processor - INFO - Found ST code from itertext for Z100_Manager.Evaluate_Level, length: 2777
+2025-11-10 15:00:02,160 - mermaid_processor - INFO - Found ST code for Z100_Manager.Evaluate_Level, length: 2777 characters
+2025-11-10 15:00:02,160 - st_processor - INFO - Processing ST code for Z100_Manager.Evaluate_Level, length: 2777 characters
+2025-11-10 15:00:02,160 - st_processor - INFO - Cleaned code sample: tStatus:=Local_status;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01A].Ready) THEN tStatus:=eZ100_Status.LT01A_Not_Ready; END_IF;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01B].Ready) THEN tStatus:=eZ100_Status.LT01B_Not_...
+2025-11-10 15:00:02,160 - st_processor - INFO - After cleaning: 2714 characters
+2025-11-10 15:00:02,160 - st_processor - INFO - Parsing ST code: tStatus:=Local_status;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01A].Ready) THEN tStatus:=eZ100_Status.LT01A_...
+2025-11-10 15:00:02,160 - st_processor - INFO - Parsed 46 statements for Z100_Manager.Evaluate_Level
+2025-11-10 15:00:02,160 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Evaluate_Level_logic.mmd with 3332 characters
+2025-11-10 15:00:02,160 - mermaid_processor - WARNING - No interface found for Z100_Manager.Evaluate_Level
+2025-11-10 15:00:02,161 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Evaluate_Level_logic.mmd']
+2025-11-10 15:00:02,161 - mermaid_processor - INFO - Converting Action: Z100_Manager.Evaluate_Flow_Intake to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 15:00:02,161 - mermaid_processor - INFO - Found body for Z100_Manager.Evaluate_Flow_Intake, analyzing content...
+2025-11-10 15:00:02,161 - mermaid_processor - INFO - Body children tags for Z100_Manager.Evaluate_Flow_Intake: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 15:00:02,161 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 15:00:02,161 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 15:00:02,161 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Evaluate_Flow_Intake ===
+2025-11-10 15:00:02,161 - st_processor - INFO - Found ST code from itertext for Z100_Manager.Evaluate_Flow_Intake, length: 2782
+2025-11-10 15:00:02,161 - mermaid_processor - INFO - Found ST code for Z100_Manager.Evaluate_Flow_Intake, length: 2782 characters
+2025-11-10 15:00:02,161 - st_processor - INFO - Processing ST code for Z100_Manager.Evaluate_Flow_Intake, length: 2782 characters
+2025-11-10 15:00:02,161 - st_processor - INFO - Cleaned code sample: tStatus:=Local_status;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01A].Ready) THEN tStatus:=eZ100_Status.LT01A_Not_Ready; END_IF;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01B].Ready) THEN tStatus:=eZ100_Status.LT01B_Not_...
+2025-11-10 15:00:02,161 - st_processor - INFO - After cleaning: 2716 characters
+2025-11-10 15:00:02,161 - st_processor - INFO - Parsing ST code: tStatus:=Local_status;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01A].Ready) THEN tStatus:=eZ100_Status.LT01A_...
+2025-11-10 15:00:02,162 - st_processor - INFO - Parsed 46 statements for Z100_Manager.Evaluate_Flow_Intake
+2025-11-10 15:00:02,162 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Evaluate_Flow_Intake_logic.mmd with 3414 characters
+2025-11-10 15:00:02,162 - mermaid_processor - WARNING - No interface found for Z100_Manager.Evaluate_Flow_Intake
+2025-11-10 15:00:02,162 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Evaluate_Flow_Intake_logic.mmd']
+2025-11-10 15:00:02,162 - mermaid_processor - INFO - Converting Action: Z100_Manager.ACV_Manager to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 15:00:02,162 - mermaid_processor - INFO - Found body for Z100_Manager.ACV_Manager, analyzing content...
+2025-11-10 15:00:02,162 - mermaid_processor - INFO - Body children tags for Z100_Manager.ACV_Manager: ['{http://www.plcopen.org/xml/tc6_0200}ST', '{http://www.plcopen.org/xml/tc6_0200}addData']
+2025-11-10 15:00:02,162 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 15:00:02,162 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 15:00:02,162 - mermaid_processor - INFO - Body child 1: {http://www.plcopen.org/xml/tc6_0200}addData - has text: True - text length: 17
+2025-11-10 15:00:02,162 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}addData: 
+                
+2025-11-10 15:00:02,162 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.ACV_Manager ===
+2025-11-10 15:00:02,162 - st_processor - WARNING - No ST code found for Z100_Manager.ACV_Manager
+2025-11-10 15:00:02,162 - cfc_processor - INFO - Found 1 CFC elements for Z100_Manager.ACV_Manager
+2025-11-10 15:00:02,162 - mermaid_processor - INFO - Found CFC code for Z100_Manager.ACV_Manager
+2025-11-10 15:00:02,162 - cfc_processor - INFO - Converting CFC to Mermaid for Z100_Manager.ACV_Manager
+2025-11-10 15:00:02,162 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.ACV_Manager_logic.mmd with 897 characters
+2025-11-10 15:00:02,162 - mermaid_processor - WARNING - No interface found for Z100_Manager.ACV_Manager
+2025-11-10 15:00:02,162 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.ACV_Manager_logic.mmd']
+2025-11-10 15:00:02,162 - mermaid_processor - INFO - Converting Action: Z100_Manager.Task_Flow_Discharge to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 15:00:02,162 - mermaid_processor - INFO - Found body for Z100_Manager.Task_Flow_Discharge, analyzing content...
+2025-11-10 15:00:02,162 - mermaid_processor - INFO - Body children tags for Z100_Manager.Task_Flow_Discharge: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 15:00:02,162 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 15:00:02,162 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 15:00:02,162 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Task_Flow_Discharge ===
+2025-11-10 15:00:02,162 - st_processor - INFO - Found ST code from itertext for Z100_Manager.Task_Flow_Discharge, length: 1937
+2025-11-10 15:00:02,162 - mermaid_processor - INFO - Found ST code for Z100_Manager.Task_Flow_Discharge, length: 1937 characters
+2025-11-10 15:00:02,162 - st_processor - INFO - Processing ST code for Z100_Manager.Task_Flow_Discharge, length: 1937 characters
+2025-11-10 15:00:02,162 - st_processor - INFO - Cleaned code sample: IF PVL.Z100_Config.Task.eTask<> Local_Task THEN
+Local_Task:=PVL.Z100_Config.Task.eTask;
+local_status:=eZ100_Status.Flow_Control_Transfer;
+PVL.Z100_Config.READY:=TRUE;
+END_IF;
+PVL.PID[PID_Mapping.Z100_...
+2025-11-10 15:00:02,162 - st_processor - INFO - After cleaning: 1834 characters
+2025-11-10 15:00:02,162 - st_processor - INFO - Parsing ST code: IF PVL.Z100_Config.Task.eTask<> Local_Task THEN
+Local_Task:=PVL.Z100_Config.Task.eTask;
+local_status...
+2025-11-10 15:00:02,163 - st_processor - INFO - Parsed 32 statements for Z100_Manager.Task_Flow_Discharge
+2025-11-10 15:00:02,163 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Task_Flow_Discharge_logic.mmd with 3309 characters
+2025-11-10 15:00:02,163 - mermaid_processor - WARNING - No interface found for Z100_Manager.Task_Flow_Discharge
+2025-11-10 15:00:02,163 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Task_Flow_Discharge_logic.mmd']
+2025-11-10 15:00:02,163 - mermaid_processor - INFO - Converting Action: Z100_Manager.Alarms to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 15:00:02,163 - mermaid_processor - INFO - Found body for Z100_Manager.Alarms, analyzing content...
+2025-11-10 15:00:02,163 - mermaid_processor - INFO - Body children tags for Z100_Manager.Alarms: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 15:00:02,163 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 15:00:02,163 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 15:00:02,163 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Alarms ===
+2025-11-10 15:00:02,163 - st_processor - INFO - Found ST code from itertext for Z100_Manager.Alarms, length: 5866
+2025-11-10 15:00:02,163 - mermaid_processor - INFO - Found ST code for Z100_Manager.Alarms, length: 5866 characters
+2025-11-10 15:00:02,163 - st_processor - INFO - Processing ST code for Z100_Manager.Alarms, length: 5866 characters
+2025-11-10 15:00:02,163 - st_processor - INFO - Cleaned code sample: CASE PVL.Z100_Config.Task.eTask OF
+eZ100_task.Off:
+PVL.AIT[AIT_Mapping.LT_01A].Alarm_Config.Silence:=FALSE;
+PVL.AIT[AIT_Mapping.LT_01B].Alarm_Config.Silence:=FALSE;
+PVL.AIT[AIT_Mapping.FT_01].Alarm_Co...
+2025-11-10 15:00:02,163 - st_processor - INFO - After cleaning: 5706 characters
+2025-11-10 15:00:02,163 - st_processor - INFO - Parsing ST code: CASE PVL.Z100_Config.Task.eTask OF
+eZ100_task.Off:
+PVL.AIT[AIT_Mapping.LT_01A].Alarm_Config.Silence:...
+2025-11-10 15:00:02,163 - st_processor - INFO - Parsed 59 statements for Z100_Manager.Alarms
+2025-11-10 15:00:02,164 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Alarms_logic.mmd with 6902 characters
+2025-11-10 15:00:02,164 - mermaid_processor - WARNING - No interface found for Z100_Manager.Alarms
+2025-11-10 15:00:02,164 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Alarms_logic.mmd']
+2025-11-10 15:00:02,164 - mermaid_processor - INFO - Converting Action: Z100_Manager.Task_OFF to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 15:00:02,164 - mermaid_processor - INFO - Found body for Z100_Manager.Task_OFF, analyzing content...
+2025-11-10 15:00:02,164 - mermaid_processor - INFO - Body children tags for Z100_Manager.Task_OFF: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 15:00:02,164 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 15:00:02,164 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 15:00:02,164 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Task_OFF ===
+2025-11-10 15:00:02,164 - st_processor - INFO - Found ST code from itertext for Z100_Manager.Task_OFF, length: 253
+2025-11-10 15:00:02,164 - mermaid_processor - INFO - Found ST code for Z100_Manager.Task_OFF, length: 253 characters
+2025-11-10 15:00:02,164 - st_processor - INFO - Processing ST code for Z100_Manager.Task_OFF, length: 253 characters
+2025-11-10 15:00:02,164 - st_processor - INFO - Cleaned code sample: IF PVL.Z100_Config.Task.eTask<> Local_Task THEN
+Local_Task:=PVL.Z100_Config.Task.eTask;
+END_IF;
+local_status:=eZ100_Status.Off;
+Evaluate_All();
+PVL.Z100_Config.READY:=(Local_Status=PVl.Z100_Config.Sta...
+2025-11-10 15:00:02,164 - st_processor - INFO - After cleaning: 213 characters
+2025-11-10 15:00:02,164 - st_processor - INFO - Parsing ST code: IF PVL.Z100_Config.Task.eTask<> Local_Task THEN
+Local_Task:=PVL.Z100_Config.Task.eTask;
+END_IF;
+loca...
+2025-11-10 15:00:02,164 - st_processor - INFO - Parsed 6 statements for Z100_Manager.Task_OFF
+2025-11-10 15:00:02,164 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Task_OFF_logic.mmd with 787 characters
+2025-11-10 15:00:02,164 - mermaid_processor - WARNING - No interface found for Z100_Manager.Task_OFF
+2025-11-10 15:00:02,164 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Task_OFF_logic.mmd']
+2025-11-10 15:00:02,164 - mermaid_processor - INFO - Converting Action: Z100_Manager.Evaluate_Batch to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 15:00:02,164 - mermaid_processor - INFO - Found body for Z100_Manager.Evaluate_Batch, analyzing content...
+2025-11-10 15:00:02,164 - mermaid_processor - INFO - Body children tags for Z100_Manager.Evaluate_Batch: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 15:00:02,164 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 15:00:02,164 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 15:00:02,164 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Evaluate_Batch ===
+2025-11-10 15:00:02,164 - st_processor - INFO - Found ST code from itertext for Z100_Manager.Evaluate_Batch, length: 2779
+2025-11-10 15:00:02,165 - mermaid_processor - INFO - Found ST code for Z100_Manager.Evaluate_Batch, length: 2779 characters
+2025-11-10 15:00:02,165 - st_processor - INFO - Processing ST code for Z100_Manager.Evaluate_Batch, length: 2779 characters
+2025-11-10 15:00:02,165 - st_processor - INFO - Cleaned code sample: tStatus:=Local_status;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01A].Ready) THEN tStatus:=eZ100_Status.LT01A_Not_Ready; END_IF;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01B].Ready) THEN tStatus:=eZ100_Status.LT01B_Not_...
+2025-11-10 15:00:02,165 - st_processor - INFO - After cleaning: 2716 characters
+2025-11-10 15:00:02,165 - st_processor - INFO - Parsing ST code: tStatus:=Local_status;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01A].Ready) THEN tStatus:=eZ100_Status.LT01A_...
+2025-11-10 15:00:02,165 - st_processor - INFO - Parsed 46 statements for Z100_Manager.Evaluate_Batch
+2025-11-10 15:00:02,165 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Evaluate_Batch_logic.mmd with 3396 characters
+2025-11-10 15:00:02,165 - mermaid_processor - WARNING - No interface found for Z100_Manager.Evaluate_Batch
+2025-11-10 15:00:02,165 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Evaluate_Batch_logic.mmd']
+2025-11-10 15:00:02,165 - mermaid_processor - INFO - Converting Action: Z100_Manager.Task_Level to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 15:00:02,165 - mermaid_processor - INFO - Found body for Z100_Manager.Task_Level, analyzing content...
+2025-11-10 15:00:02,165 - mermaid_processor - INFO - Body children tags for Z100_Manager.Task_Level: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 15:00:02,165 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 15:00:02,165 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 15:00:02,165 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Task_Level ===
+2025-11-10 15:00:02,165 - st_processor - INFO - Found ST code from itertext for Z100_Manager.Task_Level, length: 1626
+2025-11-10 15:00:02,165 - mermaid_processor - INFO - Found ST code for Z100_Manager.Task_Level, length: 1626 characters
+2025-11-10 15:00:02,165 - st_processor - INFO - Processing ST code for Z100_Manager.Task_Level, length: 1626 characters
+2025-11-10 15:00:02,165 - st_processor - INFO - Cleaned code sample: IF PVL.Z100_Config.Task.eTask<> Local_Task THEN
+Local_Task:=PVL.Z100_Config.Task.eTask;
+END_IF;
+local_status:=eZ100_Status.Level_Control_Transfer;
+PVL.PID[PID_Mapping.Z100_Level].PLC_Target:=PVL.Z100_...
+2025-11-10 15:00:02,165 - st_processor - INFO - After cleaning: 1530 characters
+2025-11-10 15:00:02,165 - st_processor - INFO - Parsing ST code: IF PVL.Z100_Config.Task.eTask<> Local_Task THEN
+Local_Task:=PVL.Z100_Config.Task.eTask;
+END_IF;
+loca...
+2025-11-10 15:00:02,165 - st_processor - INFO - Parsed 23 statements for Z100_Manager.Task_Level
+2025-11-10 15:00:02,166 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Task_Level_logic.mmd with 2629 characters
+2025-11-10 15:00:02,166 - mermaid_processor - WARNING - No interface found for Z100_Manager.Task_Level
+2025-11-10 15:00:02,166 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Task_Level_logic.mmd']
+2025-11-10 15:00:02,166 - mermaid_processor - INFO - Converting Action: Z100_Manager.Evaluate_Flow_Discharge to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 15:00:02,166 - mermaid_processor - INFO - Found body for Z100_Manager.Evaluate_Flow_Discharge, analyzing content...
+2025-11-10 15:00:02,166 - mermaid_processor - INFO - Body children tags for Z100_Manager.Evaluate_Flow_Discharge: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 15:00:02,166 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 15:00:02,166 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 15:00:02,166 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Evaluate_Flow_Discharge ===
+2025-11-10 15:00:02,166 - st_processor - INFO - Found ST code from itertext for Z100_Manager.Evaluate_Flow_Discharge, length: 2781
+2025-11-10 15:00:02,166 - mermaid_processor - INFO - Found ST code for Z100_Manager.Evaluate_Flow_Discharge, length: 2781 characters
+2025-11-10 15:00:02,166 - st_processor - INFO - Processing ST code for Z100_Manager.Evaluate_Flow_Discharge, length: 2781 characters
+2025-11-10 15:00:02,166 - st_processor - INFO - Cleaned code sample: tStatus:=Local_status;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01A].Ready) THEN tStatus:=eZ100_Status.LT01A_Not_Ready; END_IF;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01B].Ready) THEN tStatus:=eZ100_Status.LT01B_Not_...
+2025-11-10 15:00:02,166 - st_processor - INFO - After cleaning: 2716 characters
+2025-11-10 15:00:02,166 - st_processor - INFO - Parsing ST code: tStatus:=Local_status;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01A].Ready) THEN tStatus:=eZ100_Status.LT01A_...
+2025-11-10 15:00:02,166 - st_processor - INFO - Parsed 46 statements for Z100_Manager.Evaluate_Flow_Discharge
+2025-11-10 15:00:02,166 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Evaluate_Flow_Discharge_logic.mmd with 3423 characters
+2025-11-10 15:00:02,166 - mermaid_processor - WARNING - No interface found for Z100_Manager.Evaluate_Flow_Discharge
+2025-11-10 15:00:02,166 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Evaluate_Flow_Discharge_logic.mmd']
+2025-11-10 15:00:02,166 - mermaid_processor - INFO - Converting Action: Z100_Manager.Evaluate_Drain to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 15:00:02,166 - mermaid_processor - INFO - Found body for Z100_Manager.Evaluate_Drain, analyzing content...
+2025-11-10 15:00:02,166 - mermaid_processor - INFO - Body children tags for Z100_Manager.Evaluate_Drain: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 15:00:02,166 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 15:00:02,166 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 15:00:02,166 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Evaluate_Drain ===
+2025-11-10 15:00:02,166 - st_processor - INFO - Found ST code from itertext for Z100_Manager.Evaluate_Drain, length: 2771
+2025-11-10 15:00:02,166 - mermaid_processor - INFO - Found ST code for Z100_Manager.Evaluate_Drain, length: 2771 characters
+2025-11-10 15:00:02,166 - st_processor - INFO - Processing ST code for Z100_Manager.Evaluate_Drain, length: 2771 characters
+2025-11-10 15:00:02,166 - st_processor - INFO - Cleaned code sample: tStatus:=Local_status;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01A].Ready) THEN tStatus:=eZ100_Status.LT01A_Not_Ready; END_IF;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01B].Ready) THEN tStatus:=eZ100_Status.LT01B_Not_...
+2025-11-10 15:00:02,166 - st_processor - INFO - After cleaning: 2708 characters
+2025-11-10 15:00:02,167 - st_processor - INFO - Parsing ST code: tStatus:=Local_status;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01A].Ready) THEN tStatus:=eZ100_Status.LT01A_...
+2025-11-10 15:00:02,167 - st_processor - INFO - Parsed 46 statements for Z100_Manager.Evaluate_Drain
+2025-11-10 15:00:02,167 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Evaluate_Drain_logic.mmd with 3466 characters
+2025-11-10 15:00:02,167 - mermaid_processor - WARNING - No interface found for Z100_Manager.Evaluate_Drain
+2025-11-10 15:00:02,167 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Evaluate_Drain_logic.mmd']
+2025-11-10 15:00:02,167 - gui_manager - INFO - Successfully generated files in S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 15:08:53,604 - __main__ - INFO - Starting PLCopen XML to Diagram Converter
+2025-11-10 15:08:59,997 - gui_manager - INFO - File selected: S:/PLC_export_Test/H2N-PLCopen/H2-1.0.02.xml
+2025-11-10 15:09:00,393 - gui_manager - INFO - Parsing XML structure...
+2025-11-10 15:09:00,410 - gui_manager - INFO - Namespace detected: {http://www.plcopen.org/xml/tc6_0200}
+2025-11-10 15:09:00,410 - gui_manager - INFO - Extracting POU elements and actions...
+2025-11-10 15:09:00,410 - gui_manager - INFO - Found 36 POU elements
+2025-11-10 15:09:00,410 - gui_manager - INFO - Extracting project structure...
+2025-11-10 15:09:00,411 - gui_manager - INFO - Project structure extracted with 6 root items
+2025-11-10 15:09:00,411 - gui_manager - INFO - Total components extracted: 121
+2025-11-10 15:09:00,411 - gui_manager - INFO - Opening component browser...
+2025-11-10 15:09:00,500 - gui_manager - INFO - Component browser displayed, waiting for user selection...
+2025-11-10 15:09:03,899 - gui_manager - INFO - User selected component: 8434914f-e6f1-445d-8041-c11fc10ec62b
+2025-11-10 15:09:06,419 - gui_manager - INFO - Converting ObjectID 8434914f-e6f1-445d-8041-c11fc10ec62b to formats: ['mermaid']
+2025-11-10 15:09:06,419 - mermaid_processor - INFO - Mermaid processor namespace set to: {http://www.plcopen.org/xml/tc6_0200}
+2025-11-10 15:09:06,419 - st_processor - INFO - STProcessor namespace set to: {http://www.plcopen.org/xml/tc6_0200}
+2025-11-10 15:09:06,419 - drawio_processor - INFO - DrawIO processor namespace set to: {http://www.plcopen.org/xml/tc6_0200}
+2025-11-10 15:09:06,419 - st_processor - INFO - STProcessor namespace set to: {http://www.plcopen.org/xml/tc6_0200}
+2025-11-10 15:09:06,419 - mermaid_processor - INFO - Converting POU: Z100_Manager to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 15:09:06,419 - mermaid_processor - INFO - Found body for Z100_Manager, analyzing content...
+2025-11-10 15:09:06,419 - mermaid_processor - INFO - Body children tags for Z100_Manager: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 15:09:06,419 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 13
+2025-11-10 15:09:06,419 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+            
+2025-11-10 15:09:06,419 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager ===
+2025-11-10 15:09:06,419 - st_processor - INFO - Found ST code from itertext for Z100_Manager, length: 2197
+2025-11-10 15:09:06,419 - mermaid_processor - INFO - Found ST code for Z100_Manager, length: 2197 characters
+2025-11-10 15:09:06,419 - st_processor - INFO - Processing ST code for Z100_Manager, length: 2197 characters
+2025-11-10 15:09:06,419 - st_processor - INFO - Cleaned code sample: PVL.Z100_Config.StrMode:=Burkert.Burkert_OSCAT_BASIC.REPLACE_ALL(str:=TO_STRING(PVL.Z100_Config.Mode.eMode) , src:='_' , rep:=' ' );
+PVL.Z100_Config.StrStatus:=Burkert.Burkert_OSCAT_BASIC.REPLACE_ALL(...
+2025-11-10 15:09:06,419 - st_processor - INFO - After cleaning: 2129 characters
+2025-11-10 15:09:06,419 - st_processor - INFO - Parsing ST code: PVL.Z100_Config.StrMode:=Burkert.Burkert_OSCAT_BASIC.REPLACE_ALL(str:=TO_STRING(PVL.Z100_Config.Mode...
+2025-11-10 15:09:06,420 - st_processor - INFO - Parsed 37 statements for Z100_Manager
+2025-11-10 15:09:06,420 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager_logic.mmd with 4499 characters
+2025-11-10 15:09:06,420 - mermaid_processor - INFO - Found interface for Z100_Manager, analyzing variables...
+2025-11-10 15:09:06,420 - mermaid_processor - INFO - Found 7 variables in interface for Z100_Manager
+2025-11-10 15:09:06,420 - mermaid_processor - INFO - Variable 0: name=None, type=eZ100_Status
+2025-11-10 15:09:06,420 - mermaid_processor - INFO - Variable 1: name=None, type=eZ100_Status
+2025-11-10 15:09:06,420 - mermaid_processor - INFO - Variable 2: name=None, type=eZ100_Task
+2025-11-10 15:09:06,420 - mermaid_processor - INFO - Variable 3: name=None, type=Unknown
+2025-11-10 15:09:06,420 - mermaid_processor - INFO - Variable 4: name=None, type=Unknown
+2025-11-10 15:09:06,420 - mermaid_processor - INFO - Variable 5: name=None, type=Unknown
+2025-11-10 15:09:06,420 - mermaid_processor - INFO - Variable 6: name=None, type=Unknown
+2025-11-10 15:09:06,420 - mermaid_processor - WARNING - No variables found in interface for Z100_Manager
+2025-11-10 15:09:06,420 - mermaid_processor - WARNING - No interface diagram generated for Z100_Manager - no variables found
+2025-11-10 15:09:06,420 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager_logic.mmd']
+2025-11-10 15:09:06,420 - gui_manager - INFO - Converting 16 actions for POU: Z100_Manager
+2025-11-10 15:09:06,420 - mermaid_processor - INFO - Converting Action: Z100_Manager.Evaluate_Batch_Level to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 15:09:06,420 - mermaid_processor - INFO - Found body for Z100_Manager.Evaluate_Batch_Level, analyzing content...
+2025-11-10 15:09:06,420 - mermaid_processor - INFO - Body children tags for Z100_Manager.Evaluate_Batch_Level: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 15:09:06,424 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 15:09:06,424 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 15:09:06,424 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Evaluate_Batch_Level ===
+2025-11-10 15:09:06,424 - st_processor - INFO - Found ST code from itertext for Z100_Manager.Evaluate_Batch_Level, length: 2778
+2025-11-10 15:09:06,424 - mermaid_processor - INFO - Found ST code for Z100_Manager.Evaluate_Batch_Level, length: 2778 characters
+2025-11-10 15:09:06,424 - st_processor - INFO - Processing ST code for Z100_Manager.Evaluate_Batch_Level, length: 2778 characters
+2025-11-10 15:09:06,424 - st_processor - INFO - Cleaned code sample: tStatus:=Local_status;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01A].Ready) THEN tStatus:=eZ100_Status.LT01A_Not_Ready; END_IF;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01B].Ready) THEN tStatus:=eZ100_Status.LT01B_Not_...
+2025-11-10 15:09:06,424 - st_processor - INFO - After cleaning: 2716 characters
+2025-11-10 15:09:06,424 - st_processor - INFO - Parsing ST code: tStatus:=Local_status;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01A].Ready) THEN tStatus:=eZ100_Status.LT01A_...
+2025-11-10 15:09:06,425 - st_processor - INFO - Parsed 46 statements for Z100_Manager.Evaluate_Batch_Level
+2025-11-10 15:09:06,425 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Evaluate_Batch_Level_logic.mmd with 6236 characters
+2025-11-10 15:09:06,425 - mermaid_processor - WARNING - No interface found for Z100_Manager.Evaluate_Batch_Level
+2025-11-10 15:09:06,425 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Evaluate_Batch_Level_logic.mmd']
+2025-11-10 15:09:06,425 - mermaid_processor - INFO - Converting Action: Z100_Manager.PID_Manager to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 15:09:06,425 - mermaid_processor - INFO - Found body for Z100_Manager.PID_Manager, analyzing content...
+2025-11-10 15:09:06,425 - mermaid_processor - INFO - Body children tags for Z100_Manager.PID_Manager: ['{http://www.plcopen.org/xml/tc6_0200}ST', '{http://www.plcopen.org/xml/tc6_0200}addData']
+2025-11-10 15:09:06,425 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 15:09:06,425 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 15:09:06,425 - mermaid_processor - INFO - Body child 1: {http://www.plcopen.org/xml/tc6_0200}addData - has text: True - text length: 17
+2025-11-10 15:09:06,425 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}addData: 
+                
+2025-11-10 15:09:06,425 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.PID_Manager ===
+2025-11-10 15:09:06,425 - st_processor - WARNING - No ST code found for Z100_Manager.PID_Manager
+2025-11-10 15:09:06,425 - cfc_processor - INFO - Found 1 CFC elements for Z100_Manager.PID_Manager
+2025-11-10 15:09:06,425 - mermaid_processor - INFO - Found CFC code for Z100_Manager.PID_Manager
+2025-11-10 15:09:06,425 - cfc_processor - INFO - Converting CFC to Mermaid for Z100_Manager.PID_Manager
+2025-11-10 15:09:06,425 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.PID_Manager_logic.mmd with 897 characters
+2025-11-10 15:09:06,425 - mermaid_processor - WARNING - No interface found for Z100_Manager.PID_Manager
+2025-11-10 15:09:06,425 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.PID_Manager_logic.mmd']
+2025-11-10 15:09:06,425 - mermaid_processor - INFO - Converting Action: Z100_Manager.Task_Drain to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 15:09:06,426 - mermaid_processor - INFO - Found body for Z100_Manager.Task_Drain, analyzing content...
+2025-11-10 15:09:06,426 - mermaid_processor - INFO - Body children tags for Z100_Manager.Task_Drain: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 15:09:06,426 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 15:09:06,426 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 15:09:06,426 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Task_Drain ===
+2025-11-10 15:09:06,426 - st_processor - INFO - Found ST code from itertext for Z100_Manager.Task_Drain, length: 1334
+2025-11-10 15:09:06,426 - mermaid_processor - INFO - Found ST code for Z100_Manager.Task_Drain, length: 1334 characters
+2025-11-10 15:09:06,426 - st_processor - INFO - Processing ST code for Z100_Manager.Task_Drain, length: 1334 characters
+2025-11-10 15:09:06,426 - st_processor - INFO - Cleaned code sample: IF PVL.Z100_Config.Task.eTask<> Local_Task THEN
+Local_Task:=PVL.Z100_Config.Task.eTask;
+PVL.Z100_Config.READY:=TRUE;
+END_IF;
+local_status:=eZ100_Status.Drain_Active;
+PVL.PID[PID_Mapping.Z100_Flow].PLC...
+2025-11-10 15:09:06,426 - st_processor - INFO - After cleaning: 1270 characters
+2025-11-10 15:09:06,426 - st_processor - INFO - Parsing ST code: IF PVL.Z100_Config.Task.eTask<> Local_Task THEN
+Local_Task:=PVL.Z100_Config.Task.eTask;
+PVL.Z100_Con...
+2025-11-10 15:09:06,426 - st_processor - INFO - Parsed 18 statements for Z100_Manager.Task_Drain
+2025-11-10 15:09:06,426 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Task_Drain_logic.mmd with 2603 characters
+2025-11-10 15:09:06,426 - mermaid_processor - WARNING - No interface found for Z100_Manager.Task_Drain
+2025-11-10 15:09:06,426 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Task_Drain_logic.mmd']
+2025-11-10 15:09:06,426 - mermaid_processor - INFO - Converting Action: Z100_Manager.Evaluate_ALL to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 15:09:06,426 - mermaid_processor - INFO - Found body for Z100_Manager.Evaluate_ALL, analyzing content...
+2025-11-10 15:09:06,426 - mermaid_processor - INFO - Body children tags for Z100_Manager.Evaluate_ALL: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 15:09:06,426 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 15:09:06,426 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 15:09:06,426 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Evaluate_ALL ===
+2025-11-10 15:09:06,426 - st_processor - INFO - Found ST code from itertext for Z100_Manager.Evaluate_ALL, length: 2556
+2025-11-10 15:09:06,426 - mermaid_processor - INFO - Found ST code for Z100_Manager.Evaluate_ALL, length: 2556 characters
+2025-11-10 15:09:06,426 - st_processor - INFO - Processing ST code for Z100_Manager.Evaluate_ALL, length: 2556 characters
+2025-11-10 15:09:06,426 - st_processor - INFO - Cleaned code sample: tStatus:=Local_status;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01A].Ready) THEN tStatus:=eZ100_Status.LT01A_Not_Ready; END_IF;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01B].Ready) THEN tStatus:=eZ100_Status.LT01B_Not_...
+2025-11-10 15:09:06,426 - st_processor - INFO - After cleaning: 2496 characters
+2025-11-10 15:09:06,426 - st_processor - INFO - Parsing ST code: tStatus:=Local_status;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01A].Ready) THEN tStatus:=eZ100_Status.LT01A_...
+2025-11-10 15:09:06,426 - st_processor - INFO - Parsed 42 statements for Z100_Manager.Evaluate_ALL
+2025-11-10 15:09:06,427 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Evaluate_ALL_logic.mmd with 5775 characters
+2025-11-10 15:09:06,427 - mermaid_processor - WARNING - No interface found for Z100_Manager.Evaluate_ALL
+2025-11-10 15:09:06,427 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Evaluate_ALL_logic.mmd']
+2025-11-10 15:09:06,427 - mermaid_processor - INFO - Converting Action: Z100_Manager.Continuous_UV to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 15:09:06,427 - mermaid_processor - INFO - Found body for Z100_Manager.Continuous_UV, analyzing content...
+2025-11-10 15:09:06,427 - mermaid_processor - INFO - Body children tags for Z100_Manager.Continuous_UV: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 15:09:06,427 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 15:09:06,427 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 15:09:06,427 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Continuous_UV ===
+2025-11-10 15:09:06,427 - st_processor - INFO - Found ST code from itertext for Z100_Manager.Continuous_UV, length: 1162
+2025-11-10 15:09:06,427 - mermaid_processor - INFO - Found ST code for Z100_Manager.Continuous_UV, length: 1162 characters
+2025-11-10 15:09:06,427 - st_processor - INFO - Processing ST code for Z100_Manager.Continuous_UV, length: 1162 characters
+2025-11-10 15:09:06,427 - st_processor - INFO - Cleaned code sample: IF PVL.Z100_Config.Task.eTask<> Local_Task THEN
+Local_Task:=PVL.Z100_Config.Task.eTask;
+local_status:=eZ100_Status.UV_Control_Active;
+END_IF;
+PVL.PID[PID_Mapping.Z100_Flow].PLC_Target:=LIMIT(PVl.Z100_...
+2025-11-10 15:09:06,427 - st_processor - INFO - After cleaning: 1098 characters
+2025-11-10 15:09:06,427 - st_processor - INFO - Parsing ST code: IF PVL.Z100_Config.Task.eTask<> Local_Task THEN
+Local_Task:=PVL.Z100_Config.Task.eTask;
+local_status...
+2025-11-10 15:09:06,427 - st_processor - INFO - Parsed 15 statements for Z100_Manager.Continuous_UV
+2025-11-10 15:09:06,427 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Continuous_UV_logic.mmd with 2266 characters
+2025-11-10 15:09:06,427 - mermaid_processor - WARNING - No interface found for Z100_Manager.Continuous_UV
+2025-11-10 15:09:06,427 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Continuous_UV_logic.mmd']
+2025-11-10 15:09:06,427 - mermaid_processor - INFO - Converting Action: Z100_Manager.Evaluate_Continuous_UV to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 15:09:06,427 - mermaid_processor - INFO - Found body for Z100_Manager.Evaluate_Continuous_UV, analyzing content...
+2025-11-10 15:09:06,427 - mermaid_processor - INFO - Body children tags for Z100_Manager.Evaluate_Continuous_UV: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 15:09:06,427 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 15:09:06,427 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 15:09:06,427 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Evaluate_Continuous_UV ===
+2025-11-10 15:09:06,427 - st_processor - INFO - Found ST code from itertext for Z100_Manager.Evaluate_Continuous_UV, length: 2972
+2025-11-10 15:09:06,427 - mermaid_processor - INFO - Found ST code for Z100_Manager.Evaluate_Continuous_UV, length: 2972 characters
+2025-11-10 15:09:06,427 - st_processor - INFO - Processing ST code for Z100_Manager.Evaluate_Continuous_UV, length: 2972 characters
+2025-11-10 15:09:06,427 - st_processor - INFO - Cleaned code sample: tStatus:=Local_status;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01A].Ready) THEN tStatus:=eZ100_Status.LT01A_Not_Ready; END_IF;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01B].Ready) THEN tStatus:=eZ100_Status.LT01B_Not_...
+2025-11-10 15:09:06,428 - st_processor - INFO - After cleaning: 2906 characters
+2025-11-10 15:09:06,428 - st_processor - INFO - Parsing ST code: tStatus:=Local_status;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01A].Ready) THEN tStatus:=eZ100_Status.LT01A_...
+2025-11-10 15:09:06,428 - st_processor - INFO - Parsed 50 statements for Z100_Manager.Evaluate_Continuous_UV
+2025-11-10 15:09:06,429 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Evaluate_Continuous_UV_logic.mmd with 6514 characters
+2025-11-10 15:09:06,429 - mermaid_processor - WARNING - No interface found for Z100_Manager.Evaluate_Continuous_UV
+2025-11-10 15:09:06,429 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Evaluate_Continuous_UV_logic.mmd']
+2025-11-10 15:09:06,429 - mermaid_processor - INFO - Converting Action: Z100_Manager.Evaluate_Level to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 15:09:06,429 - mermaid_processor - INFO - Found body for Z100_Manager.Evaluate_Level, analyzing content...
+2025-11-10 15:09:06,429 - mermaid_processor - INFO - Body children tags for Z100_Manager.Evaluate_Level: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 15:09:06,429 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 15:09:06,429 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 15:09:06,429 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Evaluate_Level ===
+2025-11-10 15:09:06,429 - st_processor - INFO - Found ST code from itertext for Z100_Manager.Evaluate_Level, length: 2777
+2025-11-10 15:09:06,429 - mermaid_processor - INFO - Found ST code for Z100_Manager.Evaluate_Level, length: 2777 characters
+2025-11-10 15:09:06,429 - st_processor - INFO - Processing ST code for Z100_Manager.Evaluate_Level, length: 2777 characters
+2025-11-10 15:09:06,429 - st_processor - INFO - Cleaned code sample: tStatus:=Local_status;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01A].Ready) THEN tStatus:=eZ100_Status.LT01A_Not_Ready; END_IF;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01B].Ready) THEN tStatus:=eZ100_Status.LT01B_Not_...
+2025-11-10 15:09:06,429 - st_processor - INFO - After cleaning: 2714 characters
+2025-11-10 15:09:06,429 - st_processor - INFO - Parsing ST code: tStatus:=Local_status;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01A].Ready) THEN tStatus:=eZ100_Status.LT01A_...
+2025-11-10 15:09:06,429 - st_processor - INFO - Parsed 46 statements for Z100_Manager.Evaluate_Level
+2025-11-10 15:09:06,429 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Evaluate_Level_logic.mmd with 6349 characters
+2025-11-10 15:09:06,429 - mermaid_processor - WARNING - No interface found for Z100_Manager.Evaluate_Level
+2025-11-10 15:09:06,429 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Evaluate_Level_logic.mmd']
+2025-11-10 15:09:06,429 - mermaid_processor - INFO - Converting Action: Z100_Manager.Evaluate_Flow_Intake to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 15:09:06,429 - mermaid_processor - INFO - Found body for Z100_Manager.Evaluate_Flow_Intake, analyzing content...
+2025-11-10 15:09:06,429 - mermaid_processor - INFO - Body children tags for Z100_Manager.Evaluate_Flow_Intake: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 15:09:06,429 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 15:09:06,429 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 15:09:06,430 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Evaluate_Flow_Intake ===
+2025-11-10 15:09:06,430 - st_processor - INFO - Found ST code from itertext for Z100_Manager.Evaluate_Flow_Intake, length: 2782
+2025-11-10 15:09:06,430 - mermaid_processor - INFO - Found ST code for Z100_Manager.Evaluate_Flow_Intake, length: 2782 characters
+2025-11-10 15:09:06,430 - st_processor - INFO - Processing ST code for Z100_Manager.Evaluate_Flow_Intake, length: 2782 characters
+2025-11-10 15:09:06,430 - st_processor - INFO - Cleaned code sample: tStatus:=Local_status;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01A].Ready) THEN tStatus:=eZ100_Status.LT01A_Not_Ready; END_IF;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01B].Ready) THEN tStatus:=eZ100_Status.LT01B_Not_...
+2025-11-10 15:09:06,430 - st_processor - INFO - After cleaning: 2716 characters
+2025-11-10 15:09:06,430 - st_processor - INFO - Parsing ST code: tStatus:=Local_status;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01A].Ready) THEN tStatus:=eZ100_Status.LT01A_...
+2025-11-10 15:09:06,430 - st_processor - INFO - Parsed 46 statements for Z100_Manager.Evaluate_Flow_Intake
+2025-11-10 15:09:06,431 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Evaluate_Flow_Intake_logic.mmd with 6236 characters
+2025-11-10 15:09:06,431 - mermaid_processor - WARNING - No interface found for Z100_Manager.Evaluate_Flow_Intake
+2025-11-10 15:09:06,431 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Evaluate_Flow_Intake_logic.mmd']
+2025-11-10 15:09:06,431 - mermaid_processor - INFO - Converting Action: Z100_Manager.ACV_Manager to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 15:09:06,431 - mermaid_processor - INFO - Found body for Z100_Manager.ACV_Manager, analyzing content...
+2025-11-10 15:09:06,431 - mermaid_processor - INFO - Body children tags for Z100_Manager.ACV_Manager: ['{http://www.plcopen.org/xml/tc6_0200}ST', '{http://www.plcopen.org/xml/tc6_0200}addData']
+2025-11-10 15:09:06,431 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 15:09:06,431 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 15:09:06,431 - mermaid_processor - INFO - Body child 1: {http://www.plcopen.org/xml/tc6_0200}addData - has text: True - text length: 17
+2025-11-10 15:09:06,431 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}addData: 
+                
+2025-11-10 15:09:06,431 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.ACV_Manager ===
+2025-11-10 15:09:06,431 - st_processor - WARNING - No ST code found for Z100_Manager.ACV_Manager
+2025-11-10 15:09:06,431 - cfc_processor - INFO - Found 1 CFC elements for Z100_Manager.ACV_Manager
+2025-11-10 15:09:06,431 - mermaid_processor - INFO - Found CFC code for Z100_Manager.ACV_Manager
+2025-11-10 15:09:06,431 - cfc_processor - INFO - Converting CFC to Mermaid for Z100_Manager.ACV_Manager
+2025-11-10 15:09:06,431 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.ACV_Manager_logic.mmd with 897 characters
+2025-11-10 15:09:06,431 - mermaid_processor - WARNING - No interface found for Z100_Manager.ACV_Manager
+2025-11-10 15:09:06,431 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.ACV_Manager_logic.mmd']
+2025-11-10 15:09:06,431 - mermaid_processor - INFO - Converting Action: Z100_Manager.Task_Flow_Discharge to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 15:09:06,431 - mermaid_processor - INFO - Found body for Z100_Manager.Task_Flow_Discharge, analyzing content...
+2025-11-10 15:09:06,431 - mermaid_processor - INFO - Body children tags for Z100_Manager.Task_Flow_Discharge: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 15:09:06,431 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 15:09:06,431 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 15:09:06,431 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Task_Flow_Discharge ===
+2025-11-10 15:09:06,431 - st_processor - INFO - Found ST code from itertext for Z100_Manager.Task_Flow_Discharge, length: 1937
+2025-11-10 15:09:06,431 - mermaid_processor - INFO - Found ST code for Z100_Manager.Task_Flow_Discharge, length: 1937 characters
+2025-11-10 15:09:06,431 - st_processor - INFO - Processing ST code for Z100_Manager.Task_Flow_Discharge, length: 1937 characters
+2025-11-10 15:09:06,431 - st_processor - INFO - Cleaned code sample: IF PVL.Z100_Config.Task.eTask<> Local_Task THEN
+Local_Task:=PVL.Z100_Config.Task.eTask;
+local_status:=eZ100_Status.Flow_Control_Transfer;
+PVL.Z100_Config.READY:=TRUE;
+END_IF;
+PVL.PID[PID_Mapping.Z100_...
+2025-11-10 15:09:06,431 - st_processor - INFO - After cleaning: 1834 characters
+2025-11-10 15:09:06,431 - st_processor - INFO - Parsing ST code: IF PVL.Z100_Config.Task.eTask<> Local_Task THEN
+Local_Task:=PVL.Z100_Config.Task.eTask;
+local_status...
+2025-11-10 15:09:06,432 - st_processor - INFO - Parsed 28 statements for Z100_Manager.Task_Flow_Discharge
+2025-11-10 15:09:06,433 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Task_Flow_Discharge_logic.mmd with 3931 characters
+2025-11-10 15:09:06,433 - mermaid_processor - WARNING - No interface found for Z100_Manager.Task_Flow_Discharge
+2025-11-10 15:09:06,433 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Task_Flow_Discharge_logic.mmd']
+2025-11-10 15:09:06,433 - mermaid_processor - INFO - Converting Action: Z100_Manager.Alarms to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 15:09:06,433 - mermaid_processor - INFO - Found body for Z100_Manager.Alarms, analyzing content...
+2025-11-10 15:09:06,433 - mermaid_processor - INFO - Body children tags for Z100_Manager.Alarms: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 15:09:06,433 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 15:09:06,433 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 15:09:06,433 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Alarms ===
+2025-11-10 15:09:06,433 - st_processor - INFO - Found ST code from itertext for Z100_Manager.Alarms, length: 5866
+2025-11-10 15:09:06,433 - mermaid_processor - INFO - Found ST code for Z100_Manager.Alarms, length: 5866 characters
+2025-11-10 15:09:06,433 - st_processor - INFO - Processing ST code for Z100_Manager.Alarms, length: 5866 characters
+2025-11-10 15:09:06,433 - st_processor - INFO - Cleaned code sample: CASE PVL.Z100_Config.Task.eTask OF
+eZ100_task.Off:
+PVL.AIT[AIT_Mapping.LT_01A].Alarm_Config.Silence:=FALSE;
+PVL.AIT[AIT_Mapping.LT_01B].Alarm_Config.Silence:=FALSE;
+PVL.AIT[AIT_Mapping.FT_01].Alarm_Co...
+2025-11-10 15:09:06,433 - st_processor - INFO - After cleaning: 5706 characters
+2025-11-10 15:09:06,433 - st_processor - INFO - Parsing ST code: CASE PVL.Z100_Config.Task.eTask OF
+eZ100_task.Off:
+PVL.AIT[AIT_Mapping.LT_01A].Alarm_Config.Silence:...
+2025-11-10 15:09:06,433 - st_processor - INFO - Parsed 66 statements for Z100_Manager.Alarms
+2025-11-10 15:09:06,434 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Alarms_logic.mmd with 10620 characters
+2025-11-10 15:09:06,434 - mermaid_processor - WARNING - No interface found for Z100_Manager.Alarms
+2025-11-10 15:09:06,434 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Alarms_logic.mmd']
+2025-11-10 15:09:06,434 - mermaid_processor - INFO - Converting Action: Z100_Manager.Task_OFF to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 15:09:06,434 - mermaid_processor - INFO - Found body for Z100_Manager.Task_OFF, analyzing content...
+2025-11-10 15:09:06,434 - mermaid_processor - INFO - Body children tags for Z100_Manager.Task_OFF: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 15:09:06,434 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 15:09:06,434 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 15:09:06,434 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Task_OFF ===
+2025-11-10 15:09:06,434 - st_processor - INFO - Found ST code from itertext for Z100_Manager.Task_OFF, length: 253
+2025-11-10 15:09:06,434 - mermaid_processor - INFO - Found ST code for Z100_Manager.Task_OFF, length: 253 characters
+2025-11-10 15:09:06,434 - st_processor - INFO - Processing ST code for Z100_Manager.Task_OFF, length: 253 characters
+2025-11-10 15:09:06,434 - st_processor - INFO - Cleaned code sample: IF PVL.Z100_Config.Task.eTask<> Local_Task THEN
+Local_Task:=PVL.Z100_Config.Task.eTask;
+END_IF;
+local_status:=eZ100_Status.Off;
+Evaluate_All();
+PVL.Z100_Config.READY:=(Local_Status=PVl.Z100_Config.Sta...
+2025-11-10 15:09:06,434 - st_processor - INFO - After cleaning: 213 characters
+2025-11-10 15:09:06,434 - st_processor - INFO - Parsing ST code: IF PVL.Z100_Config.Task.eTask<> Local_Task THEN
+Local_Task:=PVL.Z100_Config.Task.eTask;
+END_IF;
+loca...
+2025-11-10 15:09:06,434 - st_processor - INFO - Parsed 6 statements for Z100_Manager.Task_OFF
+2025-11-10 15:09:06,435 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Task_OFF_logic.mmd with 868 characters
+2025-11-10 15:09:06,435 - mermaid_processor - WARNING - No interface found for Z100_Manager.Task_OFF
+2025-11-10 15:09:06,435 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Task_OFF_logic.mmd']
+2025-11-10 15:09:06,435 - mermaid_processor - INFO - Converting Action: Z100_Manager.Evaluate_Batch to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 15:09:06,435 - mermaid_processor - INFO - Found body for Z100_Manager.Evaluate_Batch, analyzing content...
+2025-11-10 15:09:06,435 - mermaid_processor - INFO - Body children tags for Z100_Manager.Evaluate_Batch: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 15:09:06,435 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 15:09:06,435 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 15:09:06,435 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Evaluate_Batch ===
+2025-11-10 15:09:06,435 - st_processor - INFO - Found ST code from itertext for Z100_Manager.Evaluate_Batch, length: 2779
+2025-11-10 15:09:06,435 - mermaid_processor - INFO - Found ST code for Z100_Manager.Evaluate_Batch, length: 2779 characters
+2025-11-10 15:09:06,435 - st_processor - INFO - Processing ST code for Z100_Manager.Evaluate_Batch, length: 2779 characters
+2025-11-10 15:09:06,435 - st_processor - INFO - Cleaned code sample: tStatus:=Local_status;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01A].Ready) THEN tStatus:=eZ100_Status.LT01A_Not_Ready; END_IF;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01B].Ready) THEN tStatus:=eZ100_Status.LT01B_Not_...
+2025-11-10 15:09:06,435 - st_processor - INFO - After cleaning: 2716 characters
+2025-11-10 15:09:06,435 - st_processor - INFO - Parsing ST code: tStatus:=Local_status;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01A].Ready) THEN tStatus:=eZ100_Status.LT01A_...
+2025-11-10 15:09:06,435 - st_processor - INFO - Parsed 46 statements for Z100_Manager.Evaluate_Batch
+2025-11-10 15:09:06,435 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Evaluate_Batch_logic.mmd with 6218 characters
+2025-11-10 15:09:06,435 - mermaid_processor - WARNING - No interface found for Z100_Manager.Evaluate_Batch
+2025-11-10 15:09:06,435 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Evaluate_Batch_logic.mmd']
+2025-11-10 15:09:06,435 - mermaid_processor - INFO - Converting Action: Z100_Manager.Task_Level to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 15:09:06,435 - mermaid_processor - INFO - Found body for Z100_Manager.Task_Level, analyzing content...
+2025-11-10 15:09:06,435 - mermaid_processor - INFO - Body children tags for Z100_Manager.Task_Level: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 15:09:06,435 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 15:09:06,435 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 15:09:06,435 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Task_Level ===
+2025-11-10 15:09:06,435 - st_processor - INFO - Found ST code from itertext for Z100_Manager.Task_Level, length: 1626
+2025-11-10 15:09:06,435 - mermaid_processor - INFO - Found ST code for Z100_Manager.Task_Level, length: 1626 characters
+2025-11-10 15:09:06,435 - st_processor - INFO - Processing ST code for Z100_Manager.Task_Level, length: 1626 characters
+2025-11-10 15:09:06,436 - st_processor - INFO - Cleaned code sample: IF PVL.Z100_Config.Task.eTask<> Local_Task THEN
+Local_Task:=PVL.Z100_Config.Task.eTask;
+END_IF;
+local_status:=eZ100_Status.Level_Control_Transfer;
+PVL.PID[PID_Mapping.Z100_Level].PLC_Target:=PVL.Z100_...
+2025-11-10 15:09:06,436 - st_processor - INFO - After cleaning: 1530 characters
+2025-11-10 15:09:06,436 - st_processor - INFO - Parsing ST code: IF PVL.Z100_Config.Task.eTask<> Local_Task THEN
+Local_Task:=PVL.Z100_Config.Task.eTask;
+END_IF;
+loca...
+2025-11-10 15:09:06,436 - st_processor - INFO - Parsed 24 statements for Z100_Manager.Task_Level
+2025-11-10 15:09:06,436 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Task_Level_logic.mmd with 3350 characters
+2025-11-10 15:09:06,436 - mermaid_processor - WARNING - No interface found for Z100_Manager.Task_Level
+2025-11-10 15:09:06,436 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Task_Level_logic.mmd']
+2025-11-10 15:09:06,436 - mermaid_processor - INFO - Converting Action: Z100_Manager.Evaluate_Flow_Discharge to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 15:09:06,436 - mermaid_processor - INFO - Found body for Z100_Manager.Evaluate_Flow_Discharge, analyzing content...
+2025-11-10 15:09:06,436 - mermaid_processor - INFO - Body children tags for Z100_Manager.Evaluate_Flow_Discharge: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 15:09:06,436 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 15:09:06,436 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 15:09:06,436 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Evaluate_Flow_Discharge ===
+2025-11-10 15:09:06,436 - st_processor - INFO - Found ST code from itertext for Z100_Manager.Evaluate_Flow_Discharge, length: 2781
+2025-11-10 15:09:06,436 - mermaid_processor - INFO - Found ST code for Z100_Manager.Evaluate_Flow_Discharge, length: 2781 characters
+2025-11-10 15:09:06,436 - st_processor - INFO - Processing ST code for Z100_Manager.Evaluate_Flow_Discharge, length: 2781 characters
+2025-11-10 15:09:06,436 - st_processor - INFO - Cleaned code sample: tStatus:=Local_status;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01A].Ready) THEN tStatus:=eZ100_Status.LT01A_Not_Ready; END_IF;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01B].Ready) THEN tStatus:=eZ100_Status.LT01B_Not_...
+2025-11-10 15:09:06,437 - st_processor - INFO - After cleaning: 2716 characters
+2025-11-10 15:09:06,437 - st_processor - INFO - Parsing ST code: tStatus:=Local_status;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01A].Ready) THEN tStatus:=eZ100_Status.LT01A_...
+2025-11-10 15:09:06,438 - st_processor - INFO - Parsed 46 statements for Z100_Manager.Evaluate_Flow_Discharge
+2025-11-10 15:09:06,438 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Evaluate_Flow_Discharge_logic.mmd with 6245 characters
+2025-11-10 15:09:06,438 - mermaid_processor - WARNING - No interface found for Z100_Manager.Evaluate_Flow_Discharge
+2025-11-10 15:09:06,438 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Evaluate_Flow_Discharge_logic.mmd']
+2025-11-10 15:09:06,438 - mermaid_processor - INFO - Converting Action: Z100_Manager.Evaluate_Drain to Mermaid in directory: S:/PLC_export_Test/H2N-PLCopen
+2025-11-10 15:09:06,438 - mermaid_processor - INFO - Found body for Z100_Manager.Evaluate_Drain, analyzing content...
+2025-11-10 15:09:06,438 - mermaid_processor - INFO - Body children tags for Z100_Manager.Evaluate_Drain: ['{http://www.plcopen.org/xml/tc6_0200}ST']
+2025-11-10 15:09:06,438 - mermaid_processor - INFO - Body child 0: {http://www.plcopen.org/xml/tc6_0200}ST - has text: True - text length: 17
+2025-11-10 15:09:06,438 - mermaid_processor - INFO - First 200 chars of {http://www.plcopen.org/xml/tc6_0200}ST: 
+                
+2025-11-10 15:09:06,438 - mermaid_processor - INFO - === Parsing code body for Mermaid: Z100_Manager.Evaluate_Drain ===
+2025-11-10 15:09:06,438 - st_processor - INFO - Found ST code from itertext for Z100_Manager.Evaluate_Drain, length: 2771
+2025-11-10 15:09:06,438 - mermaid_processor - INFO - Found ST code for Z100_Manager.Evaluate_Drain, length: 2771 characters
+2025-11-10 15:09:06,438 - st_processor - INFO - Processing ST code for Z100_Manager.Evaluate_Drain, length: 2771 characters
+2025-11-10 15:09:06,438 - st_processor - INFO - Cleaned code sample: tStatus:=Local_status;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01A].Ready) THEN tStatus:=eZ100_Status.LT01A_Not_Ready; END_IF;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01B].Ready) THEN tStatus:=eZ100_Status.LT01B_Not_...
+2025-11-10 15:09:06,438 - st_processor - INFO - After cleaning: 2708 characters
+2025-11-10 15:09:06,438 - st_processor - INFO - Parsing ST code: tStatus:=Local_status;
+//IF NOT(pvl.AIT[AIT_Mapping.LT_01A].Ready) THEN tStatus:=eZ100_Status.LT01A_...
+2025-11-10 15:09:06,439 - st_processor - INFO - Parsed 46 statements for Z100_Manager.Evaluate_Drain
+2025-11-10 15:09:06,439 - mermaid_processor - INFO - Created Mermaid logic file: S:/PLC_export_Test/H2N-PLCopen\Z100_Manager.Evaluate_Drain_logic.mmd with 6069 characters
+2025-11-10 15:09:06,439 - mermaid_processor - WARNING - No interface found for Z100_Manager.Evaluate_Drain
+2025-11-10 15:09:06,439 - mermaid_processor - INFO - Created 1 Mermaid files: ['S:/PLC_export_Test/H2N-PLCopen\\Z100_Manager.Evaluate_Drain_logic.mmd']
+2025-11-10 15:09:06,439 - gui_manager - INFO - Successfully generated files in S:/PLC_export_Test/H2N-PLCopen
