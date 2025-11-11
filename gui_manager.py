@@ -172,7 +172,7 @@ class GUIManager:
         # Get output directory
         output_dir = filedialog.askdirectory(title="Select Output Directory")
         if not output_dir:
-            output_dir = "diagram_output"
+            output_dir = "H2-1.0.02_full_text_flowcharts/diagram_output"
 
         # Convert to selected formats
         self._convert_to_formats(selected_id, output_dir)
