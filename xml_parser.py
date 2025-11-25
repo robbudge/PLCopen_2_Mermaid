@@ -104,6 +104,8 @@ class CodesysXMLParser:
                         pou_data['actionsInfo'][action_name]['bodyLanguage'] = action_body_lang
                         self._add_debug(
                             f"      Action body language: {action_body_lang}, length: {len(action_body) if action_body else 0}")
+                        if action_body:
+                            self._add_debug(f"      Action body preview: {action_body[:300]}...")
             else:
                 self._add_debug(f"  No actions element found for {pou_name}")
 
@@ -137,6 +139,8 @@ class CodesysXMLParser:
                         pou_data['methodsInfo'][method_name]['bodyLanguage'] = method_body_lang
                         self._add_debug(
                             f"      Method body language: {method_body_lang}, length: {len(method_body) if method_body else 0}")
+                        if method_body:
+                            self._add_debug(f"      Method body preview: {method_body[:300]}...")
             else:
                 self._add_debug(f"  No methods element found for {pou_name}")
 
@@ -152,13 +156,22 @@ class CodesysXMLParser:
                     break
 
             if body_element is not None:
+                self._add_debug(f"  Found body element for {pou_name}")
                 body_text, body_language = self._extract_body_and_language(body_element)
                 pou_data['body'] = body_text
                 pou_data['bodyLanguage'] = body_language
                 self._add_debug(
                     f"  Found main body for {pou_name} (language: {body_language}, length: {len(body_text) if body_text else 0})")
                 if body_text:
-                    self._add_debug(f"  Body preview: {body_text[:200]}...")
+                    self._add_debug(f"  Body preview: {body_text[:500]}...")
+                    # DEBUG: Check for XML entities in the body
+                    if '&lt;' in body_text or '&gt;' in body_text:
+                        self._add_debug(
+                            f"  *** WARNING: XML entities found in body: &lt;={body_text.count('&lt;')}, &gt;={body_text.count('&gt;')}")
+                        # Show specific examples
+                        lt_matches = re.findall(r'&\w+;', body_text)
+                        if lt_matches:
+                            self._add_debug(f"  XML entities found: {set(lt_matches)}")
             else:
                 self._add_debug(f"  No main body element found for {pou_name}")
 
@@ -174,6 +187,7 @@ class CodesysXMLParser:
 
         # Get language from element attribute
         language = element.get('language', 'Unknown')
+        self._add_debug(f"        Element language attribute: {language}")
 
         # Try multiple strategies to extract body content
         body_element = element
@@ -183,53 +197,153 @@ class CodesysXMLParser:
         found_language_element = None
 
         for lang_elem in language_elements:
-            lang_element = body_element.find(lang_elem)
-            if lang_element is None:
-                # Try with namespace
-                for child in body_element:
-                    tag = child.tag.split('}')[-1] if '}' in child.tag else child.tag
-                    if tag == lang_elem:
-                        lang_element = child
-                        break
-
-            if lang_element is not None:
-                found_language_element = lang_element
-                language = lang_elem  # Override with detected language
-                self._add_debug(f"      Detected language element: {lang_elem}")
+            # Look for direct child with the language tag
+            for child in body_element:
+                tag = child.tag.split('}')[-1] if '}' in child.tag else child.tag
+                if tag == lang_elem:
+                    found_language_element = child
+                    language = lang_elem  # Override with detected language
+                    self._add_debug(f"        Found language element: {lang_elem}")
+                    break
+            if found_language_element:
                 break
 
         if found_language_element is not None:
-            # Extract text from language-specific element
-            body_text = self._extract_text_from_element(found_language_element)
+            # Extract text from language-specific element - FIXED APPROACH
+            body_text = self._extract_st_code_from_element(found_language_element)
+            self._add_debug(f"        Extracted {len(body_text)} chars from language element")
         else:
-            # Strategy 2: Direct text content from body element
-            body_text = self._extract_text_from_element(body_element)
+            # Strategy 2: Look for any text content in the element
+            body_text = self._extract_any_text_from_element(body_element)
+            self._add_debug(f"        Extracted {len(body_text)} chars from body element")
 
             # Try to detect language from content if still unknown
             if language == 'Unknown':
-                language = self._detect_language_from_content(body_text)
+                detected_lang = self._detect_language_from_content(body_text)
+                language = detected_lang
+                self._add_debug(f"        Detected language from content: {detected_lang}")
+
+        # DEBUG: Show what we extracted
+        if body_text:
+            self._add_debug(f"        Body text preview: {body_text[:200]}...")
+            # Check for XML entities
+            if '&lt;' in body_text or '&gt;' in body_text:
+                self._add_debug(f"        *** XML ENTITIES PRESENT IN EXTRACTED TEXT ***")
+                self._add_debug(f"        &lt; count: {body_text.count('&lt;')}")
+                self._add_debug(f"        &gt; count: {body_text.count('&gt;')}")
+                # Show context around entities
+                lt_pos = body_text.find('&lt;')
+                if lt_pos != -1:
+                    context_start = max(0, lt_pos - 20)
+                    context_end = min(len(body_text), lt_pos + 50)
+                    self._add_debug(f"        Context around &lt;: ...{body_text[context_start:context_end]}...")
 
         return body_text, language
 
-    def _extract_text_from_element(self, element):
-        """Extract all text content from an element and its children"""
+    def _extract_st_code_from_element(self, element):
+        """Extract ST code specifically from ST elements - FIXED VERSION"""
         if element is None:
             return ""
 
-        text = element.text or ""
+        self._add_debug(f"          Extracting ST code from: {element.tag}")
+
+        # For ST elements, we need to look for specific child elements that contain the code
+        # Common structure: ST -> xhtml -> div/p elements with CDATA content
+
+        # Strategy 1: Look for xhtml content
+        xhtml_elements = []
+        for child in element:
+            tag = child.tag.split('}')[-1] if '}' in child.tag else child.tag
+            if 'xhtml' in tag.lower() or 'html' in tag.lower():
+                xhtml_elements.append(child)
+
+        if xhtml_elements:
+            self._add_debug(f"          Found {len(xhtml_elements)} xhtml elements")
+            # Extract text from all xhtml elements
+            all_text = ""
+            for xhtml_elem in xhtml_elements:
+                text = self._extract_text_from_xhtml(xhtml_elem)
+                if text:
+                    all_text += text + " "
+            return all_text.strip()
+
+        # Strategy 2: Direct text extraction with CDATA handling
+        text = self._extract_text_with_cdata(element)
+        if text:
+            return text
+
+        # Strategy 3: Fallback to basic text extraction
+        return self._extract_any_text_from_element(element)
+
+    def _extract_text_from_xhtml(self, element):
+        """Extract text from xhtml elements"""
+        text_parts = []
+
+        # Look for common HTML tags that contain text
+        text_tags = ['div', 'p', 'span', 'pre', 'code']
+
+        for tag in text_tags:
+            # Find all elements with this tag (case insensitive)
+            for child in element.iter():
+                child_tag = child.tag.split('}')[-1] if '}' in child.tag else child.tag
+                if child_tag.lower() == tag.lower():
+                    if child.text:
+                        text_parts.append(child.text.strip())
+                    # Also check for CDATA content
+                    if hasattr(child, 'itertext'):
+                        for subtext in child.itertext():
+                            if subtext.strip():
+                                text_parts.append(subtext.strip())
+
+        # Also get direct text content
+        if element.text and element.text.strip():
+            text_parts.append(element.text.strip())
+
+        # Get tail text
+        if element.tail and element.tail.strip():
+            text_parts.append(element.tail.strip())
+
+        return ' '.join(text_parts)
+
+    def _extract_text_with_cdata(self, element):
+        """Extract text handling CDATA sections"""
+        text_parts = []
+
+        # Check if element has CDATA directly
+        if element.text and element.text.strip():
+            text_parts.append(element.text.strip())
+
+        # Recursively check children
+        for child in element:
+            if child.text and child.text.strip():
+                text_parts.append(child.text.strip())
+            if child.tail and child.tail.strip():
+                text_parts.append(child.tail.strip())
+
+        return ' '.join(text_parts)
+
+    def _extract_any_text_from_element(self, element):
+        """Extract any text content from an element and its children"""
+        if element is None:
+            return ""
+
+        text_parts = []
+
+        # Get element text
+        if element.text and element.text.strip():
+            text_parts.append(element.text.strip())
 
         # Recursively get text from all children
         for child in element:
-            if child.text:
-                text += child.text
-            if child.tail:
-                text += child.tail
+            child_text = self._extract_any_text_from_element(child)
+            if child_text:
+                text_parts.append(child_text)
 
-        # Clean up the text
-        text = re.sub(r'\s+', ' ', text)
-        text = text.strip()
+        # Get tail text
+        if element.tail and element.tail.strip():
+            text_parts.append(element.tail.strip())
 
-        return text
+        return ' '.join(text_parts)
 
     def _detect_language_from_content(self, content: str) -> str:
         """Detect programming language from content heuristics"""
@@ -288,10 +402,14 @@ class CodesysXMLParser:
 
         return "Unknown"
 
+    # ========== PUBLIC METHODS ==========
+
     def get_pous(self) -> Dict[str, Any]:
+        """Get all POUs"""
         return self.pous
 
     def get_pou_body(self, pou_name: str) -> str:
+        """Get the body content of a POU"""
         pou = self.pous.get(pou_name)
         if pou:
             return pou.get('body', '')
@@ -354,6 +472,7 @@ class CodesysXMLParser:
         return ''
 
     def get_debug_info(self) -> List[str]:
+        """Get all debug information"""
         return self.debug_info
 
     def get_pou_detailed_info(self, pou_name: str) -> Dict[str, Any]:
