@@ -2,6 +2,10 @@ import tkinter as tk
 from tkinter import ttk, filedialog, messagebox, scrolledtext
 import xml.etree.ElementTree as ET
 import os
+import subprocess
+import tempfile
+import webbrowser
+from pathlib import Path
 from xml_parser import CodesysXMLParser
 from mermaid_converter import MermaidConverter
 
@@ -14,6 +18,7 @@ class CodesysToMermaidGUI:
 
         self.parser = None
         self.current_pou = None
+        self.output_folder = None
 
         self.setup_gui()
 
@@ -47,9 +52,18 @@ class CodesysToMermaidGUI:
         ttk.Button(file_frame, text="Browse", command=self.browse_file).grid(row=0, column=1, padx=5)
         ttk.Button(file_frame, text="Load XML", command=self.load_xml).grid(row=0, column=2, padx=5)
 
+        # Output folder selection
+        output_frame = ttk.LabelFrame(main_frame, text="Output Folder", padding="5")
+        output_frame.grid(row=1, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=5)
+
+        self.output_folder_var = tk.StringVar()
+        ttk.Entry(output_frame, textvariable=self.output_folder_var, width=80).grid(row=0, column=0, padx=5)
+        ttk.Button(output_frame, text="Browse", command=self.browse_output_folder).grid(row=0, column=1, padx=5)
+        ttk.Button(output_frame, text="Use Current", command=self.use_current_folder).grid(row=0, column=2, padx=5)
+
         # Project tree and POU selection
         tree_frame = ttk.LabelFrame(main_frame, text="Project Structure", padding="5")
-        tree_frame.grid(row=1, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), pady=5, padx=(0, 5))
+        tree_frame.grid(row=2, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), pady=5, padx=(0, 5))
 
         self.tree_view = ttk.Treeview(tree_frame)
         self.tree_view.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
@@ -63,7 +77,7 @@ class CodesysToMermaidGUI:
 
         # POU details and conversion
         details_frame = ttk.LabelFrame(main_frame, text="POU Details & Conversion", padding="5")
-        details_frame.grid(row=1, column=1, sticky=(tk.W, tk.E, tk.N, tk.S), pady=5)
+        details_frame.grid(row=2, column=1, sticky=(tk.W, tk.E, tk.N, tk.S), pady=5)
 
         # POU info
         info_frame = ttk.Frame(details_frame)
@@ -81,13 +95,22 @@ class CodesysToMermaidGUI:
         self.pou_type_label = ttk.Label(info_frame, text="None")
         self.pou_type_label.grid(row=2, column=1, sticky=tk.W, padx=5)
 
-        # Convert button
-        ttk.Button(details_frame, text="Generate Mermaid Flowchart",
-                   command=self.generate_mermaid).grid(row=1, column=0, pady=10)
+        # Convert buttons
+        button_frame = ttk.Frame(details_frame)
+        button_frame.grid(row=1, column=0, pady=10)
+
+        ttk.Button(button_frame, text="Generate Mermaid Flowchart",
+                   command=self.generate_mermaid).grid(row=0, column=0, padx=5)
+        ttk.Button(button_frame, text="Save Mermaid",
+                   command=self.save_mermaid).grid(row=0, column=1, padx=5)
+        ttk.Button(button_frame, text="Save HTML",
+                   command=self.save_html).grid(row=0, column=2, padx=5)
+        ttk.Button(button_frame, text="Generate PDF",
+                   command=self.generate_pdf).grid(row=0, column=3, padx=5)
 
         # Mermaid output
         output_frame = ttk.LabelFrame(main_frame, text="Mermaid Flowchart", padding="5")
-        output_frame.grid(row=2, column=0, columnspan=2, sticky=(tk.W, tk.E, tk.N, tk.S), pady=5)
+        output_frame.grid(row=3, column=0, columnspan=2, sticky=(tk.W, tk.E, tk.N, tk.S), pady=5)
 
         self.mermaid_output = scrolledtext.ScrolledText(output_frame, width=100, height=15)
         self.mermaid_output.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
@@ -101,8 +124,8 @@ class CodesysToMermaidGUI:
         parent.rowconfigure(0, weight=1)
         main_frame.columnconfigure(0, weight=1)
         main_frame.columnconfigure(1, weight=1)
-        main_frame.rowconfigure(1, weight=1)
         main_frame.rowconfigure(2, weight=1)
+        main_frame.rowconfigure(3, weight=1)
         tree_frame.columnconfigure(0, weight=1)
         tree_frame.rowconfigure(0, weight=1)
         details_frame.columnconfigure(0, weight=1)
@@ -144,6 +167,21 @@ class CodesysToMermaidGUI:
             self.file_path.set(filename)
             self.add_debug_message(f"Selected file: {filename}")
 
+    def browse_output_folder(self):
+        folder = filedialog.askdirectory(title="Select Output Folder")
+        if folder:
+            self.output_folder_var.set(folder)
+            self.output_folder = folder
+            self.add_debug_message(f"Output folder set to: {folder}")
+
+    def use_current_folder(self):
+        """Use the current XML file's folder as output folder"""
+        if self.file_path.get():
+            folder = os.path.dirname(self.file_path.get())
+            self.output_folder_var.set(folder)
+            self.output_folder = folder
+            self.add_debug_message(f"Output folder set to XML folder: {folder}")
+
     def load_xml(self):
         if not self.file_path.get():
             messagebox.showerror("Error", "Please select an XML file first")
@@ -162,6 +200,10 @@ class CodesysToMermaidGUI:
 
             self.populate_tree()
             self.add_debug_message("XML loading completed successfully")
+
+            # Set default output folder to XML file's folder
+            if not self.output_folder:
+                self.use_current_folder()
 
             messagebox.showinfo("Success", "XML file loaded successfully")
 
@@ -240,6 +282,229 @@ class CodesysToMermaidGUI:
             error_msg = f"Failed to generate Mermaid flowchart: {str(e)}"
             self.add_debug_message(f"ERROR: {error_msg}")
             messagebox.showerror("Error", error_msg)
+
+    def save_mermaid(self):
+        """Save Mermaid code to a file"""
+        if not self.current_pou:
+            messagebox.showerror("Error", "Please generate Mermaid code first")
+            return
+
+        if not self.output_folder:
+            messagebox.showerror("Error", "Please select an output folder first")
+            return
+
+        mermaid_text = self.mermaid_output.get(1.0, tk.END).strip()
+        if not mermaid_text:
+            messagebox.showerror("Error", "No Mermaid code to save")
+            return
+
+        try:
+            filename = f"{self.current_pou}.mmd"
+            filepath = os.path.join(self.output_folder, filename)
+
+            with open(filepath, 'w', encoding='utf-8') as f:
+                f.write(mermaid_text)
+
+            self.add_debug_message(f"Mermaid code saved to: {filepath}")
+            messagebox.showinfo("Success", f"Mermaid code saved to:\n{filepath}")
+
+        except Exception as e:
+            error_msg = f"Failed to save Mermaid file: {str(e)}"
+            self.add_debug_message(f"ERROR: {error_msg}")
+            messagebox.showerror("Error", error_msg)
+
+    def save_html(self):
+        """Save Mermaid diagram as standalone HTML file"""
+        if not self.current_pou:
+            messagebox.showerror("Error", "Please generate Mermaid code first")
+            return
+
+        if not self.output_folder:
+            messagebox.showerror("Error", "Please select an output folder first")
+            return
+
+        mermaid_text = self.mermaid_output.get(1.0, tk.END).strip()
+        if not mermaid_text:
+            messagebox.showerror("Error", "No Mermaid code to save")
+            return
+
+        try:
+            html_filename = f"{self.current_pou}_flowchart.html"
+            html_path = os.path.join(self.output_folder, html_filename)
+
+            html_content = self._create_mermaid_html(mermaid_text, self.current_pou)
+
+            with open(html_path, 'w', encoding='utf-8') as f:
+                f.write(html_content)
+
+            self.add_debug_message(f"HTML file saved: {html_path}")
+
+            # Ask if user wants to open it
+            open_browser = messagebox.askyesno(
+                "Success",
+                f"HTML file saved:\n{html_path}\n\nWould you like to open it in your browser?"
+            )
+
+            if open_browser:
+                webbrowser.open(f"file://{html_path}")
+
+        except Exception as e:
+            error_msg = f"Failed to save HTML file: {str(e)}"
+            self.add_debug_message(f"ERROR: {error_msg}")
+            messagebox.showerror("Error", error_msg)
+
+    def generate_pdf(self):
+        """Generate HTML file with Mermaid diagram for browser PDF printing"""
+        if not self.current_pou:
+            messagebox.showerror("Error", "Please generate Mermaid code first")
+            return
+
+        if not self.output_folder:
+            messagebox.showerror("Error", "Please select an output folder first")
+            return
+
+        mermaid_text = self.mermaid_output.get(1.0, tk.END).strip()
+        if not mermaid_text:
+            messagebox.showerror("Error", "No Mermaid code to convert to PDF")
+            return
+
+        try:
+            # Create HTML file with Mermaid diagram
+            html_filename = f"{self.current_pou}_flowchart.html"
+            html_path = os.path.join(self.output_folder, html_filename)
+
+            # Create the HTML content
+            html_content = self._create_mermaid_html(mermaid_text, self.current_pou)
+
+            with open(html_path, 'w', encoding='utf-8') as f:
+                f.write(html_content)
+
+            self.add_debug_message(f"HTML file created: {html_path}")
+
+            # Ask user if they want to open the file
+            open_browser = messagebox.askyesno(
+                "HTML File Created",
+                f"HTML file created successfully:\n{html_path}\n\n"
+                "Would you like to open it in your browser?\n\n"
+                "In the browser, you can:\n"
+                "1. Use Ctrl+P to print\n"
+                "2. Choose 'Save as PDF' as the destination\n"
+                "3. Adjust layout as needed"
+            )
+
+            if open_browser:
+                webbrowser.open(f"file://{html_path}")
+
+            messagebox.showinfo(
+                "Success",
+                f"HTML file created:\n{html_path}\n\n"
+                "To create PDF:\n"
+                "1. Open the HTML file in browser\n"
+                "2. Press Ctrl+P to print\n"
+                "3. Choose 'Save as PDF' as destination\n"
+                "4. Adjust margins and layout as needed"
+            )
+
+        except Exception as e:
+            error_msg = f"Failed to create HTML file: {str(e)}"
+            self.add_debug_message(f"ERROR: {error_msg}")
+            messagebox.showerror("Error", error_msg)
+
+    def _create_mermaid_html(self, mermaid_code: str, pou_name: str) -> str:
+        """Create HTML file with Mermaid diagram"""
+        html_template = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flowchart - {pou_name}</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {{
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: white;
+        }}
+        .header {{
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #333;
+        }}
+        .header h1 {{
+            color: #333;
+            margin: 0;
+        }}
+        .header .subtitle {{
+            color: #666;
+            font-size: 14px;
+        }}
+        .mermaid {{
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }}
+        .instructions {{
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border-left: 4px solid #007acc;
+            font-size: 14px;
+        }}
+        @media print {{
+            .instructions {{
+                display: none;
+            }}
+            body {{
+                margin: 0;
+                padding: 0;
+            }}
+            .mermaid {{
+                border: none;
+                padding: 0;
+            }}
+        }}
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>{pou_name} - Flowchart</h1>
+        <div class="subtitle">Generated from Codesys XML</div>
+    </div>
+
+    <div class="mermaid">
+{mermaid_code}
+    </div>
+
+    <div class="instructions">
+        <strong>How to save as PDF:</strong>
+        <ol>
+            <li>Press <kbd>Ctrl+P</kbd> (or <kbd>Cmd+P</kbd> on Mac)</li>
+            <li>Choose "Save as PDF" as destination</li>
+            <li>Adjust margins and layout settings if needed</li>
+            <li>Click "Save"</li>
+        </ol>
+        <p><em>This instruction box will not appear in the printed PDF.</em></p>
+    </div>
+
+    <script>
+        mermaid.initialize({{
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: {{
+                useMaxWidth: false,
+                htmlLabels: true,
+                curve: 'basis'
+            }},
+            securityLevel: 'loose'
+        }});
+    </script>
+</body>
+</html>"""
+
+        return html_template.format(pou_name=pou_name, mermaid_code=mermaid_code)
 
     def copy_to_clipboard(self):
         mermaid_text = self.mermaid_output.get(1.0, tk.END).strip()
