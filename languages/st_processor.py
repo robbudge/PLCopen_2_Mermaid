@@ -4,6 +4,7 @@ from .base_processor import BaseLanguageProcessor
 from .st_if import STIfProcessor
 from .st_case import STCaseProcessor
 from .st_sel import STSelProcessor
+from .st_max import STMaxProcessor
 from .sanitizer import MermaidSanitizer
 
 
@@ -19,6 +20,7 @@ class STProcessor(BaseLanguageProcessor):
         self.if_processor = STIfProcessor(self)
         self.case_processor = STCaseProcessor(self)
         self.sel_processor = STSelProcessor(self)
+        self.max_processor = STMaxProcessor(self)  # Add MAX processor
 
         self._add_debug("[MAIN] ST Processor initialized with specialized processors")
 
@@ -174,133 +176,174 @@ class STProcessor(BaseLanguageProcessor):
 
     def _parse_recursive(self, code: str, current_node: str, node_counter: List[int], in_if_branch: bool = False) -> \
             List[str]:
-        """Main recursive parsing routine - FIXED to handle nested structure exit nodes"""
+        """Main recursive parsing routine - FIXED to prevent infinite loops"""
         nodes = []
         remaining_code = code.strip()
-
-        # FIX: Track the current exit node - this is key!
         exit_node = current_node
 
         while remaining_code:
             self._line_counter += 1
-            self._add_debug(f"[MAIN] Line {self._line_counter}: Processing: {remaining_code[:100]}...")
-            self._add_debug(f"[MAIN] Current exit_node: {exit_node}")
 
-            # Check for IF statements first
+            # Track if we processed any statement in this iteration
+            processed = False
+
+            # Check for MAX statements
+            if self._find_max_statement(remaining_code):
+                try:
+                    result = self.max_processor.process_max_statement(remaining_code, exit_node, node_counter)
+                    if result:
+                        max_nodes, next_exit_node, consumed = result
+                        # Ensure we actually consume code
+                        if consumed > 0:
+                            nodes.extend(max_nodes)
+                            exit_node = next_exit_node
+                            remaining_code = remaining_code[consumed:].strip()
+                            processed = True
+                            continue
+                except Exception:
+                    pass
+
+            # Check for SEL statements
+            if self._find_sel_statement(remaining_code):
+                try:
+                    result = self.sel_processor.process_sel_statement(remaining_code, exit_node, node_counter)
+                    if result:
+                        sel_nodes, next_exit_node, consumed = result
+                        if consumed > 0:
+                            nodes.extend(sel_nodes)
+                            exit_node = next_exit_node
+                            remaining_code = remaining_code[consumed:].strip()
+                            processed = True
+                            continue
+                except Exception:
+                    pass
+
+            # Check for IF statements
             if_match = self._find_if_statement(remaining_code)
             if if_match:
-                self._add_debug("[MAIN] Found IF statement - delegating to IF processor")
                 try:
                     result = self.if_processor.process_if_statement(remaining_code, exit_node, node_counter)
                     if result:
                         if_nodes, next_exit_node, consumed = result
-                        self._add_debug(
-                            f"[MAIN] IF processor returned {len(if_nodes)} nodes, next_exit_node: {next_exit_node}, consumed: {consumed}")
+                        if consumed > 0:
+                            # FIX: Always connect current exit node to first IF node if needed
+                            if exit_node and exit_node != "Start" and if_nodes:
+                                first_if_node = self._find_first_decision_node(if_nodes)
+                                if first_if_node:
+                                    connection_exists = any(
+                                        node.startswith(f"{exit_node} -->") and first_if_node in node
+                                        for node in if_nodes
+                                    )
+                                    if not connection_exists:
+                                        connection = self._create_safe_connection(exit_node, first_if_node)
+                                        nodes.append(connection)
 
-                        # FIX: Always connect current exit node to first IF node if needed
-                        if exit_node and exit_node != "Start" and if_nodes:
-                            first_if_node = self._find_first_decision_node(if_nodes)
-                            if first_if_node:
-                                # Check if connection already exists
-                                connection_exists = any(
-                                    node.startswith(f"{exit_node} -->") and first_if_node in node
-                                    for node in if_nodes
-                                )
-                                if not connection_exists:
-                                    connection = self._create_safe_connection(exit_node, first_if_node)
-                                    nodes.append(connection)
-                                    self._add_debug(f"[MAIN] Added connection to IF decision: {connection}")
-
-                        nodes.extend(if_nodes)
-                        exit_node = next_exit_node  # FIX: Update exit node to the merge node from IF
-                        remaining_code = remaining_code[consumed:].strip()
-                        continue
-                    else:
-                        self._add_debug("[MAIN] IF processor returned no result")
-                except Exception as e:
-                    self._add_debug(f"[MAIN] Error in IF processor: {e}")
+                            nodes.extend(if_nodes)
+                            exit_node = next_exit_node
+                            remaining_code = remaining_code[consumed:].strip()
+                            processed = True
+                            continue
+                except Exception:
+                    pass
 
             # Check for CASE statements
             case_match = self._find_case_statement(remaining_code)
             if case_match:
-                self._add_debug("[MAIN] Found CASE statement - delegating to CASE processor")
                 try:
                     result = self.case_processor.process_case_statement(remaining_code, exit_node, node_counter)
                     if result:
                         case_nodes, next_exit_node, consumed = result
-                        self._add_debug(
-                            f"[MAIN] CASE processor returned {len(case_nodes)} nodes, next_exit_node: {next_exit_node}, consumed: {consumed}")
+                        if consumed > 0:
+                            if exit_node and exit_node != "Start" and case_nodes:
+                                first_case_node = self._find_first_decision_node(case_nodes)
+                                if first_case_node:
+                                    connection = self._create_safe_connection(exit_node, first_case_node)
+                                    nodes.append(connection)
 
-                        if exit_node and exit_node != "Start" and case_nodes:
-                            first_case_node = self._find_first_decision_node(case_nodes)
-                            if first_case_node:
-                                connection = self._create_safe_connection(exit_node, first_case_node)
-                                nodes.append(connection)
-                                self._add_debug(f"[MAIN] Added connection to CASE decision: {connection}")
+                            nodes.extend(case_nodes)
+                            exit_node = next_exit_node
+                            remaining_code = remaining_code[consumed:].strip()
+                            processed = True
+                            continue
+                except Exception:
+                    pass
 
-                        nodes.extend(case_nodes)
-                        exit_node = next_exit_node  # FIX: Update exit node to the merge node from CASE
-                        remaining_code = remaining_code[consumed:].strip()
-                        continue
-                    else:
-                        self._add_debug("[MAIN] CASE processor returned no result")
-                except Exception as e:
-                    self._add_debug(f"[MAIN] Error in CASE processor: {e}")
-
-            # Check for MAX statements in assignments
-            max_match = self._find_max_statement(remaining_code)
-            if max_match:
-                self._add_debug("[MAIN] Found MAX function in assignment - showing complete assignment")
-                # MAX statements are handled in _create_terminal_node, just continue with normal processing
-
-            # Check for SEL functions
-            if remaining_code.upper().startswith('SEL('):
-                self._add_debug("[MAIN] Found SEL function - delegating to SEL processor")
+            # Check for SEL statements
+            if self._find_sel_statement(remaining_code):
+                self._add_debug("[MAIN] Processing SEL statement")
                 try:
-                    result = self.sel_processor.process_sel_function(remaining_code, exit_node, node_counter)
+                    result = self.sel_processor.process_sel_statement(remaining_code, exit_node, node_counter)
                     if result:
                         sel_nodes, next_exit_node, consumed = result
-                        self._add_debug(
-                            f"[MAIN] SEL processor returned {len(sel_nodes)} nodes, next_exit_node: {next_exit_node}, consumed: {consumed}")
-
-                        nodes.extend(sel_nodes)
-                        exit_node = next_exit_node  # FIX: Update exit node
-                        remaining_code = remaining_code[consumed:].strip()
-                        continue
+                        if consumed > 0:
+                            nodes.extend(sel_nodes)
+                            exit_node = next_exit_node
+                            remaining_code = remaining_code[consumed:].strip()
+                            self._add_debug(f"[MAIN] SEL processed, consumed {consumed} chars")
+                            processed = True
+                            continue
                     else:
                         self._add_debug("[MAIN] SEL processor returned no result")
                 except Exception as e:
                     self._add_debug(f"[MAIN] Error in SEL processor: {e}")
 
-            # Terminal statements (assignments and function calls)
+            # Terminal statements (assignments and function calls) - FALLBACK
             statement, consumed = self._extract_terminal_statement(remaining_code)
-            if statement:
-                self._add_debug(f"[MAIN] Found terminal statement: {statement}")
+            if statement and consumed > 0:
                 node_id = f"N{node_counter[0]}"
                 node_counter[0] += 1
 
                 node_content = self._create_terminal_node(statement, node_id)
 
                 if not self._is_empty_node(node_content):
-                    self._add_debug(f"[MAIN] Created terminal node {node_id}: {node_content}")
-                    nodes.append(node_content)
-
-                    # FIX: Always connect from current exit_node, not current_node
+                    # Connect from current exit_node
                     if exit_node and exit_node != "Start":
                         connection = self._create_safe_connection(exit_node, node_id)
-                        self._add_debug(f"[MAIN] Created connection: {connection}")
                         nodes.append(connection)
 
-                    exit_node = node_id  # FIX: Update exit node to this new node
-                else:
-                    self._add_debug(f"[MAIN] Skipped empty node: {node_content}")
+                    nodes.append(node_content)
+                    exit_node = node_id
 
                 remaining_code = remaining_code[consumed:].strip()
+                processed = True
             else:
-                self._add_debug("[MAIN] No recognizable statements found, stopping")
-                break
+                # If we can't process anything and no progress is made, break to prevent infinite loop
+                if not processed:
+                    break
 
         return nodes
+
+    def _find_max_statement(self, code: str) -> bool:
+        """Check if the next complete statement contains a MAX assignment"""
+        # Find the first complete statement (up to semicolon)
+        first_semicolon = code.find(';')
+        if first_semicolon == -1:
+            #self._add_debug("[MAIN] No complete statement found for MAX check")
+            return False
+
+        first_statement = code[:first_semicolon + 1].strip()
+        #self._add_debug(f"[MAIN] Checking first statement for MAX: {first_statement[:100]}...")
+
+        # More reliable check: look for the pattern of MAX assignment
+        # Pattern: variable := MAX( ... );
+        max_pattern = r'\w+(?:\.\w+)*\s*:=\s*MAX\s*\([^;]+\)\s*;'
+        is_max = re.search(max_pattern, first_statement, re.IGNORECASE | re.DOTALL) is not None
+
+        if is_max:
+            #self._add_debug(f"[MAIN] First statement IS a MAX assignment")
+            # Additional check: verify balanced parentheses
+            open_paren = first_statement.count('(')
+            close_paren = first_statement.count(')')
+            if open_paren == close_paren:
+               # self._add_debug(f"[MAIN] MAX statement has balanced parentheses")
+                return True
+            else:
+                #self._add_debug(
+                    #f"[MAIN] MAX statement has unbalanced parentheses: {open_paren} open, {close_paren} close")
+                return False
+        else:
+            #self._add_debug(f"[MAIN] First statement is NOT a MAX assignment")
+            return False
 
     def _find_if_statement(self, code: str) -> bool:
         """Check if code starts with an IF statement"""
@@ -310,18 +353,31 @@ class STProcessor(BaseLanguageProcessor):
     def _find_case_statement(self, code: str) -> bool:
         """Check if code starts with a CASE statement"""
         # Simple check for CASE keyword at beginning
-        return code.upper().startswith('CASE ')
+        is_case = code.upper().startswith('CASE ')
+        if is_case:
+            self._add_debug(f"[MAIN] Found CASE statement: {code[:100]}...")
+        return is_case
 
-    def _find_max_statement(self, code: str) -> bool:
-        """Check if code contains a MAX function call in assignment"""
-        # Look for MAX function calls in assignments (with or without space after MAX)
-        pattern = r'\w+(?:\.\w+)*\s*:=\s*MAX\s*\([^;]*\)\s*;'
-        match = re.search(pattern, code, re.IGNORECASE)
-        if match:
-            self._add_debug(f"[MAIN] Detected MAX assignment: {match.group(0)[:50]}...")
-            return True
-        return False
+    def _find_sel_statement(self, code: str) -> bool:
+        """Check if the next complete statement contains a SEL assignment"""
+        # Find the first complete statement (up to semicolon)
+        first_semicolon = code.find(';')
+        if first_semicolon == -1:
+            self._add_debug("[MAIN] No complete statement found for SEL check")
+            return False
 
+        first_statement = code[:first_semicolon + 1].strip()
+
+        # Check if this statement contains a SEL assignment
+        sel_pattern = r'\w+(?:\.\w+)*\s*:=\s*SEL\s*\([^;]+\)\s*;'
+        is_sel = re.search(sel_pattern, first_statement, re.IGNORECASE | re.DOTALL) is not None
+
+        if is_sel:
+            self._add_debug(f"[MAIN] Found SEL assignment: {first_statement[:100]}...")
+        else:
+            self._add_debug(f"[MAIN] No SEL in: {first_statement[:100]}...")
+
+        return is_sel
     def _find_first_decision_node(self, nodes: List[str]) -> Optional[str]:
         """Find the first decision node in a list of nodes"""
         for node in nodes:

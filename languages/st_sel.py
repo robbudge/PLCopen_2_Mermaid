@@ -1,57 +1,136 @@
 import re
-from typing import List, Tuple, Callable
+from typing import List, Tuple, Optional
+from .base_processor import BaseLanguageProcessor
+from .sanitizer import MermaidSanitizer
 
 
-class STSelProcessor:
+class STSelProcessor(BaseLanguageProcessor):
     """ST SEL function processor - handles SEL(condition, true_value, false_value)"""
 
-    def __init__(self, debug_callback: Callable = None):
-        self.debug = debug_callback or (lambda msg: None)
-        self._compile_patterns()
+    def __init__(self, coordinator):
+        super().__init__()
+        self.coordinator = coordinator
 
-    def _compile_patterns(self):
-        """Compile regex patterns for SEL function parsing"""
-        self.patterns = {
-            'sel_function': re.compile(r'SEL\s*\(\s*(.+?)\s*,\s*(.+?)\s*,\s*(.+?)\s*\)', re.IGNORECASE | re.DOTALL),
-        }
+    def can_process(self, language: str) -> bool:
+        return False
 
-    def process_sel_function(self, sel_statement: str, get_next_node_id: Callable,
-                             entry_node: str, create_node: Callable, create_connection: Callable) -> Tuple[
-        List[str], str]:
-        """Process SEL function and return nodes and end node"""
-        self.debug(f"Processing SEL function: {sel_statement[:100]}...")
+    def generate_flowchart(self, code: str, pou_name: str) -> str:
+        return f"%% SEL processor cannot generate standalone flowchart for {pou_name}"
 
-        # Extract SEL parameters
-        sel_match = self.patterns['sel_function'].search(sel_statement)
+    def process_sel_statement(self, code: str, entry_node: str, node_counter: List[int]) -> Optional[
+        Tuple[List[str], str, int]]:
+        """Process SEL function assignment and return nodes, exit node, and consumed characters"""
+        self._add_debug("[SEL] Processing SEL statement")
+
+        # Find the first complete statement (up to semicolon)
+        first_semicolon = code.find(';')
+        if first_semicolon == -1:
+            self._add_debug("[SEL] No complete statement found")
+            return None
+
+        first_statement = code[:first_semicolon + 1].strip()
+        consumed = first_semicolon + 1
+
+        self._add_debug(f"[SEL] First complete statement: {first_statement[:100]}...")
+        self._add_debug(f"[SEL] Will consume {consumed} characters")
+
+        # Check if this statement is a SEL assignment
+        sel_match = self._find_sel_assignment(first_statement)
         if not sel_match:
-            self.debug("Failed to extract SEL function parameters")
-            return [], entry_node
+            self._add_debug("[SEL] No SEL assignment found in statement")
+            return None
 
-        condition = sel_match.group(1).strip()
-        true_value = sel_match.group(2).strip()
-        false_value = sel_match.group(3).strip()
+        # Extract the components
+        var = sel_match.group(1)
+        condition = sel_match.group(2).strip()
+        true_value = sel_match.group(3).strip()
+        false_value = sel_match.group(4).strip()
 
-        self.debug(f"SEL condition: {condition}")
-        self.debug(f"SEL true value: {true_value}")
-        self.debug(f"SEL false value: {false_value}")
+        self._add_debug(f"[SEL] SEL components:")
+        self._add_debug(f"[SEL]   Variable: {var}")
+        self._add_debug(f"[SEL]   Condition: {condition}")
+        self._add_debug(f"[SEL]   True value: {true_value}")
+        self._add_debug(f"[SEL]   False value: {false_value}")
 
         nodes = []
 
-        # Create SEL condition node
-        sel_node_id = get_next_node_id()
-        nodes.append(create_node(sel_node_id, f"SEL: {condition}", "rhombus"))
-        nodes.append(create_connection(entry_node, sel_node_id))
+        # Create decision node for SEL condition
+        decision_node_id = f"N{node_counter[0]}"
+        node_counter[0] += 1
 
-        # Create end node where both branches meet
-        end_node = get_next_node_id()
+        safe_condition = MermaidSanitizer.sanitize_label(f"SEL: {condition}")
+        decision_node = MermaidSanitizer.create_safe_node(decision_node_id, safe_condition, "rhombus")
+        nodes.append(decision_node)
 
-        # Connect true branch
-        nodes.append(create_connection(sel_node_id, end_node, f"True: {true_value[:30]}"))
+        # Connect from entry node to decision node
+        if entry_node and entry_node != "Start":
+            connection = MermaidSanitizer.create_safe_connection(entry_node, decision_node_id)
+            nodes.append(connection)
 
-        # Connect false branch
-        nodes.append(create_connection(sel_node_id, end_node, f"False: {false_value[:30]}"))
+        # Create true branch node
+        true_node_id = f"N{node_counter[0]}"
+        node_counter[0] += 1
 
-        nodes.append(create_node(end_node, "End SEL"))
+        true_label = MermaidSanitizer.sanitize_label(f"{var} := {true_value}")
+        true_node = MermaidSanitizer.create_safe_node(true_node_id, true_label)
+        nodes.append(true_node)
 
-        self.debug("SEL function processing completed")
-        return nodes, end_node
+        # Create false branch node
+        false_node_id = f"N{node_counter[0]}"
+        node_counter[0] += 1
+
+        false_label = MermaidSanitizer.sanitize_label(f"{var} := {false_value}")
+        false_node = MermaidSanitizer.create_safe_node(false_node_id, false_label)
+        nodes.append(false_node)
+
+        # Create merge node where both branches meet
+        merge_node_id = f"N{node_counter[0]}"
+        node_counter[0] += 1
+        merge_node = MermaidSanitizer.create_safe_node(merge_node_id, "SEL End")
+        nodes.append(merge_node)
+
+        # Connect decision to true branch with label
+        true_connection = MermaidSanitizer.create_safe_connection(decision_node_id, true_node_id, "True")
+        nodes.append(true_connection)
+
+        # Connect decision to false branch with label
+        false_connection = MermaidSanitizer.create_safe_connection(decision_node_id, false_node_id, "False")
+        nodes.append(false_connection)
+
+        # Connect both branches to merge node
+        true_to_merge = MermaidSanitizer.create_safe_connection(true_node_id, merge_node_id)
+        nodes.append(true_to_merge)
+
+        false_to_merge = MermaidSanitizer.create_safe_connection(false_node_id, merge_node_id)
+        nodes.append(false_to_merge)
+
+        self._add_debug(f"[SEL] Created SEL decision structure:")
+        self._add_debug(f"[SEL]   Decision: {decision_node_id}")
+        self._add_debug(f"[SEL]   True branch: {true_node_id}")
+        self._add_debug(f"[SEL]   False branch: {false_node_id}")
+        self._add_debug(f"[SEL]   Merge: {merge_node_id}")
+
+        return nodes, merge_node_id, consumed
+
+    def _find_sel_assignment(self, statement: str) -> Optional[re.Match]:
+        """Find SEL function call in a complete statement with parameter extraction"""
+        # Improved pattern to capture SEL parameters individually
+        # Pattern: variable := SEL(condition, true_value, false_value);
+        pattern = r'(\w+(?:\.\w+)*)\s*:=\s*SEL\s*\(\s*(.+?)\s*,\s*(.+?)\s*,\s*(.+?)\s*\)\s*;'
+        match = re.search(pattern, statement, re.IGNORECASE | re.DOTALL)
+
+        if match:
+            self._add_debug(f"[SEL] Found SEL assignment: {match.group(1)}")
+        else:
+            self._add_debug(f"[SEL] No SEL pattern matched in: {statement[:100]}...")
+
+        return match
+
+    def process_sel_function(self, code: str, entry_node: str, node_counter: List[int]) -> Optional[
+        Tuple[List[str], str, int]]:
+        """Process standalone SEL function (not in assignment)"""
+        self._add_debug("[SEL] Processing standalone SEL function")
+
+        # This would handle cases like: SEL(condition, true_val, false_val);
+        # For now, just return None since we're focusing on assignment format
+        return None
