@@ -7,23 +7,23 @@ class CodesysXMLParser:
     def __init__(self, xml_file_path):
         self.xml_file_path = xml_file_path
         self.debug_info = []
-        self._add_debug(f"Initializing parser for file: {xml_file_path}")
+        self._add_debug(f"[XML] Initializing parser for file: {xml_file_path}")
 
         try:
             # Parse XML
             self.tree = ET.parse(xml_file_path)
             self.root = self.tree.getroot()
             self._add_debug(f"XML root tag: {self.root.tag}")
-            self._add_debug(f"XML root attributes: {self.root.attrib}")
+            #self._add_debug(f"XML root attributes: {self.root.attrib}")
 
             # Use iterative search to find POUs regardless of namespace
             self.pous = self._find_pous_iterative()
-            self._add_debug(f"Found {len(self.pous)} POUs: {list(self.pous.keys())}")
+            self._add_debug(f"[XML] Found {len(self.pous)} POUs: {list(self.pous.keys())}")
 
         except Exception as e:
-            self._add_debug(f"Error during initialization: {str(e)}")
+            self._add_debug(f"[XML] Error during initialization: {str(e)}")
             import traceback
-            self._add_debug(f"Traceback: {traceback.format_exc()}")
+            self._add_debug(f"[XML] Traceback: {traceback.format_exc()}")
             raise
 
     def _add_debug(self, message: str):
@@ -38,24 +38,24 @@ class CodesysXMLParser:
         """Find all POU elements by iterating through the tree"""
         pous = {}
 
-        self._add_debug("Starting iterative POU search...")
+        self._add_debug("[XML] Starting iterative POU search...")
 
         # Iterate through all elements looking for those with pouType attribute
         all_elements = list(self.root.iter())
-        self._add_debug(f"Total elements in XML: {len(all_elements)}")
+        self._add_debug(f"[XML] Total elements in XML: {len(all_elements)}")
 
         pou_elements = []
         for elem in all_elements:
             if elem.get('pouType') and elem.get('name'):
                 pou_elements.append(elem)
 
-        self._add_debug(f"Found {len(pou_elements)} elements with pouType and name attributes")
+        #self._add_debug(f"[XML] Found {len(pou_elements)} elements with pouType and name attributes")
 
         for pou_element in pou_elements:
             pou_name = pou_element.get('name')
             pou_type = pou_element.get('pouType')
 
-            self._add_debug(f"Processing POU: {pou_name} (type: {pou_type})")
+            self._add_debug(f"[XML] Processing POU: {pou_name} (type: {pou_type})")
 
             pou_data = {
                 'name': pou_name,
@@ -72,10 +72,10 @@ class CodesysXMLParser:
             # Detect language from POU element
             pou_language = pou_element.get('language', 'Unknown')
             pou_data['language'] = pou_language
-            self._add_debug(f"  POU '{pou_name}' main language: {pou_language}")
+            #self._add_debug(f"[XML]   POU '{pou_name}' main language: {pou_language}")
 
             # Parse actions with language detection
-            self._add_debug(f"  Looking for actions in POU {pou_name}")
+            #self._add_debug(f"[XML]   Looking for actions in POU {pou_name}")
             actions_element = None
 
             # Find actions element
@@ -86,7 +86,7 @@ class CodesysXMLParser:
                     break
 
             if actions_element is not None:
-                self._add_debug(f"  Found actions element for {pou_name}")
+                self._add_debug(f"[XML]   Found actions element for {pou_name}")
                 for action in actions_element:
                     action_name = action.get('name')
                     if action_name:
@@ -96,21 +96,21 @@ class CodesysXMLParser:
                             'language': action_language,
                             'body': None
                         }
-                        self._add_debug(f"    Found action: {action_name} (language: {action_language})")
+                        self._add_debug(f"[XML]     Found action: {action_name} (language: {action_language})")
 
                         # Extract action body and language
                         action_body, action_body_lang = self._extract_body_and_language(action)
                         pou_data['actionsInfo'][action_name]['body'] = action_body
                         pou_data['actionsInfo'][action_name]['bodyLanguage'] = action_body_lang
                         self._add_debug(
-                            f"      Action body language: {action_body_lang}, length: {len(action_body) if action_body else 0}")
-                        if action_body:
-                            self._add_debug(f"      Action body preview: {action_body[:300]}...")
+                            f"[XML]       Action body language: {action_body_lang}, length: {len(action_body) if action_body else 0}")
+                        #if action_body:
+                            #self._add_debug(f"      Action body preview: {action_body[:300]}...")
             else:
-                self._add_debug(f"  No actions element found for {pou_name}")
+                self._add_debug(f"[XML]   No actions element found for {pou_name}")
 
             # Parse methods with language detection
-            self._add_debug(f"  Looking for methods in POU {pou_name}")
+            #self._add_debug(f"[XML]   Looking for methods in POU {pou_name}")
             methods_element = None
 
             # Find methods element
@@ -121,7 +121,7 @@ class CodesysXMLParser:
                     break
 
             if methods_element is not None:
-                self._add_debug(f"  Found methods element for {pou_name}")
+                self._add_debug(f"[XML]   Found methods element for {pou_name}")
                 for method in methods_element:
                     method_name = method.get('name')
                     if method_name:
@@ -131,21 +131,21 @@ class CodesysXMLParser:
                             'language': method_language,
                             'body': None
                         }
-                        self._add_debug(f"    Found method: {method_name} (language: {method_language})")
+                        self._add_debug(f"[XML]     Found method: {method_name} (language: {method_language})")
 
                         # Extract method body and language
                         method_body, method_body_lang = self._extract_body_and_language(method)
                         pou_data['methodsInfo'][method_name]['body'] = method_body
                         pou_data['methodsInfo'][method_name]['bodyLanguage'] = method_body_lang
                         self._add_debug(
-                            f"      Method body language: {method_body_lang}, length: {len(method_body) if method_body else 0}")
-                        if method_body:
-                            self._add_debug(f"      Method body preview: {method_body[:300]}...")
+                            f"[XML]       Method body language: {method_body_lang}, length: {len(method_body) if method_body else 0}")
+                        #if method_body:
+                            #self._add_debug(f"      Method body preview: {method_body[:300]}...")
             else:
-                self._add_debug(f"  No methods element found for {pou_name}")
+                self._add_debug(f"[XML]   No methods element found for {pou_name}")
 
             # Parse main body with language detection
-            self._add_debug(f"  Looking for main body in POU {pou_name}")
+            self._add_debug(f"[XML]   Looking for main body in POU {pou_name}")
             body_element = None
 
             # Find body element
@@ -156,27 +156,27 @@ class CodesysXMLParser:
                     break
 
             if body_element is not None:
-                self._add_debug(f"  Found body element for {pou_name}")
+                self._add_debug(f"[XML]   Found body element for {pou_name}")
                 body_text, body_language = self._extract_body_and_language(body_element)
                 pou_data['body'] = body_text
                 pou_data['bodyLanguage'] = body_language
                 self._add_debug(
-                    f"  Found main body for {pou_name} (language: {body_language}, length: {len(body_text) if body_text else 0})")
+                    f"[XML]   Found main body for {pou_name} (language: {body_language}, length: {len(body_text) if body_text else 0})")
                 if body_text:
-                    self._add_debug(f"  Body preview: {body_text[:500]}...")
+                    #self._add_debug(f"  Body preview: {body_text[:500]}...")
                     # DEBUG: Check for XML entities in the body
                     if '&lt;' in body_text or '&gt;' in body_text:
                         self._add_debug(
-                            f"  *** WARNING: XML entities found in body: &lt;={body_text.count('&lt;')}, &gt;={body_text.count('&gt;')}")
+                            f"[XML]   *** WARNING: XML entities found in body: &lt;={body_text.count('&lt;')}, &gt;={body_text.count('&gt;')}")
                         # Show specific examples
                         lt_matches = re.findall(r'&\w+;', body_text)
                         if lt_matches:
                             self._add_debug(f"  XML entities found: {set(lt_matches)}")
             else:
-                self._add_debug(f"  No main body element found for {pou_name}")
+                self._add_debug(f"[XML]   No main body element found for {pou_name}")
 
             pous[pou_name] = pou_data
-            self._add_debug(f"Completed processing POU: {pou_name}")
+            #self._add_debug(f"[XML] Completed processing POU: {pou_name}")
 
         return pous
 
@@ -187,7 +187,7 @@ class CodesysXMLParser:
 
         # Get language from element attribute
         language = element.get('language', 'Unknown')
-        self._add_debug(f"        Element language attribute: {language}")
+        #self._add_debug(f"[XML]         Element language attribute: {language}")
 
         # Try multiple strategies to extract body content
         body_element = element
@@ -203,7 +203,7 @@ class CodesysXMLParser:
                 if tag == lang_elem:
                     found_language_element = child
                     language = lang_elem  # Override with detected language
-                    self._add_debug(f"        Found language element: {lang_elem}")
+                    self._add_debug(f"[XML]         Found language element: {lang_elem}")
                     break
             if found_language_element:
                 break
@@ -211,32 +211,32 @@ class CodesysXMLParser:
         if found_language_element is not None:
             # Extract text from language-specific element - FIXED APPROACH
             body_text = self._extract_st_code_from_element(found_language_element)
-            self._add_debug(f"        Extracted {len(body_text)} chars from language element")
+            #self._add_debug(f"[XML]         Extracted {len(body_text)} chars from language element")
         else:
             # Strategy 2: Look for any text content in the element
             body_text = self._extract_any_text_from_element(body_element)
-            self._add_debug(f"        Extracted {len(body_text)} chars from body element")
+            #self._add_debug(f"[XML]         Extracted {len(body_text)} chars from body element")
 
             # Try to detect language from content if still unknown
             if language == 'Unknown':
                 detected_lang = self._detect_language_from_content(body_text)
                 language = detected_lang
-                self._add_debug(f"        Detected language from content: {detected_lang}")
+                #self._add_debug(f"[XML]         Detected language from content: {detected_lang}")
 
         # DEBUG: Show what we extracted
         if body_text:
-            self._add_debug(f"        Body text preview: {body_text[:200]}...")
+            #self._add_debug(f"        Body text preview: {body_text[:200]}...")
             # Check for XML entities
             if '&lt;' in body_text or '&gt;' in body_text:
                 self._add_debug(f"        *** XML ENTITIES PRESENT IN EXTRACTED TEXT ***")
-                self._add_debug(f"        &lt; count: {body_text.count('&lt;')}")
-                self._add_debug(f"        &gt; count: {body_text.count('&gt;')}")
+                self._add_debug(f"[XML]         &lt; count: {body_text.count('&lt;')}")
+                self._add_debug(f"[XML]         &gt; count: {body_text.count('&gt;')}")
                 # Show context around entities
                 lt_pos = body_text.find('&lt;')
                 if lt_pos != -1:
                     context_start = max(0, lt_pos - 20)
                     context_end = min(len(body_text), lt_pos + 50)
-                    self._add_debug(f"        Context around &lt;: ...{body_text[context_start:context_end]}...")
+                    self._add_debug(f"[XML]         Context around &lt;: ...{body_text[context_start:context_end]}...")
 
         return body_text, language
 
@@ -245,7 +245,7 @@ class CodesysXMLParser:
         if element is None:
             return ""
 
-        self._add_debug(f"          Extracting ST code from: {element.tag}")
+        #self._add_debug(f"[XML]           Extracting ST code from: {element.tag}")
 
         # For ST elements, we need to look for specific child elements that contain the code
         # Common structure: ST -> xhtml -> div/p elements with CDATA content
@@ -258,7 +258,7 @@ class CodesysXMLParser:
                 xhtml_elements.append(child)
 
         if xhtml_elements:
-            self._add_debug(f"          Found {len(xhtml_elements)} xhtml elements")
+            self._add_debug(f"[XML]           Found {len(xhtml_elements)} xhtml elements")
             # Extract text from all xhtml elements
             all_text = ""
             for xhtml_elem in xhtml_elements:

@@ -4,6 +4,7 @@ from .base_processor import BaseLanguageProcessor
 from .st_if import STIfProcessor
 from .st_case import STCaseProcessor
 from .st_sel import STSelProcessor
+from .sanitizer import MermaidSanitizer
 
 
 class STProcessor(BaseLanguageProcessor):
@@ -12,6 +13,7 @@ class STProcessor(BaseLanguageProcessor):
     def __init__(self):
         super().__init__()
         self._compile_patterns()
+        self._line_counter = 0  # Add line counter for debugging
 
         # Initialize specialized processors with self as coordinator
         self.if_processor = STIfProcessor(self)
@@ -40,24 +42,11 @@ class STProcessor(BaseLanguageProcessor):
         """Generate Mermaid flowchart from ST code"""
         self.clear_debug()
         self._add_debug(f"[MAIN] Generating flowchart for POU: {pou_name}")
-
-        # DUMP ORIGINAL CODE BEFORE ANY PROCESSING
-        self._add_debug(f"[MAIN] === ORIGINAL RAW CODE FOR {pou_name} ===")
-        self._add_debug(code)
-        self._add_debug(f"[MAIN] === END ORIGINAL RAW CODE ===")
-        self._add_debug(f"[MAIN] Original code length: {len(code)} characters")
+        self._line_counter = 0  # Reset line counter for each new flowchart
 
         clean_code = self._clean_code(code)
         if not clean_code:
             return f"%% No ST code found for POU {pou_name}"
-
-        self._add_debug(f"[MAIN] Cleaned code preview: {clean_code[:200]}...")
-
-        # DUMP COMPLETE CLEANED CODE
-        self._add_debug(f"[MAIN] === COMPLETE CLEANED ST CODE FOR {pou_name} ===")
-        self._add_debug(clean_code)
-        self._add_debug(f"[MAIN] === END CLEANED ST CODE ===")
-        self._add_debug(f"[MAIN] Total code length: {len(clean_code)} characters")
 
         # Generate flowchart
         mermaid_lines = ["flowchart TD"]
@@ -75,9 +64,6 @@ class STProcessor(BaseLanguageProcessor):
         end_nodes = self._add_final_end_node(nodes, node_counter)
         nodes.extend(end_nodes)
 
-        # Debug: Show all nodes before final output
-        self._debug_node_list(nodes)
-
         mermaid_lines.extend(nodes)
 
         result = '\n'.join(mermaid_lines)
@@ -92,44 +78,22 @@ class STProcessor(BaseLanguageProcessor):
         self._add_debug(f"[MAIN] Generated flowchart with {len(nodes)} nodes")
         return result
 
-    def _debug_node_list(self, nodes: List[str]):
-        """Debug method to show all nodes and their content"""
-        self._add_debug("[MAIN] === NODE LIST DEBUG ===")
-        for i, node in enumerate(nodes):
-            self._add_debug(f"[MAIN] Node {i}: {node}")
-        self._add_debug("[MAIN] === END NODE LIST DEBUG ===")
-
     def _clean_code(self, code: str) -> str:
         """Clean and extract ST code"""
         if not code:
             return ""
 
         self._add_debug("[MAIN] Cleaning ST code")
-        self._add_debug(f"[MAIN] Original code length: {len(code)}")
-
-        # DUMP CODE BEFORE XML DECODING
-        self._add_debug(f"[MAIN] === CODE BEFORE XML DECODING ===")
-        self._add_debug(code[:1000] + "..." if len(code) > 1000 else code)
-        self._add_debug(f"[MAIN] === END CODE BEFORE XML DECODING ===")
 
         # Check for XML entities before decoding
         xml_entities_found = False
         if '&lt;' in code or '&gt;' in code:
             xml_entities_found = True
-            self._add_debug(f"[MAIN] XML entities found BEFORE decoding:")
-            self._add_debug(f"[MAIN]   &lt; count: {code.count('&lt;')}")
-            self._add_debug(f"[MAIN]   &gt; count: {code.count('&gt;')}")
-        else:
-            self._add_debug(f"[MAIN] NO XML entities found before decoding")
+            self._add_debug("[MAIN] XML entities detected - performing decoding")
 
         # Decode XML entities
         if xml_entities_found:
-            self._add_debug("[MAIN] XML entities detected - performing decoding")
             code = self._decode_xml_entities(code)
-        else:
-            self._add_debug("[MAIN] No XML entities found - skipping XML decoding")
-
-        self._add_debug(f"[MAIN] After XML decoding preview: {code[:300]}...")
 
         # Remove XML tags if present
         code = self._remove_only_real_xml_tags(code)
@@ -143,24 +107,10 @@ class STProcessor(BaseLanguageProcessor):
         code = self.patterns['comment_multi'].sub('', code)
         code = self.patterns['pragma'].sub('', code)
 
-        self._add_debug(f"[MAIN] Final cleaned code length: {len(code)}")
-
-        # Show cleaned code structure
-        self._add_debug(f"[MAIN] === CLEANED CODE STRUCTURE ===")
-        lines = code.split('\n')
-        for i, line in enumerate(lines[:20]):
-            if line.strip():
-                self._add_debug(f"[MAIN] Line {i}: {line.strip()}")
-        if len(lines) > 20:
-            self._add_debug(f"[MAIN] ... and {len(lines) - 20} more lines")
-        self._add_debug(f"[MAIN] === END CLEANED CODE STRUCTURE ===")
-
         return code.strip()
 
     def _remove_only_real_xml_tags(self, code: str) -> str:
         """Remove only actual XML tags, not ST comparison operations"""
-        self._add_debug("[MAIN] Scanning for real XML tags (not ST comparisons)")
-
         # Look for patterns that are definitely XML tags
         xml_tag_patterns = [
             r'<[A-Za-z][A-Za-z0-9]*[^>]*>',
@@ -205,11 +155,8 @@ class STProcessor(BaseLanguageProcessor):
             '&nbsp;': ' ', '&#60;': '<', '&#62;': '>', '&#38;': '&', '&#34;': '"', '&#39;': "'",
         }
 
-        original_text = text
         for entity, replacement in replacements.items():
             if entity in text:
-                count = text.count(entity)
-                self._add_debug(f"[MAIN] Replacing {count} instances of {entity} with {replacement}")
                 text = text.replace(entity, replacement)
 
         # Handle hex entities
@@ -223,13 +170,10 @@ class STProcessor(BaseLanguageProcessor):
             except ValueError:
                 pass
 
-        if text != original_text:
-            self._add_debug(f"[MAIN] XML entities decoded successfully")
-
         return text
 
     def _parse_recursive(self, code: str, current_node: str, node_counter: List[int], in_if_branch: bool = False) -> \
-    List[str]:
+            List[str]:
         """Main recursive parsing routine - FIXED to handle nested structure exit nodes"""
         nodes = []
         remaining_code = code.strip()
@@ -238,7 +182,8 @@ class STProcessor(BaseLanguageProcessor):
         exit_node = current_node
 
         while remaining_code:
-            self._add_debug(f"[MAIN] Processing: {remaining_code[:100]}...")
+            self._line_counter += 1
+            self._add_debug(f"[MAIN] Line {self._line_counter}: Processing: {remaining_code[:100]}...")
             self._add_debug(f"[MAIN] Current exit_node: {exit_node}")
 
             # Check for IF statements first
@@ -302,6 +247,12 @@ class STProcessor(BaseLanguageProcessor):
                 except Exception as e:
                     self._add_debug(f"[MAIN] Error in CASE processor: {e}")
 
+            # Check for MAX statements in assignments
+            max_match = self._find_max_statement(remaining_code)
+            if max_match:
+                self._add_debug("[MAIN] Found MAX function in assignment - showing complete assignment")
+                # MAX statements are handled in _create_terminal_node, just continue with normal processing
+
             # Check for SEL functions
             if remaining_code.upper().startswith('SEL('):
                 self._add_debug("[MAIN] Found SEL function - delegating to SEL processor")
@@ -360,6 +311,16 @@ class STProcessor(BaseLanguageProcessor):
         """Check if code starts with a CASE statement"""
         # Simple check for CASE keyword at beginning
         return code.upper().startswith('CASE ')
+
+    def _find_max_statement(self, code: str) -> bool:
+        """Check if code contains a MAX function call in assignment"""
+        # Look for MAX function calls in assignments (with or without space after MAX)
+        pattern = r'\w+(?:\.\w+)*\s*:=\s*MAX\s*\([^;]*\)\s*;'
+        match = re.search(pattern, code, re.IGNORECASE)
+        if match:
+            self._add_debug(f"[MAIN] Detected MAX assignment: {match.group(0)[:50]}...")
+            return True
+        return False
 
     def _find_first_decision_node(self, nodes: List[str]) -> Optional[str]:
         """Find the first decision node in a list of nodes"""
@@ -442,14 +403,22 @@ class STProcessor(BaseLanguageProcessor):
             value = assign_match.group(2)
             if value.endswith(';'):
                 value = value[:-1].strip()
-            safe_label = self._sanitize_label(f"{var} := {value}")
+
+            # Special handling for MAX function calls - show complete assignment
+            if 'MAX(' in value.upper() or 'MAX (' in value.upper():
+                # For MAX functions, show the complete assignment with function call
+                safe_label = self._sanitize_label(f"{var} := {value}")
+                self._add_debug(f"[MAIN] Creating MAX assignment node: {var} := {value[:50]}...")
+            else:
+                safe_label = self._sanitize_label(f"{var} := {value}")
             return self._create_safe_node(node_id, safe_label)
 
-        # Check for function call
+        # Check for function call - show complete function call with parameters
         func_match = self.patterns['function_call'].search(statement)
         if func_match:
-            func_name = func_match.group(1)
-            safe_label = self._sanitize_label(f"Call {func_name}")
+            # Extract the complete function call with parameters
+            func_call = func_match.group(0).strip()
+            safe_label = self._sanitize_label(f"Call {func_call}")
             return self._create_safe_node(node_id, safe_label)
 
         # Check if this is just a semicolon
@@ -460,3 +429,24 @@ class STProcessor(BaseLanguageProcessor):
         clean_stmt = statement[:-1].strip() if statement.endswith(';') else statement.strip()
         safe_label = self._sanitize_label(clean_stmt)
         return self._create_safe_node(node_id, safe_label)
+
+    def _sanitize_label(self, label: str) -> str:
+        """Sanitize label for Mermaid syntax using MermaidSanitizer"""
+        return MermaidSanitizer.sanitize_label(label)
+
+    def _create_safe_node(self, node_id: str, label: str, node_type: str = "rectangle") -> str:
+        """Create a safe Mermaid node with proper escaping using MermaidSanitizer"""
+        return MermaidSanitizer.create_safe_node(node_id, label, node_type)
+
+    def _create_safe_connection(self, from_node: str, to_node: str, label: str = "") -> str:
+        """Create a safe Mermaid connection between nodes using MermaidSanitizer"""
+        return MermaidSanitizer.create_safe_connection(from_node, to_node, label)
+
+    def _sanitize_node_id(self, node_id: str) -> str:
+        """Sanitize node ID for Mermaid syntax"""
+        # Remove any characters that aren't alphanumeric or underscore
+        return re.sub(r'[^a-zA-Z0-9_]', '', node_id)
+
+    def _validate_mermaid_output(self, mermaid_code: str) -> List[str]:
+        """Validate Mermaid output for common issues"""
+        return MermaidSanitizer.validate_mermaid_syntax(mermaid_code)
