@@ -40,10 +40,41 @@ class STProcessor(BaseLanguageProcessor):
         """Check if this processor can handle ST language"""
         return language.upper() in ['ST', 'STRUCTURED TEXT', 'UNKNOWN']
 
-    def generate_flowchart(self, code: str, pou_name: str) -> str:
+    def generate_flowchart(self, code: str, pou_name: str, pou_info: dict = None) -> str:
         """Generate Mermaid flowchart from ST code"""
         self.clear_debug()
         self._add_debug(f"[MAIN] Generating flowchart for POU: {pou_name}")
+
+        # Log POU information including actions and methods
+        if pou_info:
+            self._add_debug(f"[MAIN] POU Type: {pou_info.get('pouType', 'Unknown')}")
+            self._add_debug(f"[MAIN] Language: {pou_info.get('language', 'Unknown')}")
+
+            actions = pou_info.get('actions', [])
+            methods = pou_info.get('methods', [])
+
+            self._add_debug(f"[MAIN] Actions found: {len(actions)}")
+            for action in actions:
+                action_info = pou_info.get('actionsInfo', {}).get(action, {})
+                action_lang = action_info.get('language', 'Unknown')
+                action_body_lang = action_info.get('bodyLanguage', 'Unknown')
+                action_body_len = len(action_info.get('body', ''))
+
+                self._add_debug(
+                    f"[MAIN]   - {action} (lang: {action_lang}, body lang: {action_body_lang}, body length: {action_body_len})")
+
+            self._add_debug(f"[MAIN] Methods found: {len(methods)}")
+            for method in methods:
+                method_info = pou_info.get('methodsInfo', {}).get(method, {})
+                method_lang = method_info.get('language', 'Unknown')
+                method_body_lang = method_info.get('bodyLanguage', 'Unknown')
+                method_body_len = len(method_info.get('body', ''))
+
+                self._add_debug(
+                    f"[MAIN]   - {method} (lang: {method_lang}, body lang: {method_body_lang}, body length: {method_body_len})")
+        else:
+            self._add_debug("[MAIN] No additional POU information provided")
+
         self._line_counter = 0  # Reset line counter for each new flowchart
 
         clean_code = self._clean_code(code)
@@ -58,7 +89,7 @@ class STProcessor(BaseLanguageProcessor):
         nodes = [self._create_safe_node("Start", "Start")]
         current_node = "Start"
 
-        # Parse the code - FIXED: Use exit_node tracking
+        # Parse the code
         parsed_nodes = self._parse_recursive(clean_code, current_node, node_counter)
         nodes.extend(parsed_nodes)
 
@@ -374,8 +405,8 @@ class STProcessor(BaseLanguageProcessor):
 
         if is_sel:
             self._add_debug(f"[MAIN] Found SEL assignment: {first_statement[:100]}...")
-        else:
-            self._add_debug(f"[MAIN] No SEL in: {first_statement[:100]}...")
+        #else:
+            #self._add_debug(f"[MAIN] No SEL in: {first_statement[:100]}...")
 
         return is_sel
     def _find_first_decision_node(self, nodes: List[str]) -> Optional[str]:

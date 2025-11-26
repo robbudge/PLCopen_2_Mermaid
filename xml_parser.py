@@ -187,58 +187,214 @@ class CodesysXMLParser:
 
         # Get language from element attribute
         language = element.get('language', 'Unknown')
-        #self._add_debug(f"[XML]         Element language attribute: {language}")
 
-        # Try multiple strategies to extract body content
-        body_element = element
+        element_name = element.get('name', 'unnamed')
+        self._add_debug(f"[XML]         Processing element: {element_name}")
 
-        # Strategy 1: Look for ST, LD, FBD, etc. elements
+        # STRATEGY 1: Check for CFC/FBD content in addData first (SPECIFICALLY FOR ACTIONS)
+        cfc_content = self._extract_cfc_content_from_action(element)
+        if cfc_content:
+            body_text = cfc_content
+            language = "CFC"
+            self._add_debug(f"[XML]         Found CFC content in action, length: {len(body_text)}")
+            return body_text, language
+
+        # STRATEGY 2: Look for standard language elements (ST, LD, etc.)
         language_elements = ['ST', 'LD', 'FBD', 'SFC', 'IL', 'CFC']
         found_language_element = None
 
         for lang_elem in language_elements:
-            # Look for direct child with the language tag
-            for child in body_element:
+            for child in element:
                 tag = child.tag.split('}')[-1] if '}' in child.tag else child.tag
                 if tag == lang_elem:
                     found_language_element = child
-                    language = lang_elem  # Override with detected language
+                    language = lang_elem
                     self._add_debug(f"[XML]         Found language element: {lang_elem}")
                     break
             if found_language_element:
                 break
 
         if found_language_element is not None:
-            # Extract text from language-specific element - FIXED APPROACH
+            # Extract text from language-specific element
             body_text = self._extract_st_code_from_element(found_language_element)
-            #self._add_debug(f"[XML]         Extracted {len(body_text)} chars from language element")
+            self._add_debug(f"[XML]         Extracted {len(body_text)} chars from language element")
+
+            # If we found an ST element but it's empty (like in CFC actions), check for CFC
+            if language == 'ST' and len(body_text.strip()) == 0:
+                cfc_content = self._extract_cfc_content_from_action(element)
+                if cfc_content:
+                    body_text = cfc_content
+                    language = "CFC"
+                    self._add_debug(f"[XML]         ST was empty, found CFC content instead")
         else:
-            # Strategy 2: Look for any text content in the element
-            body_text = self._extract_any_text_from_element(body_element)
-            #self._add_debug(f"[XML]         Extracted {len(body_text)} chars from body element")
+            # Strategy 3: Look for any text content
+            body_text = self._extract_any_text_from_element(element)
+            self._add_debug(f"[XML]         Extracted {len(body_text)} chars from body element")
 
             # Try to detect language from content if still unknown
             if language == 'Unknown':
                 detected_lang = self._detect_language_from_content(body_text)
                 language = detected_lang
-                #self._add_debug(f"[XML]         Detected language from content: {detected_lang}")
+                self._add_debug(f"[XML]         Detected language from content: {detected_lang}")
 
         # DEBUG: Show what we extracted
         if body_text:
-            #self._add_debug(f"        Body text preview: {body_text[:200]}...")
-            # Check for XML entities
-            if '&lt;' in body_text or '&gt;' in body_text:
-                self._add_debug(f"        *** XML ENTITIES PRESENT IN EXTRACTED TEXT ***")
-                self._add_debug(f"[XML]         &lt; count: {body_text.count('&lt;')}")
-                self._add_debug(f"[XML]         &gt; count: {body_text.count('&gt;')}")
-                # Show context around entities
-                lt_pos = body_text.find('&lt;')
-                if lt_pos != -1:
-                    context_start = max(0, lt_pos - 20)
-                    context_end = min(len(body_text), lt_pos + 50)
-                    self._add_debug(f"[XML]         Context around &lt;: ...{body_text[context_start:context_end]}...")
+            self._add_debug(f"[XML]         Body text preview: {body_text[:200]}...")
 
         return body_text, language
+
+    def _extract_cfc_content_from_action(self, element):
+        """Extract CFC content specifically from action elements"""
+        # Look for: body -> addData -> data -> CFC structure
+        body_element = None
+
+        # Find body element first
+        for child in element:
+            tag = child.tag.split('}')[-1] if '}' in child.tag else child.tag
+            if tag == 'body':
+                body_element = child
+                break
+
+        if not body_element:
+            return None
+
+        # Look for addData in body
+        for body_child in body_element:
+            tag = body_child.tag.split('}')[-1] if '}' in body_child.tag else body_child.tag
+            if tag == 'addData':
+                # Look for data elements with CFC content
+                for data_elem in body_child:
+                    data_tag = data_elem.tag.split('}')[-1] if '}' in data_elem.tag else data_elem.tag
+                    if data_tag == 'data':
+                        data_name = data_elem.get('name', '')
+                        if 'cfc' in data_name.lower():
+                            self._add_debug(f"[XML]           Found CFC data in action: {data_name}")
+                            # Look for CFC element
+                            for cfc_elem in data_elem:
+                                cfc_tag = cfc_elem.tag.split('}')[-1] if '}' in cfc_elem.tag else cfc_elem.tag
+                                if cfc_tag == 'CFC':
+                                    self._add_debug(
+                                        f"[XML]           Found CFC element, extracting structured content...")
+                                    return self._extract_structured_cfc_content(cfc_elem)
+
+        return None
+
+    def _extract_structured_cfc_content(self, cfc_element):
+        """Extract meaningful content from CFC structured XML"""
+        content_parts = []
+
+        # CFC content is structured - extract blocks, connections, variables
+        self._add_debug(f"[XML]             Extracting CFC structure...")
+
+        # Extract inVariables (inputs)
+        in_vars = cfc_element.findall(".//inVariable")
+        for var in in_vars:
+            local_id = var.get('localId', '?')
+            expression_elem = var.find("expression")
+            expression = expression_elem.text if expression_elem is not None and expression_elem.text else "no expression"
+            content_parts.append(f"IN[{local_id}]: {expression}")
+
+        # Extract outVariables (outputs)
+        out_vars = cfc_element.findall(".//outVariable")
+        for var in out_vars:
+            local_id = var.get('localId', '?')
+            execution_order = var.get('executionOrderId', '?')
+            expression_elem = var.find("expression")
+            expression = expression_elem.text if expression_elem is not None and expression_elem.text else "no expression"
+            content_parts.append(f"OUT[{local_id}](order:{execution_order}): {expression}")
+
+        # Extract connectors
+        connectors = cfc_element.findall(".//connector")
+        for conn in connectors:
+            local_id = conn.get('localId', '?')
+            # Find connection points
+            conn_points = conn.findall(".//connection")
+            for cp in conn_points:
+                ref_id = cp.get('refLocalId', '?')
+                formal_param = cp.get('formalParameter', '')
+                if formal_param:
+                    content_parts.append(f"CONN[{local_id}] -> [{ref_id}]({formal_param})")
+                else:
+                    content_parts.append(f"CONN[{local_id}] -> [{ref_id}]")
+
+        # Extract blocks if any
+        blocks = cfc_element.findall(".//block")
+        for block in blocks:
+            local_id = block.get('localId', '?')
+            type_name = block.get('typeName', '?')
+            content_parts.append(f"BLOCK[{local_id}]: {type_name}")
+
+        if content_parts:
+            result = "CFC Diagram:\n" + "\n".join(content_parts)
+            self._add_debug(f"[XML]             Extracted {len(content_parts)} CFC elements")
+            return result
+        else:
+            # If no specific content found, at least indicate it's CFC
+            return "CFC Function Block Diagram (structured content)"
+
+    def _extract_cfc_content(self, element):
+        """Extract CFC/FBD content from addData section"""
+        # Look for addData -> data -> CFC structure
+        add_data_elements = []
+
+        for child in element:
+            tag = child.tag.split('}')[-1] if '}' in child.tag else child.tag
+            if tag == 'addData':
+                add_data_elements.append(child)
+
+        for add_data in add_data_elements:
+            for data_elem in add_data:
+                data_tag = data_elem.tag.split('}')[-1] if '}' in data_elem.tag else data_elem.tag
+                if data_tag == 'data':
+                    # Check if this is CFC data
+                    data_name = data_elem.get('name', '')
+                    if 'cfc' in data_name.lower():
+                        self._add_debug(f"[XML]           Found CFC data: {data_name}")
+                        # Look for CFC element
+                        for cfc_elem in data_elem:
+                            cfc_tag = cfc_elem.tag.split('}')[-1] if '}' in cfc_elem.tag else cfc_tag
+                            if cfc_tag == 'CFC':
+                                self._add_debug(f"[XML]           Found CFC element, extracting content...")
+                                # Extract CFC content - this might be structured XML
+                                return self._extract_structured_cfc_content(cfc_elem)
+
+        return None
+
+    def _extract_structured_cfc_content(self, cfc_element):
+        """Extract meaningful content from CFC structured XML"""
+        content_parts = []
+
+        # CFC content is typically structured with blocks, connections, etc.
+        # We'll extract block names, connection info, etc.
+
+        # Look for common CFC elements
+        cfc_elements_to_extract = [
+            'block', 'variable', 'connection', 'input', 'output',
+            'position', 'name', 'type', 'executionOrder'
+        ]
+
+        for elem_name in cfc_elements_to_extract:
+            elements_found = cfc_element.findall(f".//{elem_name}")
+            for elem in elements_found:
+                # Get element attributes
+                attrs = elem.attrib
+                if attrs:
+                    content_parts.append(f"{elem_name}: {attrs}")
+
+                # Get element text if any
+                if elem.text and elem.text.strip():
+                    content_parts.append(f"{elem_name}: {elem.text.strip()}")
+
+        # Also extract any text content from the CFC element
+        direct_text = self._extract_any_text_from_element(cfc_element)
+        if direct_text:
+            content_parts.append(direct_text)
+
+        if content_parts:
+            return "\n".join(content_parts)
+        else:
+            # If no specific content found, at least indicate it's CFC
+            return "CFC Function Block Diagram Content"
 
     def _extract_st_code_from_element(self, element):
         """Extract ST code specifically from ST elements - FIXED VERSION"""
@@ -365,18 +521,21 @@ class CodesysXMLParser:
             r'END_WHILE'
         ]
 
-        # LD (Ladder Diagram) patterns - would have contacts, coils, etc.
+        # LD (Ladder Diagram) patterns
         ld_patterns = [
-            r'---|\|\s+|\s+\|',  # Ladder rungs
-            r'\(\s*\)',  # Contacts
-            r'\[\s*\]',  # Coils
+            r'---|\|\s+|\s+\|',
+            r'\(\s*\)',
+            r'\[\s*\]',
         ]
 
-        # FBD (Function Block Diagram) patterns
-        fbd_patterns = [
-            r'BLOCK\s+',
-            r'FB_\w+',
-            r'IN\s+OUT\s+',
+        # CFC/FBD patterns - look for structured elements
+        cfc_patterns = [
+            r'IN\[\d+\]:',
+            r'OUT\[\d+\]:',
+            r'CONN\[\d+\]',
+            r'BLOCK\[\d+\]:',
+            r'CFC DIAGRAM:',
+            r'EXECUTIONORDER',
         ]
 
         # Check for ST patterns
@@ -388,15 +547,28 @@ class CodesysXMLParser:
         if st_score >= 2:
             return "ST"
 
-        # Check for LD patterns (simplified)
+        # Check for LD patterns
         if any(re.search(pattern, content) for pattern in ld_patterns):
             return "LD"
 
-        # Check for FBD patterns
-        if any(re.search(pattern, content_upper) for pattern in fbd_patterns):
-            return "FBD"
+        # Check for CFC/FBD patterns
+        cfc_score = 0
+        for pattern in cfc_patterns:
+            if re.search(pattern, content_upper):
+                cfc_score += 1
 
-        # Default to ST if it has common ST constructs but not enough patterns
+        if cfc_score >= 1:
+            return "CFC"
+
+        # Check for structured XML content that indicates CFC
+        if '<block' in content or '<connection' in content or 'executionOrder' in content:
+            return "CFC"
+
+        # Check for CFC variable patterns
+        if re.search(r'IN\[\d+\]', content) or re.search(r'OUT\[\d+\]', content):
+            return "CFC"
+
+        # Default to ST if it has common ST constructs
         if ';' in content and ('IF' in content_upper or ':=' in content):
             return "ST"
 
