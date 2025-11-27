@@ -1,6 +1,7 @@
 import re
 from typing import List, Dict, Any
 from languages.cfc_2_st import CFCToSTConverter
+from languages.st_processor import STProcessor  # Add this import
 from languages.sanitizer import MermaidSanitizer
 
 
@@ -8,6 +9,7 @@ class FBDProcessor:
     def __init__(self):
         self.debug_info = []
         self.cfc_converter = CFCToSTConverter()
+        self.st_processor = STProcessor()  # Add ST processor
         self.sanitizer = MermaidSanitizer()
         self._add_debug("[FBD_PROCESSOR] Function Block Diagram Processor initialized")
 
@@ -50,10 +52,10 @@ class FBDProcessor:
             for debug_msg in self.cfc_converter.get_debug_info():
                 self._add_debug(debug_msg)
 
-            # Generate flowchart from ST code
+            # Generate flowchart from ST code using STProcessor
             if st_code and st_code.strip() and not st_code.startswith("// No ST"):
-                self._add_debug("[FBD_PROCESSOR] Generating flowchart from converted ST")
-                return self._generate_flowchart_from_st(st_code, pou_name)
+                self._add_debug("[FBD_PROCESSOR] Generating flowchart from converted ST using STProcessor")
+                return self._generate_flowchart_from_st_with_processor(st_code, pou_name, pou_info)
             else:
                 self._add_debug("[FBD_PROCESSOR] No ST code generated, using fallback")
                 return self._generate_cfc_fallback(code, pou_name)
@@ -73,8 +75,75 @@ class FBDProcessor:
             self._add_debug("[FBD_PROCESSOR] No specific content type detected, using generic flowchart")
             return self._generate_generic_flowchart(pou_name, code)
 
-    def _generate_flowchart_from_st(self, st_code: str, pou_name: str) -> str:
-        """Generate flowchart from ST code with proper sanitization - NO TRUNCATION"""
+    def _generate_flowchart_from_st_with_processor(self, st_code: str, pou_name: str, pou_info: Dict[str, Any]) -> str:
+        """Generate flowchart from ST code using the STProcessor"""
+        self._add_debug("[FBD_PROCESSOR] Using STProcessor to generate flowchart from ST code")
+
+        # Extract the actual ST code from the wrapper
+        # The CFC converter returns code with "// === GENERATED ST CODE ===" wrapper
+        clean_st_code = self._extract_clean_st_code(st_code)
+
+        self._add_debug(f"[FBD_PROCESSOR] Clean ST code length: {len(clean_st_code)}")
+        self._add_debug(f"[FBD_PROCESSOR] Clean ST code preview: {clean_st_code[:200]}...")
+
+        # Use STProcessor to generate the flowchart
+        try:
+            # Create a modified pou_info for the ST processor
+            st_pou_info = {
+                'pouType': 'Action',  # CFC actions are typically treated as actions
+                'language': 'ST',
+                'bodyLanguage': 'ST',
+                'actions': [],
+                'methods': []
+            }
+
+            # Generate flowchart using STProcessor
+            mermaid_result = self.st_processor.generate_flowchart(clean_st_code, pou_name, st_pou_info)
+
+            # Add ST processor debug to our debug
+            for debug_msg in self.st_processor.get_debug_info():
+                self._add_debug(debug_msg)
+
+            self._add_debug(f"[FBD_PROCESSOR] STProcessor generated flowchart with length: {len(mermaid_result)}")
+            return mermaid_result
+
+        except Exception as e:
+            self._add_debug(f"[FBD_PROCESSOR] Error using STProcessor: {e}")
+            # Fallback to simple ST processing
+            return self._generate_flowchart_from_st_fallback(st_code, pou_name)
+
+    def _extract_clean_st_code(self, st_code: str) -> str:
+        """Extract clean ST code from the CFC converter output"""
+        lines = st_code.split('\n')
+        clean_lines = []
+
+        in_st_code = False
+        for line in lines:
+            if line.strip().startswith('// === GENERATED ST CODE ==='):
+                in_st_code = True
+                continue
+            elif line.strip().startswith('// === END GENERATED ST CODE ==='):
+                in_st_code = False
+                continue
+            elif in_st_code:
+                # Skip comment lines within the ST code section
+                if not line.strip().startswith('//'):
+                    clean_lines.append(line)
+            else:
+                # Also capture ST code that's not wrapped in comments
+                if line.strip() and not line.strip().startswith('//'):
+                    clean_lines.append(line)
+
+        # If we didn't find the wrapper, use all non-comment lines
+        if not clean_lines:
+            clean_lines = [line for line in lines if line.strip() and not line.strip().startswith('//')]
+
+        return '\n'.join(clean_lines)
+
+    def _generate_flowchart_from_st_fallback(self, st_code: str, pou_name: str) -> str:
+        """Fallback method for ST code processing if STProcessor fails"""
+        self._add_debug("[FBD_PROCESSOR] Using fallback ST processing")
+
         lines = st_code.split('\n')
         non_empty_lines = [line.strip() for line in lines if line.strip() and not line.strip().startswith('//')]
 
@@ -94,7 +163,7 @@ class FBDProcessor:
 
         mermaid_lines.append("    ProcessST --> End([End])")
         mermaid_lines.append("")
-        mermaid_lines.append("    %% Generated from CFC to ST conversion")
+        mermaid_lines.append("    %% Generated from CFC to ST conversion (Fallback)")
         mermaid_lines.append(f"    %% {len(non_empty_lines)} lines of ST code")
 
         return "\n".join(mermaid_lines)

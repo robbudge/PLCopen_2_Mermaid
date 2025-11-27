@@ -5,6 +5,7 @@ from .st_if import STIfProcessor
 from .st_case import STCaseProcessor
 from .st_sel import STSelProcessor
 from .st_max import STMaxProcessor
+from .st_or import STOrProcessor
 from .sanitizer import MermaidSanitizer
 
 
@@ -20,7 +21,8 @@ class STProcessor(BaseLanguageProcessor):
         self.if_processor = STIfProcessor(self)
         self.case_processor = STCaseProcessor(self)
         self.sel_processor = STSelProcessor(self)
-        self.max_processor = STMaxProcessor(self)  # Add MAX processor
+        self.max_processor = STMaxProcessor(self)
+        self.or_processor = STOrProcessor(self)  # Add OR processor
 
         self._add_debug("[MAIN] ST Processor initialized with specialized processors")
 
@@ -205,18 +207,34 @@ class STProcessor(BaseLanguageProcessor):
 
         return text
 
-    def _parse_recursive(self, code: str, current_node: str, node_counter: List[int], in_if_branch: bool = False) -> \
-            List[str]:
-        """Main recursive parsing routine - FIXED to prevent infinite loops"""
+    def _parse_recursive(self, code: str, current_node: str, node_counter: List[int], in_if_branch: bool = False) -> List[str]:
+        """Main recursive parsing routine - UPDATED to include OR processing"""
         nodes = []
         remaining_code = code.strip()
         exit_node = current_node
 
         while remaining_code:
             self._line_counter += 1
-
-            # Track if we processed any statement in this iteration
             processed = False
+
+            # Check for OR statements FIRST (before other processors)
+            if self.or_processor.find_or_statement(remaining_code):
+                self._add_debug("[MAIN] Processing OR statement")
+                try:
+                    result = self.or_processor.process_or_statement(remaining_code, exit_node, node_counter)
+                    if result:
+                        or_nodes, next_exit_node, consumed = result
+                        if consumed > 0:
+                            nodes.extend(or_nodes)
+                            exit_node = next_exit_node
+                            remaining_code = remaining_code[consumed:].strip()
+                            self._add_debug(f"[MAIN] OR processed, consumed {consumed} chars")
+                            processed = True
+                            continue
+                    else:
+                        self._add_debug("[MAIN] OR processor returned no result")
+                except Exception as e:
+                    self._add_debug(f"[MAIN] Error in OR processor: {e}")
 
             # Check for MAX statements
             if self._find_max_statement(remaining_code):
@@ -224,7 +242,6 @@ class STProcessor(BaseLanguageProcessor):
                     result = self.max_processor.process_max_statement(remaining_code, exit_node, node_counter)
                     if result:
                         max_nodes, next_exit_node, consumed = result
-                        # Ensure we actually consume code
                         if consumed > 0:
                             nodes.extend(max_nodes)
                             exit_node = next_exit_node
@@ -299,25 +316,6 @@ class STProcessor(BaseLanguageProcessor):
                 except Exception:
                     pass
 
-            # Check for SEL statements
-            if self._find_sel_statement(remaining_code):
-                self._add_debug("[MAIN] Processing SEL statement")
-                try:
-                    result = self.sel_processor.process_sel_statement(remaining_code, exit_node, node_counter)
-                    if result:
-                        sel_nodes, next_exit_node, consumed = result
-                        if consumed > 0:
-                            nodes.extend(sel_nodes)
-                            exit_node = next_exit_node
-                            remaining_code = remaining_code[consumed:].strip()
-                            self._add_debug(f"[MAIN] SEL processed, consumed {consumed} chars")
-                            processed = True
-                            continue
-                    else:
-                        self._add_debug("[MAIN] SEL processor returned no result")
-                except Exception as e:
-                    self._add_debug(f"[MAIN] Error in SEL processor: {e}")
-
             # Terminal statements (assignments and function calls) - FALLBACK
             statement, consumed = self._extract_terminal_statement(remaining_code)
             if statement and consumed > 0:
@@ -349,31 +347,23 @@ class STProcessor(BaseLanguageProcessor):
         # Find the first complete statement (up to semicolon)
         first_semicolon = code.find(';')
         if first_semicolon == -1:
-            #self._add_debug("[MAIN] No complete statement found for MAX check")
             return False
 
         first_statement = code[:first_semicolon + 1].strip()
-        #self._add_debug(f"[MAIN] Checking first statement for MAX: {first_statement[:100]}...")
 
         # More reliable check: look for the pattern of MAX assignment
-        # Pattern: variable := MAX( ... );
         max_pattern = r'\w+(?:\.\w+)*\s*:=\s*MAX\s*\([^;]+\)\s*;'
         is_max = re.search(max_pattern, first_statement, re.IGNORECASE | re.DOTALL) is not None
 
         if is_max:
-            #self._add_debug(f"[MAIN] First statement IS a MAX assignment")
             # Additional check: verify balanced parentheses
             open_paren = first_statement.count('(')
             close_paren = first_statement.count(')')
             if open_paren == close_paren:
-               # self._add_debug(f"[MAIN] MAX statement has balanced parentheses")
                 return True
             else:
-                #self._add_debug(
-                    #f"[MAIN] MAX statement has unbalanced parentheses: {open_paren} open, {close_paren} close")
                 return False
         else:
-            #self._add_debug(f"[MAIN] First statement is NOT a MAX assignment")
             return False
 
     def _find_if_statement(self, code: str) -> bool:
@@ -405,10 +395,8 @@ class STProcessor(BaseLanguageProcessor):
 
         if is_sel:
             self._add_debug(f"[MAIN] Found SEL assignment: {first_statement[:100]}...")
-        #else:
-            #self._add_debug(f"[MAIN] No SEL in: {first_statement[:100]}...")
-
         return is_sel
+
     def _find_first_decision_node(self, nodes: List[str]) -> Optional[str]:
         """Find the first decision node in a list of nodes"""
         for node in nodes:
