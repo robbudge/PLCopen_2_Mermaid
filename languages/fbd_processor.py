@@ -1,17 +1,26 @@
 import re
+import os
 from typing import List, Dict, Any
 from languages.cfc_2_st import CFCToSTConverter
-from languages.st_processor import STProcessor  # Add this import
+from languages.st_processor import STProcessor
 from languages.sanitizer import MermaidSanitizer
 
 
 class FBDProcessor:
-    def __init__(self):
+    def __init__(self, output_folder: str = None):
         self.debug_info = []
         self.cfc_converter = CFCToSTConverter()
-        self.st_processor = STProcessor()  # Add ST processor
+        self.st_processor = STProcessor()
         self.sanitizer = MermaidSanitizer()
+        self.output_folder = output_folder
         self._add_debug("[FBD_PROCESSOR] Function Block Diagram Processor initialized")
+        if output_folder:
+            self._add_debug(f"[FBD_PROCESSOR] Output folder: {output_folder}")
+
+    def set_output_folder(self, output_folder: str):
+        """Set the output folder for saving ST files"""
+        self.output_folder = output_folder
+        self._add_debug(f"[FBD_PROCESSOR] Output folder set to: {output_folder}")
 
     def _add_debug(self, message: str):
         """Add debug message with timestamp"""
@@ -52,8 +61,35 @@ class FBDProcessor:
             for debug_msg in self.cfc_converter.get_debug_info():
                 self._add_debug(debug_msg)
 
+            # DEBUG: Check the ST code and conditions
+            self._add_debug(f"[FBD_PROCESSOR] ST code generated: {len(st_code)} chars")
+            self._add_debug(f"[FBD_PROCESSOR] ST code preview: '{st_code[:100]}'")
+            self._add_debug(f"[FBD_PROCESSOR] Output folder: {self.output_folder}")
+            self._add_debug(f"[FBD_PROCESSOR] ST code is not empty: {bool(st_code and st_code.strip())}")
+            self._add_debug(
+                f"[FBD_PROCESSOR] ST code doesn't start with '// No ST': {not st_code.strip().startswith('// No ST')}")
+
+            # Save the ST code to file if output folder is set - FIXED CONDITION
+            if (self.output_folder and
+                    st_code and
+                    st_code.strip() and
+                    not st_code.strip().startswith("// No ST")):
+
+                self._add_debug("[FBD_PROCESSOR] Conditions met, calling _save_st_to_file")
+                self._save_st_to_file(pou_name, pou_info, st_code)
+            else:
+                self._add_debug("[FBD_PROCESSOR] Conditions NOT met for saving ST file:")
+                if not self.output_folder:
+                    self._add_debug("  - No output folder set")
+                if not st_code:
+                    self._add_debug("  - No ST code generated")
+                elif not st_code.strip():
+                    self._add_debug("  - ST code is empty after stripping")
+                elif st_code.strip().startswith("// No ST"):
+                    self._add_debug("  - ST code starts with '// No ST'")
+
             # Generate flowchart from ST code using STProcessor
-            if st_code and st_code.strip() and not st_code.startswith("// No ST"):
+            if st_code and st_code.strip() and not st_code.strip().startswith("// No ST"):
                 self._add_debug("[FBD_PROCESSOR] Generating flowchart from converted ST using STProcessor")
                 return self._generate_flowchart_from_st_with_processor(st_code, pou_name, pou_info)
             else:
@@ -75,12 +111,37 @@ class FBDProcessor:
             self._add_debug("[FBD_PROCESSOR] No specific content type detected, using generic flowchart")
             return self._generate_generic_flowchart(pou_name, code)
 
+    def _save_st_to_file(self, pou_name: str, pou_info: Dict[str, Any], st_code: str):
+        """Save the generated ST code to a .cfc2st file with full POU name"""
+        try:
+            # Ensure output folder exists
+            if not os.path.exists(self.output_folder):
+                os.makedirs(self.output_folder)
+                self._add_debug(f"[FBD_PROCESSOR] Created output folder: {self.output_folder}")
+
+            # Get the full POU name from pou_info if available
+            full_pou_name = pou_info.get('name', pou_name)
+            self._add_debug(f"[FBD_PROCESSOR] Saving ST file for: {full_pou_name}")
+
+            # Create filename (replace any invalid characters)
+            safe_pou_name = re.sub(r'[<>:"/\\|?*]', '_', full_pou_name)
+            filename = f"{safe_pou_name}.cfc2st"
+            filepath = os.path.join(self.output_folder, filename)
+
+            # Write ST code to file
+            with open(filepath, 'w', encoding='utf-8') as f:
+                f.write(st_code)
+
+            self._add_debug(f"[FBD_PROCESSOR] ✓ Saved ST code to: {filepath}")
+
+        except Exception as e:
+            self._add_debug(f"[FBD_PROCESSOR] ✗ Error saving ST file: {str(e)}")
+
     def _generate_flowchart_from_st_with_processor(self, st_code: str, pou_name: str, pou_info: Dict[str, Any]) -> str:
         """Generate flowchart from ST code using the STProcessor"""
         self._add_debug("[FBD_PROCESSOR] Using STProcessor to generate flowchart from ST code")
 
         # Extract the actual ST code from the wrapper
-        # The CFC converter returns code with "// === GENERATED ST CODE ===" wrapper
         clean_st_code = self._extract_clean_st_code(st_code)
 
         self._add_debug(f"[FBD_PROCESSOR] Clean ST code length: {len(clean_st_code)}")

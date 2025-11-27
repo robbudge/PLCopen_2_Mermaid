@@ -94,6 +94,7 @@ class CFCToSTConverter:
 
         return st_output
 
+
     def _clean_xml_namespaces(self, xml_string: str) -> str:
         """Clean XML namespaces for easier parsing"""
         self._add_debug("[CFC_TO_ST] Cleaning XML namespaces...")

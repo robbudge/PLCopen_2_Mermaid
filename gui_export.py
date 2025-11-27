@@ -1,6 +1,7 @@
 import os
 import webbrowser
 from pathlib import Path
+import datetime
 
 
 class GUIExport:
@@ -10,11 +11,7 @@ class GUIExport:
         self.gui = gui_instance
 
     def save_mermaid(self, mermaid_text: str, filename: str = None) -> bool:
-        """Save Mermaid code to a file"""
-        if not self.gui.current_pou:
-            self.gui.add_debug("ERROR: No POU selected for saving")
-            return False
-
+        """Save Mermaid code to a file - AUTOMATICALLY CALLED"""
         if not self.gui.output_folder:
             self.gui.add_debug("ERROR: No output folder selected")
             return False
@@ -25,7 +22,13 @@ class GUIExport:
 
         try:
             if not filename:
-                filename = f"{self.gui.current_pou}.mmd"
+                # Use current POU name if no filename provided
+                if self.gui.current_pou:
+                    filename = f"{self.gui.current_pou}.mmd"
+                else:
+                    self.gui.add_debug("ERROR: No POU selected and no filename provided")
+                    return False
+
             filepath = os.path.join(self.gui.output_folder, filename)
 
             with open(filepath, 'w', encoding='utf-8') as f:
@@ -40,11 +43,7 @@ class GUIExport:
             return False
 
     def save_html(self, mermaid_text: str, filename: str = None) -> bool:
-        """Save Mermaid diagram as standalone HTML file"""
-        if not self.gui.current_pou:
-            self.gui.add_debug("ERROR: No POU selected for HTML export")
-            return False
-
+        """Save Mermaid diagram as standalone HTML file - AUTOMATICALLY CALLED"""
         if not self.gui.output_folder:
             self.gui.add_debug("ERROR: No output folder selected")
             return False
@@ -55,10 +54,29 @@ class GUIExport:
 
         try:
             if not filename:
-                filename = f"{self.gui.current_pou}_flowchart.html"
+                # Use current POU name if no filename provided
+                if self.gui.current_pou:
+                    filename = f"{self.gui.current_pou}_flowchart.html"
+                else:
+                    self.gui.add_debug("ERROR: No POU selected and no filename provided")
+                    return False
+
             html_path = os.path.join(self.gui.output_folder, filename)
 
-            html_content = self._create_mermaid_html(mermaid_text, self.gui.current_pou)
+            # Get the actual item name for the title
+            if hasattr(self.gui, 'selected_item_type'):
+                if self.gui.selected_item_type == "POU":
+                    item_name = self.gui.current_pou
+                elif self.gui.selected_item_type == "Action":
+                    item_name = f"{self.gui.current_pou}.{self.gui.current_action}"
+                elif self.gui.selected_item_type == "Method":
+                    item_name = f"{self.gui.current_pou}.{self.gui.current_method}"
+                else:
+                    item_name = self.gui.current_pou if self.gui.current_pou else "Flowchart"
+            else:
+                item_name = self.gui.current_pou if self.gui.current_pou else "Flowchart"
+
+            html_content = self._create_mermaid_html(mermaid_text, item_name)
 
             with open(html_path, 'w', encoding='utf-8') as f:
                 f.write(html_content)
@@ -71,12 +89,40 @@ class GUIExport:
             self.gui.add_debug(f"ERROR: {error_msg}")
             return False
 
-    def generate_pdf(self, mermaid_text: str, filename: str = None) -> bool:
-        """Generate HTML file with Mermaid diagram for browser PDF printing"""
-        if not self.gui.current_pou:
-            self.gui.add_debug("ERROR: No POU selected for PDF generation")
+    def save_cfc2st(self, st_code: str, filename: str = None) -> bool:
+        """Save CFC to ST conversion file - AUTOMATICALLY CALLED for CFC content"""
+        if not self.gui.output_folder:
+            self.gui.add_debug("ERROR: No output folder selected")
             return False
 
+        if not st_code:
+            self.gui.add_debug("ERROR: No ST code to save")
+            return False
+
+        try:
+            if not filename:
+                # Use current POU name if no filename provided
+                if self.gui.current_pou:
+                    filename = f"{self.gui.current_pou}.cfc2st"
+                else:
+                    self.gui.add_debug("ERROR: No POU selected and no filename provided")
+                    return False
+
+            filepath = os.path.join(self.gui.output_folder, filename)
+
+            with open(filepath, 'w', encoding='utf-8') as f:
+                f.write(st_code)
+
+            self.gui.add_debug(f"CFC to ST file saved: {filepath}")
+            return True
+
+        except Exception as e:
+            error_msg = f"Failed to save CFC to ST file: {str(e)}"
+            self.gui.add_debug(f"ERROR: {error_msg}")
+            return False
+
+    def generate_pdf(self, mermaid_text: str, filename: str = None) -> bool:
+        """Generate HTML file with Mermaid diagram for browser PDF printing"""
         if not self.gui.output_folder:
             self.gui.add_debug("ERROR: No output folder selected")
             return False

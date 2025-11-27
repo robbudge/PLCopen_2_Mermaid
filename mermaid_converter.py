@@ -6,17 +6,26 @@ from languages.fbd_processor import FBDProcessor
 
 
 class MermaidConverter:
-    def __init__(self):
+    def __init__(self, output_folder: str = None):
         self.debug_info = []
+        self.output_folder = output_folder
         self._add_debug("[CONVERTER] Mermaid Converter initialized")
 
         # Initialize language processors
         self.processors = {
             'ST': STProcessor(),
             'LD': LDProcessor(),
-            'FBD': FBDProcessor(),
+            'FBD': FBDProcessor(output_folder),
         }
         self._add_debug(f"[CONVERTER] Available processors: {list(self.processors.keys())}")
+        if output_folder:
+            self._add_debug(f"[CONVERTER] Output folder: {output_folder}")
+
+    def set_output_folder(self, output_folder: str):
+        """Set the output folder for all processors"""
+        self.output_folder = output_folder
+        self.fbd_processor.set_output_folder(output_folder)
+        self._add_debug(f"[CONVERTER] Output folder set to: {output_folder}")
 
     def _add_debug(self, message: str):
         """Add debug message with timestamp"""

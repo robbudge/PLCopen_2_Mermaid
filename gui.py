@@ -110,12 +110,12 @@ class CodesysToMermaidGUI:
 
         ttk.Button(button_frame, text="Generate Mermaid Flowchart",
                    command=self.generate_mermaid).grid(row=0, column=0, padx=5)
-        ttk.Button(button_frame, text="Save Mermaid",
-                   command=self.save_mermaid).grid(row=0, column=1, padx=5)
-        ttk.Button(button_frame, text="Save HTML",
-                   command=self.save_html).grid(row=0, column=2, padx=5)
-        ttk.Button(button_frame, text="Generate PDF",
-                   command=self.generate_pdf).grid(row=0, column=3, padx=5)
+        #ttk.Button(button_frame, text="Save Mermaid",
+                   #command=self.save_mermaid).grid(row=0, column=1, padx=5)
+        #ttk.Button(button_frame, text="Save HTML",
+                   #command=self.save_html).grid(row=0, column=2, padx=5)
+        #ttk.Button(button_frame, text="Generate PDF",
+                   #command=self.generate_pdf).grid(row=0, column=3, padx=5)
 
         # Add recursive processing button
         ttk.Button(button_frame, text="Generate Recursive (POU + Actions)",
@@ -460,7 +460,8 @@ class CodesysToMermaidGUI:
                 'body': code
             }
 
-            converter = MermaidConverter()
+            #converter = MermaidConverter()
+            converter = MermaidConverter(self.output_folder)
 
             # For actions and methods, we need to pass the custom info and use the code directly
             if self.selected_item_type in ["Action", "Method"]:
@@ -482,6 +483,28 @@ class CodesysToMermaidGUI:
             self.mermaid_output.delete(1.0, tk.END)
             self.mermaid_output.insert(1.0, mermaid_code)
 
+            # AUTOMATICALLY SAVE FILES
+            if self.output_folder:
+                # Always save .mmd and .html files
+                mmd_success = self.export_handler.save_mermaid(mermaid_code, f"{item_name}.mmd")
+                html_success = self.export_handler.save_html(mermaid_code, f"{item_name}_flowchart.html")
+
+                # For CFC content, also save .cfc2st file
+                #if language.upper() == 'CFC' or body_language.upper() == 'CFC':
+                    # Extract the ST code from the converter if available
+                    # We need to get the ST code that was generated during CFC conversion
+                #    cfc2st_success = self._save_cfc2st_file(item_name, code, converter)
+                #else:
+                    #cfc2st_success = False
+
+                # Log the results
+                if mmd_success and html_success:
+                    self.add_debug(f"✓ Automatic file creation completed for {item_name}")
+                    #if cfc2st_success:
+                    #    self.add_debug(f"✓ CFC to ST conversion file created")
+                else:
+                    self.add_debug(f"⚠ Some files could not be created automatically")
+
             self.add_debug(f"Mermaid generation completed for {item_name}")
 
         except Exception as e:
@@ -490,6 +513,39 @@ class CodesysToMermaidGUI:
             import traceback
             self.add_debug(f"Traceback: {traceback.format_exc()}")
             messagebox.showerror("Error", error_msg)
+
+    def _save_cfc2st_file(self, item_name: str, cfc_code: str, converter) -> bool:
+        """Save CFC to ST conversion file"""
+        try:
+            # Alternative approach: Check if FBD processor already generated ST code
+            if (hasattr(converter, 'fbd_processor') and
+                    converter.fbd_processor is not None and
+                    hasattr(converter.fbd_processor, 'cfc_converter')):
+
+                # Get the ST code that was already generated during flowchart creation
+                cfc_converter = converter.fbd_processor.cfc_converter
+                if hasattr(cfc_converter, 'last_generated_st_code'):
+                    st_code = cfc_converter.last_generated_st_code
+                else:
+                    # Generate it fresh
+                    st_code = cfc_converter.convert_cfc_to_st(cfc_code)
+
+                # Save the ST code to .cfc2st file
+                filename = f"{item_name}.cfc2st"
+                filepath = os.path.join(self.output_folder, filename)
+
+                with open(filepath, 'w', encoding='utf-8') as f:
+                    f.write(st_code)
+
+                self.add_debug(f"✓ CFC to ST file saved: {filepath}")
+                return True
+            else:
+                self.add_debug("⚠ CFC to ST conversion not available")
+                return False
+
+        except Exception as e:
+            self.add_debug(f"⚠ Failed to save CFC to ST file: {str(e)}")
+            return False
 
     def generate_recursive_mermaid(self):
         """Generate Mermaid flowchart for POU including all actions and methods recursively"""
@@ -525,21 +581,33 @@ class CodesysToMermaidGUI:
                 'errors': []
             }
 
-            converter = MermaidConverter()
+            # Create converter with output folder
+            converter = MermaidConverter(self.output_folder)
 
             # Generate main POU flowchart
             try:
                 self.add_debug(f"Generating flowchart for main POU: {self.current_pou}")
                 pou_language = pou_info.get('language', 'Unknown')
+                pou_body_language = pou_info.get('bodyLanguage', 'Unknown')
                 pou_code = pou_info.get('body', '')
+
+                # Use bodyLanguage if main language is Unknown but bodyLanguage is known
+                if pou_language == 'Unknown' and pou_body_language != 'Unknown':
+                    pou_language = pou_body_language
 
                 if not pou_code:
                     self.add_debug(f"  ⚠ No code found for main POU: {self.current_pou}")
                     processed_items['no_code'].append(f"POU: {self.current_pou} (language: {pou_language})")
                 else:
-                    # Check if language is supported
+                    # Check if language is supported - CFC is handled by FBD processor
                     supported_languages = converter.get_supported_languages()
-                    if pou_language not in supported_languages:
+                    language_to_check = pou_language.upper()
+
+                    # Map CFC to FBD processor
+                    if language_to_check == 'CFC':
+                        language_to_check = 'FBD'
+
+                    if language_to_check not in [lang.upper() for lang in supported_languages]:
                         self.add_debug(f"  ✗ No processor for POU language: {pou_language}")
                         processed_items['no_processor'].append(f"POU: {self.current_pou} (language: {pou_language})")
                     else:
@@ -562,6 +630,11 @@ class CodesysToMermaidGUI:
                     action_info = pou_info.get('actionsInfo', {}).get(action, {})
                     action_code = action_info.get('body', '')
                     action_language = action_info.get('language', 'Unknown')
+                    action_body_language = action_info.get('bodyLanguage', 'Unknown')
+
+                    # Use bodyLanguage if main language is Unknown but bodyLanguage is known
+                    if action_language == 'Unknown' and action_body_language != 'Unknown':
+                        action_language = action_body_language
 
                     if not action_code:
                         self.add_debug(f"  ⚠ No code found for action: {action}")
@@ -569,20 +642,26 @@ class CodesysToMermaidGUI:
                             f"Action: {self.current_pou}.{action} (language: {action_language})")
                         continue
 
-                    # Check if language is supported
+                    # Check if language is supported - CFC is handled by FBD processor
                     supported_languages = converter.get_supported_languages()
-                    if action_language not in supported_languages:
+                    language_to_check = action_language.upper()
+
+                    # Map CFC to FBD processor
+                    if language_to_check == 'CFC':
+                        language_to_check = 'FBD'
+
+                    if language_to_check not in [lang.upper() for lang in supported_languages]:
                         self.add_debug(f"  ✗ No processor for action language: {action_language}")
                         processed_items['no_processor'].append(
                             f"Action: {self.current_pou}.{action} (language: {action_language})")
                         continue
 
-                    # Create custom POU info for the action
+                    # Create custom POU info for the action - PRESERVE THE LANGUAGE INFO
                     custom_pou_info = {
                         'name': f"{self.current_pou}.{action}",
                         'pouType': 'Action',
-                        'language': action_language,
-                        'bodyLanguage': action_language,
+                        'language': action_language,  # Use the detected language
+                        'bodyLanguage': action_body_language,  # Use the detected body language
                         'body': action_code
                     }
 
@@ -618,6 +697,11 @@ class CodesysToMermaidGUI:
                     method_info = pou_info.get('methodsInfo', {}).get(method, {})
                     method_code = method_info.get('body', '')
                     method_language = method_info.get('language', 'Unknown')
+                    method_body_language = method_info.get('bodyLanguage', 'Unknown')
+
+                    # Use bodyLanguage if main language is Unknown but bodyLanguage is known
+                    if method_language == 'Unknown' and method_body_language != 'Unknown':
+                        method_language = method_body_language
 
                     if not method_code:
                         self.add_debug(f"  ⚠ No code found for method: {method}")
@@ -625,20 +709,26 @@ class CodesysToMermaidGUI:
                             f"Method: {self.current_pou}.{method} (language: {method_language})")
                         continue
 
-                    # Check if language is supported
+                    # Check if language is supported - CFC is handled by FBD processor
                     supported_languages = converter.get_supported_languages()
-                    if method_language not in supported_languages:
+                    language_to_check = method_language.upper()
+
+                    # Map CFC to FBD processor
+                    if language_to_check == 'CFC':
+                        language_to_check = 'FBD'
+
+                    if language_to_check not in [lang.upper() for lang in supported_languages]:
                         self.add_debug(f"  ✗ No processor for method language: {method_language}")
                         processed_items['no_processor'].append(
                             f"Method: {self.current_pou}.{method} (language: {method_language})")
                         continue
 
-                    # Create custom POU info for the method
+                    # Create custom POU info for the method - PRESERVE THE LANGUAGE INFO
                     custom_pou_info = {
                         'name': f"{self.current_pou}.{method}",
                         'pouType': 'Method',
-                        'language': method_language,
-                        'bodyLanguage': method_language,
+                        'language': method_language,  # Use the detected language
+                        'bodyLanguage': method_body_language,  # Use the detected body language
                         'body': method_code
                     }
 
