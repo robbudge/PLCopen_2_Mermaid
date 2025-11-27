@@ -70,6 +70,7 @@ class MermaidConverter:
                 f"[CONVERTER] No processor available for language: {language} (mapped to: {mapped_language})")
 
         return processor
+
     def convert_pou_to_mermaid(self, parser, pou_name: str) -> str:
         """Convert a POU to Mermaid flowchart"""
         self.clear_debug()
@@ -81,6 +82,7 @@ class MermaidConverter:
         self._add_debug(f"[CONVERTER] Converting POU: {pou_name}")
         self._add_debug(f"[CONVERTER] POU Type: {pou_info.get('pouType', 'Unknown')}")
         self._add_debug(f"[CONVERTER] Language: {pou_info.get('language', 'Unknown')}")
+        self._add_debug(f"[CONVERTER] Body Language: {pou_info.get('bodyLanguage', 'Unknown')}")
 
         # Log available actions and methods for this POU
         actions = pou_info.get('actions', [])
@@ -118,9 +120,14 @@ class MermaidConverter:
             self._add_debug(f"[CONVERTER] No code found for POU: {pou_name}")
             return f"%% No code found for POU {pou_name}"
 
+        self._add_debug(f"[CONVERTER] Code preview (first 200 chars): {repr(code[:200])}")
+        self._add_debug(f"[CONVERTER] Code length: {len(code)} characters")
+
         # Generate flowchart with POU information
         try:
+            self._add_debug(f"[CONVERTER] Calling processor.generate_flowchart()...")
             result = processor.generate_flowchart(code, pou_name, pou_info)
+            self._add_debug(f"[CONVERTER] Processor returned result, length: {len(result)}")
 
             # Add converter debug info to processor debug output
             processor_debug = processor.get_debug_info()

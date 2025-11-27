@@ -355,6 +355,7 @@ class CodesysToMermaidGUI:
                 self.add_debug(f"  Method Language: {language}")
                 self.add_debug(f"  Body Language: {body_language}")
                 self.add_debug(f"  Body Length: {len(method_info.get('body', ''))}")
+
     def generate_mermaid(self):
         if not self.current_pou or not self.parser:
             messagebox.showerror("Error", "Please select a POU, Action, or Method first")
@@ -383,28 +384,16 @@ class CodesysToMermaidGUI:
                 code = action_info.get('body', '')
                 item_name = f"{self.current_pou}.{action_name}"
 
-                # Try to get language information with better fallbacks
+                # Use the language information that was already detected by the XML parser
                 language = action_info.get('language', 'Unknown')
                 body_language = action_info.get('bodyLanguage', 'Unknown')
 
-                # If language is still unknown, try to extract from body or use parent POU language
-                if language == 'Unknown' and code:
-                    # Try to detect language from content
-                    if any(keyword in code.upper() for keyword in ['IF', 'THEN', 'ELSIF', 'END_IF']):
-                        language = 'ST'
-                        body_language = 'ST'
-                    elif any(keyword in code.upper() for keyword in ['LD', 'CONTACT', 'COIL']):
-                        language = 'LD'
-                        body_language = 'LD'
-                    elif any(keyword in code.upper() for keyword in ['STEP', 'TRANSITION', 'SFC']):
-                        language = 'SFC'
-                        body_language = 'SFC'
-
-                # If still unknown, use parent POU language as fallback
-                if language == 'Unknown':
-                    parent_language = pou_info.get('language', 'Unknown')
-                    language = parent_language
-                    body_language = parent_language
+                # If the XML parser detected CFC, preserve that information
+                if language == 'Unknown' and body_language != 'Unknown':
+                    language = body_language
+                elif language == 'Unknown':
+                    # Fallback to parent POU language
+                    language = pou_info.get('language', 'Unknown')
 
             elif self.selected_item_type == "Method":
                 method_name = getattr(self, 'current_method', None)
@@ -421,21 +410,10 @@ class CodesysToMermaidGUI:
                 language = method_info.get('language', 'Unknown')
                 body_language = method_info.get('bodyLanguage', 'Unknown')
 
-                if language == 'Unknown' and code:
-                    if any(keyword in code.upper() for keyword in ['IF', 'THEN', 'ELSIF', 'END_IF']):
-                        language = 'ST'
-                        body_language = 'ST'
-                    elif any(keyword in code.upper() for keyword in ['LD', 'CONTACT', 'COIL']):
-                        language = 'LD'
-                        body_language = 'LD'
-                    elif any(keyword in code.upper() for keyword in ['STEP', 'TRANSITION', 'SFC']):
-                        language = 'SFC'
-                        body_language = 'SFC'
-
-                if language == 'Unknown':
-                    parent_language = pou_info.get('language', 'Unknown')
-                    language = parent_language
-                    body_language = parent_language
+                if language == 'Unknown' and body_language != 'Unknown':
+                    language = body_language
+                elif language == 'Unknown':
+                    language = pou_info.get('language', 'Unknown')
             else:
                 messagebox.showerror("Error", "Unknown item type selected")
                 return
@@ -456,7 +434,7 @@ class CodesysToMermaidGUI:
                 self.add_debug(f"Body Language: {body_language}")
                 self.add_debug(f"Body Length: {len(code)} characters")
                 self.add_debug(
-                    f"Language detection: {'Auto-detected' if language != 'Unknown' else 'Used parent POU language'}")
+                    f"Language source: {'From XML parser' if language != 'Unknown' else 'Used parent POU language'}")
 
             elif self.selected_item_type == "Method":
                 self.add_debug(f"Parent POU: {self.current_pou}")
@@ -464,7 +442,7 @@ class CodesysToMermaidGUI:
                 self.add_debug(f"Body Language: {body_language}")
                 self.add_debug(f"Body Length: {len(code)} characters")
                 self.add_debug(
-                    f"Language detection: {'Auto-detected' if language != 'Unknown' else 'Used parent POU language'}")
+                    f"Language source: {'From XML parser' if language != 'Unknown' else 'Used parent POU language'}")
 
             self.add_debug(f"=== END {self.selected_item_type.upper()} DETAILS ===")
 
@@ -473,12 +451,12 @@ class CodesysToMermaidGUI:
                 messagebox.showerror("Error", f"No code found for {self.selected_item_type.lower()} {item_name}")
                 return
 
-            # Create a custom pou_info for the selected item
+            # Create a custom pou_info for the selected item - PRESERVE THE LANGUAGE INFO
             custom_pou_info = {
                 'name': item_name,
                 'pouType': self.selected_item_type,
-                'language': language,
-                'bodyLanguage': body_language,
+                'language': language,  # Use the detected language
+                'bodyLanguage': body_language,  # Use the detected body language
                 'body': code
             }
 
@@ -498,7 +476,7 @@ class CodesysToMermaidGUI:
                 mermaid_code = converter.convert_pou_to_mermaid(mock_parser, item_name)
             else:
                 # For regular POUs, use the normal approach but with updated info
-                pou_info.update(custom_pou_info)  # Update with current selection info
+                pou_info.update(custom_pou_info)
                 mermaid_code = converter.convert_pou_to_mermaid(self.parser, self.current_pou)
 
             self.mermaid_output.delete(1.0, tk.END)
@@ -512,6 +490,7 @@ class CodesysToMermaidGUI:
             import traceback
             self.add_debug(f"Traceback: {traceback.format_exc()}")
             messagebox.showerror("Error", error_msg)
+
     def generate_recursive_mermaid(self):
         """Generate Mermaid flowchart for POU including all actions and methods recursively"""
         if not self.current_pou or not self.parser:

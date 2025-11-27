@@ -191,12 +191,13 @@ class CodesysXMLParser:
         element_name = element.get('name', 'unnamed')
         self._add_debug(f"[XML]         Processing element: {element_name}")
 
-        # STRATEGY 1: Check for CFC/FBD content in addData first (SPECIFICALLY FOR ACTIONS)
-        cfc_content = self._extract_cfc_content_from_action(element)
-        if cfc_content:
-            body_text = cfc_content
+        # STRATEGY 1: Check for CFC/FBD content and pass raw XML to FBD processor
+        cfc_element = self._find_cfc_element(element)
+        if cfc_element:
+            # Pass the raw CFC XML to FBD processor
+            body_text = self._extract_cfc_xml_content(cfc_element)
             language = "CFC"
-            self._add_debug(f"[XML]         Found CFC content in action, length: {len(body_text)}")
+            self._add_debug(f"[XML]         Found CFC XML content, passing to FBD processor")
             return body_text, language
 
         # STRATEGY 2: Look for standard language elements (ST, LD, etc.)
@@ -218,14 +219,6 @@ class CodesysXMLParser:
             # Extract text from language-specific element
             body_text = self._extract_st_code_from_element(found_language_element)
             self._add_debug(f"[XML]         Extracted {len(body_text)} chars from language element")
-
-            # If we found an ST element but it's empty (like in CFC actions), check for CFC
-            if language == 'ST' and len(body_text.strip()) == 0:
-                cfc_content = self._extract_cfc_content_from_action(element)
-                if cfc_content:
-                    body_text = cfc_content
-                    language = "CFC"
-                    self._add_debug(f"[XML]         ST was empty, found CFC content instead")
         else:
             # Strategy 3: Look for any text content
             body_text = self._extract_any_text_from_element(element)
@@ -242,6 +235,53 @@ class CodesysXMLParser:
             self._add_debug(f"[XML]         Body text preview: {body_text[:200]}...")
 
         return body_text, language
+
+    def _find_cfc_element(self, element):
+        """Find CFC element in action body"""
+        # Look for: body -> addData -> data -> CFC structure
+        body_element = None
+
+        # Find body element first
+        for child in element:
+            tag = child.tag.split('}')[-1] if '}' in child.tag else child.tag
+            if tag == 'body':
+                body_element = child
+                break
+
+        if not body_element:
+            return None
+
+        # Look for addData in body
+        for body_child in body_element:
+            tag = body_child.tag.split('}')[-1] if '}' in body_child.tag else body_child.tag
+            if tag == 'addData':
+                # Look for data elements with CFC content
+                for data_elem in body_child:
+                    data_tag = data_elem.tag.split('}')[-1] if '}' in data_elem.tag else data_elem.tag
+                    if data_tag == 'data':
+                        data_name = data_elem.get('name', '')
+                        if 'cfc' in data_name.lower():
+                            self._add_debug(f"[XML]           Found CFC data: {data_name}")
+                            # Look for CFC element
+                            for cfc_elem in data_elem:
+                                cfc_tag = cfc_elem.tag.split('}')[-1] if '}' in cfc_elem.tag else cfc_elem.tag
+                                if cfc_tag == 'CFC':
+                                    self._add_debug(f"[XML]           Found CFC element")
+                                    return cfc_elem
+
+        return None
+
+    def _extract_cfc_xml_content(self, cfc_element):
+        """Extract CFC XML content as string for FBD processor"""
+        try:
+            # Convert the CFC element to string representation
+            import xml.etree.ElementTree as ET
+            xml_string = ET.tostring(cfc_element, encoding='unicode', method='xml')
+            self._add_debug(f"[XML]           Extracted CFC XML, length: {len(xml_string)}")
+            return xml_string
+        except Exception as e:
+            self._add_debug(f"[XML]           Error extracting CFC XML: {str(e)}")
+            return "CFC_CONTENT_UNAVAILABLE"
 
     def _extract_cfc_content_from_action(self, element):
         """Extract CFC content specifically from action elements"""

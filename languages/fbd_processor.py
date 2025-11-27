@@ -1,10 +1,14 @@
 import re
 from typing import List, Dict, Any
+from languages.cfc_2_st import CFCToSTConverter
+from languages.sanitizer import MermaidSanitizer
 
 
 class FBDProcessor:
     def __init__(self):
         self.debug_info = []
+        self.cfc_converter = CFCToSTConverter()
+        self.sanitizer = MermaidSanitizer()
         self._add_debug("[FBD_PROCESSOR] Function Block Diagram Processor initialized")
 
     def _add_debug(self, message: str):
@@ -24,126 +28,209 @@ class FBDProcessor:
         return self.debug_info
 
     def generate_flowchart(self, code: str, pou_name: str, pou_info: Dict[str, Any]) -> str:
-        """Generate Mermaid flowchart from Function Block Diagram code"""
+        """Generate Mermaid flowchart from Function Block Diagram or CFC code"""
         self.clear_debug()
         self._add_debug(f"[FBD_PROCESSOR] Generating flowchart for POU: {pou_name}")
         self._add_debug(f"[FBD_PROCESSOR] Code length: {len(code)} characters")
+        self._add_debug(f"[FBD_PROCESSOR] POU type: {pou_info.get('pouType', 'Unknown')}")
 
-        # Basic parsing of FBD elements
+        # Check if this is CFC XML content
+        is_cfc_xml = (
+                code.strip().startswith('<CFC>') or
+                code.strip().startswith('<ns0:CFC') or
+                ':CFC' in code and '<' in code and '>' in code
+        )
+
+        if is_cfc_xml:
+            self._add_debug("[FBD_PROCESSOR] Detected CFC XML content")
+            # Use CFC to ST converter
+            st_code = self.cfc_converter.convert_cfc_to_st(code)
+
+            # Add CFC converter debug to our debug
+            for debug_msg in self.cfc_converter.get_debug_info():
+                self._add_debug(debug_msg)
+
+            # Generate flowchart from ST code
+            if st_code and st_code.strip() and not st_code.startswith("// No ST"):
+                self._add_debug("[FBD_PROCESSOR] Generating flowchart from converted ST")
+                return self._generate_flowchart_from_st(st_code, pou_name)
+            else:
+                self._add_debug("[FBD_PROCESSOR] No ST code generated, using fallback")
+                return self._generate_cfc_fallback(code, pou_name)
+
+        # Check if this is FBD text content
         lines = code.split('\n')
         self._add_debug(f"[FBD_PROCESSOR] Found {len(lines)} lines of code")
 
-        # Extract basic FBD components
-        function_blocks = self._extract_function_blocks(code)
-        connections = self._extract_connections(code)
-        variables = self._extract_variables(code)
+        # Check if this looks like FBD text content
+        fbd_keywords = ['FUNCTION BLOCK', 'BLOCK', 'CONNECTION', 'IN=', 'OUT=', 'FB_']
+        has_fbd_keywords = any(keyword in code.upper() for keyword in fbd_keywords)
 
-        self._add_debug(
-            f"[FBD_PROCESSOR] Found {len(function_blocks)} function blocks, {len(connections)} connections, {len(variables)} variables")
+        if has_fbd_keywords:
+            self._add_debug("[FBD_PROCESSOR] Detected FBD text content")
+            return self._generate_fbd_placeholder_flowchart(pou_name, code)
+        else:
+            self._add_debug("[FBD_PROCESSOR] No specific content type detected, using generic flowchart")
+            return self._generate_generic_flowchart(pou_name, code)
 
-        # Generate simple Mermaid flowchart as placeholder
-        mermaid_code = self._generate_placeholder_flowchart(pou_name, function_blocks, connections, variables)
+    def _generate_flowchart_from_st(self, st_code: str, pou_name: str) -> str:
+        """Generate flowchart from ST code with proper sanitization - NO TRUNCATION"""
+        lines = st_code.split('\n')
+        non_empty_lines = [line.strip() for line in lines if line.strip() and not line.strip().startswith('//')]
 
-        self._add_debug(f"[FBD_PROCESSOR] Flowchart generation completed")
-        return mermaid_code
+        # Use sanitizer for the POU name
+        safe_pou_name = self.sanitizer.sanitize_label(pou_name)
 
-    def _extract_function_blocks(self, code: str) -> List[Dict[str, str]]:
-        """Extract function blocks from FBD code"""
-        blocks = []
-
-        # Look for common function block patterns
-        block_patterns = [
-            r'(\w+)\s*:\s*(\w+)',  # Instance : BlockType
-            r'(\w+)\s*\(\s*\)',  # Function calls
-        ]
-
-        for pattern in block_patterns:
-            matches = re.finditer(pattern, code, re.IGNORECASE)
-            for match in matches:
-                if len(match.groups()) == 2:
-                    blocks.append({
-                        'instance': match.group(1),
-                        'type': match.group(2)
-                    })
-                else:
-                    blocks.append({
-                        'instance': match.group(1),
-                        'type': 'FUNCTION'
-                    })
-
-        return blocks
-
-    def _extract_connections(self, code: str) -> List[str]:
-        """Extract connection patterns from FBD code"""
-        connections = []
-
-        # Look for connection patterns (variable assignments, etc.)
-        connection_patterns = [
-            r'(\w+)\s*:=\s*(\w+)',  # Simple assignment
-            r'(\w+)\s*->\s*(\w+)',  # Connection arrow
-        ]
-
-        for pattern in connection_patterns:
-            matches = re.finditer(pattern, code, re.IGNORECASE)
-            for match in matches:
-                connections.append(f"{match.group(1)} -> {match.group(2)}")
-
-        return connections
-
-    def _extract_variables(self, code: str) -> List[str]:
-        """Extract variable names from FBD code"""
-        variables = []
-
-        # Look for variable patterns (avoiding keywords)
-        var_pattern = r'\b([A-Za-z_]\w*)\b'
-        keywords = {'VAR', 'END_VAR', 'IF', 'THEN', 'ELSE', 'END_IF', 'TRUE', 'FALSE'}
-
-        matches = re.finditer(var_pattern, code, re.IGNORECASE)
-        for match in matches:
-            var_name = match.group(1)
-            if var_name.upper() not in keywords and not var_name.isdigit():
-                variables.append(var_name)
-
-        return list(set(variables))  # Remove duplicates
-
-    def _generate_placeholder_flowchart(self, pou_name: str, function_blocks: List[Dict], connections: List[str],
-                                        variables: List[str]) -> str:
-        """Generate a placeholder flowchart for FBD code"""
         mermaid_lines = [
             "flowchart TD",
-            f"    Start([Start: {pou_name}])",
-            "    Start --> InitVars[Initialize Variables]",
+            f"    Start([Start: {safe_pou_name}])",
+            "    Start --> ProcessST[Process ST Logic]",
         ]
 
-        # Add variable initialization
-        if variables:
-            mermaid_lines.append("    InitVars --> ProcessFBD[Process FBD]")
-            for i, var in enumerate(variables[:5]):  # Limit to first 5 variables
-                mermaid_lines.append(f"    ProcessFBD --> Var{i}[Var: {var}]")
+        for i, line in enumerate(non_empty_lines[:10]):
+            # Use sanitizer for the ST code line - NO TRUNCATION
+            safe_line = self.sanitizer.sanitize_label(line.replace(';', '').strip())
+            mermaid_lines.append(f"    ProcessST --> Step{i}[{safe_line}]")
 
-        # Add function blocks
-        if function_blocks:
-            mermaid_lines.append("    ProcessFBD --> ExecuteBlocks[Execute Function Blocks]")
-            for i, block in enumerate(function_blocks[:5]):  # Limit to first 5 blocks
-                block_label = f"{block.get('instance', f'Block{i}')}: {block.get('type', 'FUNCTION')}"
-                mermaid_lines.append(f"    ExecuteBlocks --> FB{i}[{block_label}]")
-
-        # Add connections
-        if connections:
-            mermaid_lines.append("    ProcessFBD --> ProcessConnections[Process Connections]")
-            for i, connection in enumerate(connections[:5]):  # Limit to first 5 connections
-                mermaid_lines.append(f"    ProcessConnections --> Conn{i}[{connection}]")
-
-        mermaid_lines.append("    ProcessFBD --> End([End])")
-
-        # Add note about FBD processing
+        mermaid_lines.append("    ProcessST --> End([End])")
         mermaid_lines.append("")
-        mermaid_lines.append("    %% Note: FBD Processor is a placeholder")
-        mermaid_lines.append(f"    %% Found {len(function_blocks)} function blocks and {len(connections)} connections")
-        mermaid_lines.append("    %% Full FBD to flowchart conversion coming soon")
+        mermaid_lines.append("    %% Generated from CFC to ST conversion")
+        mermaid_lines.append(f"    %% {len(non_empty_lines)} lines of ST code")
 
         return "\n".join(mermaid_lines)
 
+    def _generate_cfc_fallback(self, cfc_xml: str, pou_name: str) -> str:
+        """Generate fallback flowchart for CFC content when conversion fails"""
+        self._add_debug("[FBD_PROCESSOR] Generating CFC fallback flowchart")
+
+        # Simple counting of elements
+        input_count = len(re.findall(r'<.*?inVariable', cfc_xml))
+        output_count = len(re.findall(r'<.*?outVariable', cfc_xml))
+        block_count = len(re.findall(r'<.*?block', cfc_xml))
+        connection_count = len(re.findall(r'<.*?connector', cfc_xml))
+
+        # Use sanitizer for the POU name
+        safe_pou_name = self.sanitizer.sanitize_label(pou_name)
+
+        mermaid_lines = [
+            "flowchart TD",
+            f"    Start([Start: {safe_pou_name}])",
+            f"    Start --> ProcessCFC[Process CFC Diagram]",
+            f"    ProcessCFC --> Inputs[Read {input_count} Inputs]",
+            f"    ProcessCFC --> Blocks[Execute {block_count} Blocks]",
+            f"    ProcessCFC --> Outputs[Write {output_count} Outputs]",
+            f"    ProcessCFC --> Connections[Handle {connection_count} Connections]",
+            f"    ProcessCFC --> End([End])",
+            "",
+            f"    %% CFC Function Block Diagram",
+            f"    %% Inputs: {input_count}, Outputs: {output_count}",
+            f"    %% Blocks: {block_count}, Connections: {connection_count}",
+            f"    %% CFC to ST conversion failed - using fallback",
+        ]
+
+        return "\n".join(mermaid_lines)
+
+    def _generate_fbd_placeholder_flowchart(self, pou_name: str, code: str) -> str:
+        """Generate placeholder flowchart for FBD content with sanitization - NO TRUNCATION"""
+        self._add_debug("[FBD_PROCESSOR] Generating FBD placeholder flowchart")
+
+        lines = code.split('\n')
+
+        # Use sanitizer for the POU name
+        safe_pou_name = self.sanitizer.sanitize_label(pou_name)
+
+        mermaid_lines = [
+            "flowchart TD",
+            f"    Start([Start: {safe_pou_name}])",
+            "    Start --> ProcessFBD[Process Function Blocks]",
+        ]
+
+        # Extract basic FBD-like elements - NO TRUNCATION
+        blocks_found = []
+        connections_found = []
+        variables_found = []
+
+        for line in lines:
+            line_upper = line.upper()
+            if any(keyword in line_upper for keyword in ['BLOCK', 'FB_', 'FUNCTION']):
+                clean_line = self.sanitizer.sanitize_label(line.strip())
+                blocks_found.append(clean_line)
+            elif any(keyword in line_upper for keyword in ['->', ':=', 'CONNECTION']):
+                clean_line = self.sanitizer.sanitize_label(line.strip())
+                connections_found.append(clean_line)
+            elif any(keyword in line_upper for keyword in ['VAR', 'INPUT', 'OUTPUT']):
+                clean_line = self.sanitizer.sanitize_label(line.strip())
+                variables_found.append(clean_line)
+
+        # Add blocks to flowchart
+        if blocks_found:
+            mermaid_lines.append("    ProcessFBD --> ExecuteBlocks[Execute Function Blocks]")
+            for i, block in enumerate(blocks_found[:5]):
+                mermaid_lines.append(f"    ExecuteBlocks --> Block{i}[{block}]")
+
+        # Add connections to flowchart
+        if connections_found:
+            mermaid_lines.append("    ProcessFBD --> ProcessConnections[Process Connections]")
+            for i, conn in enumerate(connections_found[:5]):
+                mermaid_lines.append(f"    ProcessConnections --> Conn{i}[{conn}]")
+
+        # Add variables to flowchart
+        if variables_found:
+            mermaid_lines.append("    ProcessFBD --> InitVariables[Initialize Variables]")
+            for i, var in enumerate(variables_found[:5]):
+                mermaid_lines.append(f"    InitVariables --> Var{i}[{var}]")
+
+        mermaid_lines.append("    ProcessFBD --> End([End])")
+
+        # Add note
+        mermaid_lines.append("")
+        mermaid_lines.append("    %% Note: FBD Processor Placeholder")
+        mermaid_lines.append(
+            f"    %% Found {len(blocks_found)} blocks, {len(connections_found)} connections, {len(variables_found)} variables")
+
+        return "\n".join(mermaid_lines)
+
+    def _generate_generic_flowchart(self, pou_name: str, code: str) -> str:
+        """Generate generic flowchart for unknown content with sanitization - NO TRUNCATION"""
+        self._add_debug("[FBD_PROCESSOR] Generating generic flowchart")
+
+        lines = code.split('\n')
+        non_empty_lines = [line.strip() for line in lines if line.strip() and not line.strip().startswith('//')]
+
+        # Use sanitizer for the POU name
+        safe_pou_name = self.sanitizer.sanitize_label(pou_name)
+
+        mermaid_lines = [
+            "flowchart TD",
+            f"    Start([Start: {safe_pou_name}])",
+            "    Start --> ProcessContent[Process Content]",
+        ]
+
+        # Add some content lines as steps - NO TRUNCATION
+        for i, line in enumerate(non_empty_lines[:8]):
+            # Use sanitizer for the content line
+            safe_line = self.sanitizer.sanitize_label(line)
+            mermaid_lines.append(f"    ProcessContent --> Step{i}[{safe_line}]")
+
+        mermaid_lines.append("    ProcessContent --> End([End])")
+
+        # Add note
+        mermaid_lines.append("")
+        mermaid_lines.append("    %% Note: Generic FBD Processing")
+        mermaid_lines.append(f"    %% Processed {len(non_empty_lines)} lines of content")
+
+        return "\n".join(mermaid_lines)
+
+    def get_supported_languages(self) -> List[str]:
+        """Get list of supported languages"""
+        return ["FBD", "CFC", "Function Block Diagram"]
+
     def get_supported_elements(self) -> List[str]:
         """Get list of supported FBD elements"""
-        return ["Function Blocks", "Connections", "Variables", "Data Flow"]
+        return [
+            "Function Blocks",
+            "Connections",
+            "Variables",
+            "Data Flow",
+            "CFC Diagrams"
+        ]
