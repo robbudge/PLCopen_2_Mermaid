@@ -1,0 +1,726 @@
+import xml.etree.ElementTree as ET
+import re
+from typing import Dict, List, Any
+
+
+class CodesysXMLParser:
+    def __init__(self, xml_file_path):
+        self.xml_file_path = xml_file_path
+        self.debug_info = []
+        self._add_debug(f"[XML] Initializing parser for file: {xml_file_path}")
+
+        try:
+            # Parse XML
+            self.tree = ET.parse(xml_file_path)
+            self.root = self.tree.getroot()
+            self._add_debug(f"XML root tag: {self.root.tag}")
+            #self._add_debug(f"XML root attributes: {self.root.attrib}")
+
+            # Use iterative search to find POUs regardless of namespace
+            self.pous = self._find_pous_iterative()
+            self._add_debug(f"[XML] Found {len(self.pous)} POUs: {list(self.pous.keys())}")
+
+        except Exception as e:
+            self._add_debug(f"[XML] Error during initialization: {str(e)}")
+            import traceback
+            self._add_debug(f"[XML] Traceback: {traceback.format_exc()}")
+            raise
+
+    def _add_debug(self, message: str):
+        """Add debug message with timestamp"""
+        import datetime
+        timestamp = datetime.datetime.now().strftime("%H:%M:%S.%f")[:-3]
+        debug_msg = f"[{timestamp}] {message}"
+        self.debug_info.append(debug_msg)
+        print(debug_msg)
+
+    def _find_pous_iterative(self) -> Dict[str, Any]:
+        """Find all POU elements by iterating through the tree"""
+        pous = {}
+
+        self._add_debug("[XML] Starting iterative POU search...")
+
+        # Iterate through all elements looking for those with pouType attribute
+        all_elements = list(self.root.iter())
+        self._add_debug(f"[XML] Total elements in XML: {len(all_elements)}")
+
+        pou_elements = []
+        for elem in all_elements:
+            if elem.get('pouType') and elem.get('name'):
+                pou_elements.append(elem)
+
+        #self._add_debug(f"[XML] Found {len(pou_elements)} elements with pouType and name attributes")
+
+        for pou_element in pou_elements:
+            pou_name = pou_element.get('name')
+            pou_type = pou_element.get('pouType')
+
+            self._add_debug(f"[XML] Processing POU: {pou_name} (type: {pou_type})")
+
+            pou_data = {
+                'name': pou_name,
+                'pouType': pou_type,
+                'language': 'Unknown',  # Default, will be updated
+                'actions': [],
+                'methods': [],
+                'body': None,
+                'bodyLanguage': 'Unknown',
+                'actionsInfo': {},  # Store language per action
+                'methodsInfo': {}  # Store language per method
+            }
+
+            # Detect language from POU element
+            pou_language = pou_element.get('language', 'Unknown')
+            pou_data['language'] = pou_language
+            #self._add_debug(f"[XML]   POU '{pou_name}' main language: {pou_language}")
+
+            # Parse actions with language detection
+            #self._add_debug(f"[XML]   Looking for actions in POU {pou_name}")
+            actions_element = None
+
+            # Find actions element
+            for child in pou_element:
+                tag = child.tag.split('}')[-1] if '}' in child.tag else child.tag
+                if tag == 'actions':
+                    actions_element = child
+                    break
+
+            if actions_element is not None:
+                self._add_debug(f"[XML]   Found actions element for {pou_name}")
+                for action in actions_element:
+                    action_name = action.get('name')
+                    if action_name:
+                        action_language = action.get('language', 'Unknown')
+                        pou_data['actions'].append(action_name)
+                        pou_data['actionsInfo'][action_name] = {
+                            'language': action_language,
+                            'body': None
+                        }
+                        self._add_debug(f"[XML]     Found action: {action_name} (language: {action_language})")
+
+                        # Extract action body and language
+                        action_body, action_body_lang = self._extract_body_and_language(action)
+                        pou_data['actionsInfo'][action_name]['body'] = action_body
+                        pou_data['actionsInfo'][action_name]['bodyLanguage'] = action_body_lang
+                        self._add_debug(
+                            f"[XML]       Action body language: {action_body_lang}, length: {len(action_body) if action_body else 0}")
+                        #if action_body:
+                            #self._add_debug(f"      Action body preview: {action_body[:300]}...")
+            else:
+                self._add_debug(f"[XML]   No actions element found for {pou_name}")
+
+            # Parse methods with language detection
+            #self._add_debug(f"[XML]   Looking for methods in POU {pou_name}")
+            methods_element = None
+
+            # Find methods element
+            for child in pou_element:
+                tag = child.tag.split('}')[-1] if '}' in child.tag else child.tag
+                if tag == 'methods':
+                    methods_element = child
+                    break
+
+            if methods_element is not None:
+                self._add_debug(f"[XML]   Found methods element for {pou_name}")
+                for method in methods_element:
+                    method_name = method.get('name')
+                    if method_name:
+                        method_language = method.get('language', 'Unknown')
+                        pou_data['methods'].append(method_name)
+                        pou_data['methodsInfo'][method_name] = {
+                            'language': method_language,
+                            'body': None
+                        }
+                        self._add_debug(f"[XML]     Found method: {method_name} (language: {method_language})")
+
+                        # Extract method body and language
+                        method_body, method_body_lang = self._extract_body_and_language(method)
+                        pou_data['methodsInfo'][method_name]['body'] = method_body
+                        pou_data['methodsInfo'][method_name]['bodyLanguage'] = method_body_lang
+                        self._add_debug(
+                            f"[XML]       Method body language: {method_body_lang}, length: {len(method_body) if method_body else 0}")
+                        #if method_body:
+                            #self._add_debug(f"      Method body preview: {method_body[:300]}...")
+            else:
+                self._add_debug(f"[XML]   No methods element found for {pou_name}")
+
+            # Parse main body with language detection
+            self._add_debug(f"[XML]   Looking for main body in POU {pou_name}")
+            body_element = None
+
+            # Find body element
+            for child in pou_element:
+                tag = child.tag.split('}')[-1] if '}' in child.tag else child.tag
+                if tag == 'body':
+                    body_element = child
+                    break
+
+            if body_element is not None:
+                self._add_debug(f"[XML]   Found body element for {pou_name}")
+                body_text, body_language = self._extract_body_and_language(body_element)
+                pou_data['body'] = body_text
+                pou_data['bodyLanguage'] = body_language
+                self._add_debug(
+                    f"[XML]   Found main body for {pou_name} (language: {body_language}, length: {len(body_text) if body_text else 0})")
+                if body_text:
+                    #self._add_debug(f"  Body preview: {body_text[:500]}...")
+                    # DEBUG: Check for XML entities in the body
+                    if '&lt;' in body_text or '&gt;' in body_text:
+                        self._add_debug(
+                            f"[XML]   *** WARNING: XML entities found in body: &lt;={body_text.count('&lt;')}, &gt;={body_text.count('&gt;')}")
+                        # Show specific examples
+                        lt_matches = re.findall(r'&\w+;', body_text)
+                        if lt_matches:
+                            self._add_debug(f"  XML entities found: {set(lt_matches)}")
+            else:
+                self._add_debug(f"[XML]   No main body element found for {pou_name}")
+
+            pous[pou_name] = pou_data
+            #self._add_debug(f"[XML] Completed processing POU: {pou_name}")
+
+        return pous
+
+    def _extract_body_and_language(self, element) -> tuple:
+        """Extract body content and detect language from an element"""
+        body_text = ""
+        language = "Unknown"
+
+        # Get language from element attribute
+        language = element.get('language', 'Unknown')
+
+        element_name = element.get('name', 'unnamed')
+        self._add_debug(f"[XML]         Processing element: {element_name}")
+
+        # STRATEGY 1: Check for CFC/FBD content and pass raw XML to FBD processor
+        cfc_element = self._find_cfc_element(element)
+        if cfc_element:
+            # Pass the raw CFC XML to FBD processor
+            body_text = self._extract_cfc_xml_content(cfc_element)
+            language = "CFC"
+            self._add_debug(f"[XML]         Found CFC XML content, passing to FBD processor")
+            return body_text, language
+
+        # STRATEGY 2: Look for standard language elements (ST, LD, etc.)
+        language_elements = ['ST', 'LD', 'FBD', 'SFC', 'IL', 'CFC']
+        found_language_element = None
+
+        for lang_elem in language_elements:
+            for child in element:
+                tag = child.tag.split('}')[-1] if '}' in child.tag else child.tag
+                if tag == lang_elem:
+                    found_language_element = child
+                    language = lang_elem
+                    self._add_debug(f"[XML]         Found language element: {lang_elem}")
+                    break
+            if found_language_element:
+                break
+
+        if found_language_element is not None:
+            # Extract text from language-specific element
+            body_text = self._extract_st_code_from_element(found_language_element)
+            self._add_debug(f"[XML]         Extracted {len(body_text)} chars from language element")
+        else:
+            # Strategy 3: Look for any text content
+            body_text = self._extract_any_text_from_element(element)
+            self._add_debug(f"[XML]         Extracted {len(body_text)} chars from body element")
+
+            # Try to detect language from content if still unknown
+            if language == 'Unknown':
+                detected_lang = self._detect_language_from_content(body_text)
+                language = detected_lang
+                self._add_debug(f"[XML]         Detected language from content: {detected_lang}")
+
+        # DEBUG: Show what we extracted
+        if body_text:
+            self._add_debug(f"[XML]         Body text preview: {body_text[:200]}...")
+
+        return body_text, language
+
+    def _find_cfc_element(self, element):
+        """Find CFC element in action body"""
+        # Look for: body -> addData -> data -> CFC structure
+        body_element = None
+
+        # Find body element first
+        for child in element:
+            tag = child.tag.split('}')[-1] if '}' in child.tag else child.tag
+            if tag == 'body':
+                body_element = child
+                break
+
+        if not body_element:
+            return None
+
+        # Look for addData in body
+        for body_child in body_element:
+            tag = body_child.tag.split('}')[-1] if '}' in body_child.tag else body_child.tag
+            if tag == 'addData':
+                # Look for data elements with CFC content
+                for data_elem in body_child:
+                    data_tag = data_elem.tag.split('}')[-1] if '}' in data_elem.tag else data_elem.tag
+                    if data_tag == 'data':
+                        data_name = data_elem.get('name', '')
+                        if 'cfc' in data_name.lower():
+                            self._add_debug(f"[XML]           Found CFC data: {data_name}")
+                            # Look for CFC element
+                            for cfc_elem in data_elem:
+                                cfc_tag = cfc_elem.tag.split('}')[-1] if '}' in cfc_elem.tag else cfc_elem.tag
+                                if cfc_tag == 'CFC':
+                                    self._add_debug(f"[XML]           Found CFC element")
+                                    return cfc_elem
+
+        return None
+
+    def _extract_cfc_xml_content(self, cfc_element):
+        """Extract CFC XML content as string for FBD processor"""
+        try:
+            # Convert the CFC element to string representation
+            import xml.etree.ElementTree as ET
+            xml_string = ET.tostring(cfc_element, encoding='unicode', method='xml')
+            self._add_debug(f"[XML]           Extracted CFC XML, length: {len(xml_string)}")
+            return xml_string
+        except Exception as e:
+            self._add_debug(f"[XML]           Error extracting CFC XML: {str(e)}")
+            return "CFC_CONTENT_UNAVAILABLE"
+
+    def _extract_cfc_content_from_action(self, element):
+        """Extract CFC content specifically from action elements"""
+        # Look for: body -> addData -> data -> CFC structure
+        body_element = None
+
+        # Find body element first
+        for child in element:
+            tag = child.tag.split('}')[-1] if '}' in child.tag else child.tag
+            if tag == 'body':
+                body_element = child
+                break
+
+        if not body_element:
+            return None
+
+        # Look for addData in body
+        for body_child in body_element:
+            tag = body_child.tag.split('}')[-1] if '}' in body_child.tag else body_child.tag
+            if tag == 'addData':
+                # Look for data elements with CFC content
+                for data_elem in body_child:
+                    data_tag = data_elem.tag.split('}')[-1] if '}' in data_elem.tag else data_elem.tag
+                    if data_tag == 'data':
+                        data_name = data_elem.get('name', '')
+                        if 'cfc' in data_name.lower():
+                            self._add_debug(f"[XML]           Found CFC data in action: {data_name}")
+                            # Look for CFC element
+                            for cfc_elem in data_elem:
+                                cfc_tag = cfc_elem.tag.split('}')[-1] if '}' in cfc_elem.tag else cfc_elem.tag
+                                if cfc_tag == 'CFC':
+                                    self._add_debug(
+                                        f"[XML]           Found CFC element, extracting structured content...")
+                                    return self._extract_structured_cfc_content(cfc_elem)
+
+        return None
+
+    def _extract_structured_cfc_content(self, cfc_element):
+        """Extract meaningful content from CFC structured XML"""
+        content_parts = []
+
+        # CFC content is structured - extract blocks, connections, variables
+        self._add_debug(f"[XML]             Extracting CFC structure...")
+
+        # Extract inVariables (inputs)
+        in_vars = cfc_element.findall(".//inVariable")
+        for var in in_vars:
+            local_id = var.get('localId', '?')
+            expression_elem = var.find("expression")
+            expression = expression_elem.text if expression_elem is not None and expression_elem.text else "no expression"
+            content_parts.append(f"IN[{local_id}]: {expression}")
+
+        # Extract outVariables (outputs)
+        out_vars = cfc_element.findall(".//outVariable")
+        for var in out_vars:
+            local_id = var.get('localId', '?')
+            execution_order = var.get('executionOrderId', '?')
+            expression_elem = var.find("expression")
+            expression = expression_elem.text if expression_elem is not None and expression_elem.text else "no expression"
+            content_parts.append(f"OUT[{local_id}](order:{execution_order}): {expression}")
+
+        # Extract connectors
+        connectors = cfc_element.findall(".//connector")
+        for conn in connectors:
+            local_id = conn.get('localId', '?')
+            # Find connection points
+            conn_points = conn.findall(".//connection")
+            for cp in conn_points:
+                ref_id = cp.get('refLocalId', '?')
+                formal_param = cp.get('formalParameter', '')
+                if formal_param:
+                    content_parts.append(f"CONN[{local_id}] -> [{ref_id}]({formal_param})")
+                else:
+                    content_parts.append(f"CONN[{local_id}] -> [{ref_id}]")
+
+        # Extract blocks if any
+        blocks = cfc_element.findall(".//block")
+        for block in blocks:
+            local_id = block.get('localId', '?')
+            type_name = block.get('typeName', '?')
+            content_parts.append(f"BLOCK[{local_id}]: {type_name}")
+
+        if content_parts:
+            result = "CFC Diagram:\n" + "\n".join(content_parts)
+            self._add_debug(f"[XML]             Extracted {len(content_parts)} CFC elements")
+            return result
+        else:
+            # If no specific content found, at least indicate it's CFC
+            return "CFC Function Block Diagram (structured content)"
+
+    def _extract_cfc_content(self, element):
+        """Extract CFC/FBD content from addData section"""
+        # Look for addData -> data -> CFC structure
+        add_data_elements = []
+
+        for child in element:
+            tag = child.tag.split('}')[-1] if '}' in child.tag else child.tag
+            if tag == 'addData':
+                add_data_elements.append(child)
+
+        for add_data in add_data_elements:
+            for data_elem in add_data:
+                data_tag = data_elem.tag.split('}')[-1] if '}' in data_elem.tag else data_elem.tag
+                if data_tag == 'data':
+                    # Check if this is CFC data
+                    data_name = data_elem.get('name', '')
+                    if 'cfc' in data_name.lower():
+                        self._add_debug(f"[XML]           Found CFC data: {data_name}")
+                        # Look for CFC element
+                        for cfc_elem in data_elem:
+                            cfc_tag = cfc_elem.tag.split('}')[-1] if '}' in cfc_elem.tag else cfc_tag
+                            if cfc_tag == 'CFC':
+                                self._add_debug(f"[XML]           Found CFC element, extracting content...")
+                                # Extract CFC content - this might be structured XML
+                                return self._extract_structured_cfc_content(cfc_elem)
+
+        return None
+
+    def _extract_structured_cfc_content(self, cfc_element):
+        """Extract meaningful content from CFC structured XML"""
+        content_parts = []
+
+        # CFC content is typically structured with blocks, connections, etc.
+        # We'll extract block names, connection info, etc.
+
+        # Look for common CFC elements
+        cfc_elements_to_extract = [
+            'block', 'variable', 'connection', 'input', 'output',
+            'position', 'name', 'type', 'executionOrder'
+        ]
+
+        for elem_name in cfc_elements_to_extract:
+            elements_found = cfc_element.findall(f".//{elem_name}")
+            for elem in elements_found:
+                # Get element attributes
+                attrs = elem.attrib
+                if attrs:
+                    content_parts.append(f"{elem_name}: {attrs}")
+
+                # Get element text if any
+                if elem.text and elem.text.strip():
+                    content_parts.append(f"{elem_name}: {elem.text.strip()}")
+
+        # Also extract any text content from the CFC element
+        direct_text = self._extract_any_text_from_element(cfc_element)
+        if direct_text:
+            content_parts.append(direct_text)
+
+        if content_parts:
+            return "\n".join(content_parts)
+        else:
+            # If no specific content found, at least indicate it's CFC
+            return "CFC Function Block Diagram Content"
+
+    def _extract_st_code_from_element(self, element):
+        """Extract ST code specifically from ST elements - FIXED VERSION"""
+        if element is None:
+            return ""
+
+        #self._add_debug(f"[XML]           Extracting ST code from: {element.tag}")
+
+        # For ST elements, we need to look for specific child elements that contain the code
+        # Common structure: ST -> xhtml -> div/p elements with CDATA content
+
+        # Strategy 1: Look for xhtml content
+        xhtml_elements = []
+        for child in element:
+            tag = child.tag.split('}')[-1] if '}' in child.tag else child.tag
+            if 'xhtml' in tag.lower() or 'html' in tag.lower():
+                xhtml_elements.append(child)
+
+        if xhtml_elements:
+            self._add_debug(f"[XML]           Found {len(xhtml_elements)} xhtml elements")
+            # Extract text from all xhtml elements
+            all_text = ""
+            for xhtml_elem in xhtml_elements:
+                text = self._extract_text_from_xhtml(xhtml_elem)
+                if text:
+                    all_text += text + " "
+            return all_text.strip()
+
+        # Strategy 2: Direct text extraction with CDATA handling
+        text = self._extract_text_with_cdata(element)
+        if text:
+            return text
+
+        # Strategy 3: Fallback to basic text extraction
+        return self._extract_any_text_from_element(element)
+
+    def _extract_text_from_xhtml(self, element):
+        """Extract text from xhtml elements"""
+        text_parts = []
+
+        # Look for common HTML tags that contain text
+        text_tags = ['div', 'p', 'span', 'pre', 'code']
+
+        for tag in text_tags:
+            # Find all elements with this tag (case insensitive)
+            for child in element.iter():
+                child_tag = child.tag.split('}')[-1] if '}' in child.tag else child.tag
+                if child_tag.lower() == tag.lower():
+                    if child.text:
+                        text_parts.append(child.text.strip())
+                    # Also check for CDATA content
+                    if hasattr(child, 'itertext'):
+                        for subtext in child.itertext():
+                            if subtext.strip():
+                                text_parts.append(subtext.strip())
+
+        # Also get direct text content
+        if element.text and element.text.strip():
+            text_parts.append(element.text.strip())
+
+        # Get tail text
+        if element.tail and element.tail.strip():
+            text_parts.append(element.tail.strip())
+
+        return ' '.join(text_parts)
+
+    def _extract_text_with_cdata(self, element):
+        """Extract text handling CDATA sections"""
+        text_parts = []
+
+        # Check if element has CDATA directly
+        if element.text and element.text.strip():
+            text_parts.append(element.text.strip())
+
+        # Recursively check children
+        for child in element:
+            if child.text and child.text.strip():
+                text_parts.append(child.text.strip())
+            if child.tail and child.tail.strip():
+                text_parts.append(child.tail.strip())
+
+        return ' '.join(text_parts)
+
+    def _extract_any_text_from_element(self, element):
+        """Extract any text content from an element and its children"""
+        if element is None:
+            return ""
+
+        text_parts = []
+
+        # Get element text
+        if element.text and element.text.strip():
+            text_parts.append(element.text.strip())
+
+        # Recursively get text from all children
+        for child in element:
+            child_text = self._extract_any_text_from_element(child)
+            if child_text:
+                text_parts.append(child_text)
+
+        # Get tail text
+        if element.tail and element.tail.strip():
+            text_parts.append(element.tail.strip())
+
+        return ' '.join(text_parts)
+
+    def _detect_language_from_content(self, content: str) -> str:
+        """Detect programming language from content heuristics"""
+        if not content:
+            return "Unknown"
+
+        content_upper = content.upper()
+
+        # ST (Structured Text) patterns
+        st_patterns = [
+            r'IF\s+.+\s+THEN',
+            r'END_IF',
+            r':=',
+            r'FOR\s+.+\s+TO\s+.+\s+DO',
+            r'END_FOR',
+            r'CASE\s+.+\s+OF',
+            r'END_CASE',
+            r'WHILE\s+.+\s+DO',
+            r'END_WHILE'
+        ]
+
+        # LD (Ladder Diagram) patterns
+        ld_patterns = [
+            r'---|\|\s+|\s+\|',
+            r'\(\s*\)',
+            r'\[\s*\]',
+        ]
+
+        # CFC/FBD patterns - look for structured elements
+        cfc_patterns = [
+            r'IN\[\d+\]:',
+            r'OUT\[\d+\]:',
+            r'CONN\[\d+\]',
+            r'BLOCK\[\d+\]:',
+            r'CFC DIAGRAM:',
+            r'EXECUTIONORDER',
+        ]
+
+        # Check for ST patterns
+        st_score = 0
+        for pattern in st_patterns:
+            if re.search(pattern, content_upper):
+                st_score += 1
+
+        if st_score >= 2:
+            return "ST"
+
+        # Check for LD patterns
+        if any(re.search(pattern, content) for pattern in ld_patterns):
+            return "LD"
+
+        # Check for CFC/FBD patterns
+        cfc_score = 0
+        for pattern in cfc_patterns:
+            if re.search(pattern, content_upper):
+                cfc_score += 1
+
+        if cfc_score >= 1:
+            return "CFC"
+
+        # Check for structured XML content that indicates CFC
+        if '<block' in content or '<connection' in content or 'executionOrder' in content:
+            return "CFC"
+
+        # Check for CFC variable patterns
+        if re.search(r'IN\[\d+\]', content) or re.search(r'OUT\[\d+\]', content):
+            return "CFC"
+
+        # Default to ST if it has common ST constructs
+        if ';' in content and ('IF' in content_upper or ':=' in content):
+            return "ST"
+
+        return "Unknown"
+
+    # ========== PUBLIC METHODS ==========
+
+    def get_pous(self) -> Dict[str, Any]:
+        """Get all POUs"""
+        return self.pous
+
+    def get_pou_body(self, pou_name: str) -> str:
+        """Get the body content of a POU"""
+        pou = self.pous.get(pou_name)
+        if pou:
+            return pou.get('body', '')
+        return ''
+
+    def get_pou_language(self, pou_name: str) -> str:
+        """Get the main language of the POU"""
+        pou = self.pous.get(pou_name)
+        if pou:
+            return pou.get('language', 'Unknown')
+        return 'Unknown'
+
+    def get_pou_body_language(self, pou_name: str) -> str:
+        """Get the language specifically used in the body"""
+        pou = self.pous.get(pou_name)
+        if pou:
+            return pou.get('bodyLanguage', 'Unknown')
+        return 'Unknown'
+
+    def get_action_language(self, pou_name: str, action_name: str) -> str:
+        """Get the language of a specific action"""
+        pou = self.pous.get(pou_name)
+        if pou and action_name in pou.get('actionsInfo', {}):
+            return pou['actionsInfo'][action_name].get('language', 'Unknown')
+        return 'Unknown'
+
+    def get_action_body_language(self, pou_name: str, action_name: str) -> str:
+        """Get the body language of a specific action"""
+        pou = self.pous.get(pou_name)
+        if pou and action_name in pou.get('actionsInfo', {}):
+            return pou['actionsInfo'][action_name].get('bodyLanguage', 'Unknown')
+        return 'Unknown'
+
+    def get_method_language(self, pou_name: str, method_name: str) -> str:
+        """Get the language of a specific method"""
+        pou = self.pous.get(pou_name)
+        if pou and method_name in pou.get('methodsInfo', {}):
+            return pou['methodsInfo'][method_name].get('language', 'Unknown')
+        return 'Unknown'
+
+    def get_method_body_language(self, pou_name: str, method_name: str) -> str:
+        """Get the body language of a specific method"""
+        pou = self.pous.get(pou_name)
+        if pou and method_name in pou.get('methodsInfo', {}):
+            return pou['methodsInfo'][method_name].get('bodyLanguage', 'Unknown')
+        return 'Unknown'
+
+    def get_action_body(self, pou_name: str, action_name: str) -> str:
+        """Get the body content of a specific action"""
+        pou = self.pous.get(pou_name)
+        if pou and action_name in pou.get('actionsInfo', {}):
+            return pou['actionsInfo'][action_name].get('body', '')
+        return ''
+
+    def get_method_body(self, pou_name: str, method_name: str) -> str:
+        """Get the body content of a specific method"""
+        pou = self.pous.get(pou_name)
+        if pou and method_name in pou.get('methodsInfo', {}):
+            return pou['methodsInfo'][method_name].get('body', '')
+        return ''
+
+    def get_debug_info(self) -> List[str]:
+        """Get all debug information"""
+        return self.debug_info
+
+    def get_pou_detailed_info(self, pou_name: str) -> Dict[str, Any]:
+        """Get detailed information about a POU including all languages"""
+        pou = self.pous.get(pou_name)
+        if not pou:
+            return {}
+
+        detailed_info = {
+            'name': pou_name,
+            'pouType': pou.get('pouType', 'Unknown'),
+            'mainLanguage': pou.get('language', 'Unknown'),
+            'bodyLanguage': pou.get('bodyLanguage', 'Unknown'),
+            'bodyLength': len(pou.get('body', '')),
+            'actions': [],
+            'methods': []
+        }
+
+        # Add action details
+        for action_name in pou.get('actions', []):
+            action_info = pou['actionsInfo'].get(action_name, {})
+            detailed_info['actions'].append({
+                'name': action_name,
+                'language': action_info.get('language', 'Unknown'),
+                'bodyLanguage': action_info.get('bodyLanguage', 'Unknown'),
+                'bodyLength': len(action_info.get('body', ''))
+            })
+
+        # Add method details
+        for method_name in pou.get('methods', []):
+            method_info = pou['methodsInfo'].get(method_name, {})
+            detailed_info['methods'].append({
+                'name': method_name,
+                'language': method_info.get('language', 'Unknown'),
+                'bodyLanguage': method_info.get('bodyLanguage', 'Unknown'),
+                'bodyLength': len(method_info.get('body', ''))
+            })
+
+        return detailed_info
